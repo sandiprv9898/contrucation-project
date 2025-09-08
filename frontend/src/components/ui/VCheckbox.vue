@@ -41,12 +41,11 @@
     <div v-if="$slots.default || label" class="flex-1 min-w-0">
       <label
         :for="inputId"
-        :class="cn(
-          'text-sm font-medium cursor-pointer select-none',
-          'text-foreground',
+        :class="[
+          'text-sm font-medium cursor-pointer select-none text-gray-700',
           disabled && 'cursor-not-allowed opacity-50',
           labelClass
-        )"
+        ]"
       >
         <slot>{{ label }}</slot>
       </label>
@@ -54,7 +53,7 @@
       <!-- Description text -->
       <p 
         v-if="description" 
-        class="mt-1 text-xs text-muted-foreground"
+        class="mt-1 text-xs text-gray-500"
       >
         {{ description }}
       </p>
