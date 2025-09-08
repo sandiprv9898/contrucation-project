@@ -910,16 +910,50 @@ npm run build
 git status # Ensure no unwanted files
 ```
 
+## Port Configuration
+
+**IMPORTANT**: This project uses odd port numbers between 3070-3080 to avoid conflicts with other projects:
+
+- **Laravel Backend**: Port **3071** (API server)
+- **Vue.js Frontend**: Port **3073** (Vite dev server)  
+- **Database (PostgreSQL)**: Port **3075**
+- **Redis**: Port **3077**
+- **Horizon Dashboard**: Port **3079**
+
+### Environment Configuration
+```bash
+# .env (Laravel)
+APP_URL=http://localhost:3071
+DB_PORT=3075
+REDIS_PORT=3077
+HORIZON_PORT=3079
+
+# .env.local (Vue.js)
+VITE_API_URL=http://localhost:3071/api
+VITE_DEV_PORT=3073
+
+# docker-compose.yml ports mapping
+laravel:
+  ports:
+    - "3071:80"
+postgres:
+  ports:
+    - "3075:5432"
+redis:
+  ports:
+    - "3077:6379"
+```
+
 ## Quick Reference Commands
 
 ### Laravel Commands
 ```bash
 # Development
 sail up -d                          # Start Docker containers
-sail artisan serve                  # Start development server
+sail artisan serve --port=3071      # Start development server on port 3071
 sail artisan migrate:fresh --seed   # Reset database with seeds
 sail artisan queue:work             # Start queue worker
-sail artisan horizon               # Start Horizon dashboard
+sail artisan horizon               # Start Horizon dashboard (port 3079)
 
 # Testing
 sail artisan test                   # Run all tests
@@ -940,9 +974,9 @@ sail artisan route:list           # List all routes
 ### Vue.js Commands
 ```bash
 # Development
-npm run dev                        # Start Vite dev server
+npm run dev -- --port 3073         # Start Vite dev server on port 3073
 npm run build                      # Build for production
-npm run preview                    # Preview production build
+npm run preview -- --port 3073     # Preview production build on port 3073
 
 # Testing
 npm run test:unit                  # Run unit tests
@@ -960,6 +994,7 @@ npm run format                     # Format with Prettier
 
 ### Before Starting Any Task
 - [ ] Read this entire policy document
+- [ ] **Verify port configuration** (Laravel: 3071, Vue: 3073, PostgreSQL: 3075, Redis: 3077, Horizon: 3079)
 - [ ] Check if UI components exist in `/components/ui/`
 - [ ] Review the domain structure
 - [ ] Plan API endpoints and database changes
