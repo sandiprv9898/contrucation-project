@@ -7,55 +7,78 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Modern Stripe-inspired palette
         primary: {
-          DEFAULT: '#FF6B35', // Construction Orange
-          50: '#FFF4F1',
-          100: '#FFE6DC',
-          200: '#FFCCB8',
-          300: '#FFB394',
-          400: '#FF9970',
-          500: '#FF6B35',
-          600: '#E55A2B',
-          700: '#CC4E21',
-          800: '#B33F17',
-          900: '#99350E'
+          DEFAULT: '#635BFF', // Stripe Purple
+          50: '#F8F7FF',
+          100: '#F1EFFF', 
+          200: '#E4E0FF',
+          300: '#D1CCFF',
+          400: '#B8B0FF',
+          500: '#635BFF',
+          600: '#5548E8',
+          700: '#4338CA',
+          800: '#3730A3',
+          900: '#312E81'
         },
         secondary: {
-          DEFAULT: '#4A5568', // Steel Blue
-          50: '#F7FAFC',
-          100: '#EDF2F7',
+          DEFAULT: '#0F172A', // Slate Dark
+          50: '#F8FAFC',
+          100: '#F1F5F9',
           200: '#E2E8F0',
-          300: '#CBD5E0',
-          400: '#A0AEC0',
-          500: '#4A5568',
-          600: '#2D3748',
-          700: '#1A202C',
-          800: '#171923',
-          900: '#0F1419'
+          300: '#CBD5E1',
+          400: '#94A3B8',
+          500: '#64748B',
+          600: '#475569',
+          700: '#334155',
+          800: '#1E293B',
+          900: '#0F172A'
         },
-        accent: '#38A169', // Safety Green
-        success: '#38A169',
-        warning: '#F6AD55',
-        destructive: '#E53E3E',
-        muted: {
-          DEFAULT: '#F7FAFC',
-          foreground: '#718096'
+        accent: '#00D924', // Success Green
+        success: '#10B981',
+        warning: '#F59E0B',
+        destructive: '#EF4444',
+        info: '#3B82F6',
+        
+        // Neutral grays (Stripe-inspired)
+        gray: {
+          50: '#FAFBFC',
+          100: '#F6F9FC', 
+          200: '#E6EBF1',
+          300: '#CED4DA',
+          400: '#8E9AA8',
+          500: '#6B7C95',
+          600: '#525F7F',
+          700: '#3C4257',
+          800: '#24292E',
+          900: '#0F172A'
         },
-        background: '#FFFFFF',
-        foreground: '#1A202C',
+        
+        // UI colors
+        background: '#FAFBFC',
+        foreground: '#0F172A',
         card: '#FFFFFF',
-        border: '#E2E8F0',
-        // Status Colors
-        'status-planning': '#3182CE',
-        'status-active': '#38A169',
-        'status-on-hold': '#F6AD55',
-        'status-completed': '#4A5568',
-        'status-delayed': '#E53E3E',
-        // Priority Colors  
-        'priority-critical': '#E53E3E',
-        'priority-high': '#FF6B35',
-        'priority-medium': '#F6AD55',
-        'priority-low': '#38A169'
+        border: '#E6EBF1',
+        input: '#FFFFFF',
+        ring: '#635BFF',
+        
+        muted: {
+          DEFAULT: '#F6F9FC',
+          foreground: '#6B7C95'
+        },
+        
+        // Construction-specific status colors
+        'status-planning': '#3B82F6',
+        'status-active': '#10B981',
+        'status-on-hold': '#F59E0B',
+        'status-completed': '#6B7C95',
+        'status-delayed': '#EF4444',
+        
+        // Priority colors  
+        'priority-critical': '#EF4444',
+        'priority-high': '#F59E0B',
+        'priority-medium': '#3B82F6',
+        'priority-low': '#10B981'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
