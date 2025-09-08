@@ -28,7 +28,7 @@
         :disabled="authStore.isLoading"
         required
         class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
-        @input="(e) => console.log('Input event:', e.target.value)"
+        @input="(e) => console.log('Input event:', (e.target as HTMLInputElement)?.value)"
       />
       <p v-if="errors.name" class="mt-1 text-xs text-red-600">{{ errors.name }}</p>
       <p class="text-xs text-gray-500">Current name: "{{ form.name }}" (length: {{ form.name?.length || 0 }})</p>
@@ -148,6 +148,7 @@
 import { reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/modules/auth'
+import type { UserRole } from '@/modules/auth/types/auth.types'
 import VButton from '@/components/ui/VButton.vue'
 import VCheckbox from '@/components/ui/VCheckbox.vue'
 import VLabel from '@/components/ui/VLabel.vue'
@@ -164,7 +165,7 @@ const form = reactive({
   email: '',
   password: '',
   password_confirmation: '',
-  role: 'field_worker',
+  role: 'field_worker' as UserRole,
   agreeToTerms: false,
 })
 
@@ -230,7 +231,7 @@ const handleSubmit = async () => {
       email: form.email,
       password: form.password,
       password_confirmation: form.password_confirmation,
-      role: form.role as any,
+      role: form.role,
     })
 
     // Redirect to dashboard on successful registration

@@ -9,6 +9,14 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore()
+        if (authStore.isAuthenticated) {
+          next('/dashboard')
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/about',
@@ -59,8 +67,17 @@ const router = createRouter({
 })
 
 // Navigation guards
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
+  
+  // Initialize auth state if not already done
+  if (!authStore.currentUser && authStore.token) {
+    try {
+      await authStore.initAuth()
+    } catch (error) {
+      console.warn('Auth initialization failed:', error)
+    }
+  }
   
   // Check if route requires authentication
   if (to.matched.some(record => record.meta.requiresAuth)) {

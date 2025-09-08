@@ -145,6 +145,7 @@
 import { reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/modules/auth'
+import type { UserRole } from '@/modules/auth/types/auth.types'
 
 // Define component name
 defineOptions({ name: 'RegisterForm' })
@@ -158,7 +159,7 @@ const form = reactive({
   email: '',
   password: '',
   password_confirmation: '',
-  role: 'field_worker',
+  role: 'field_worker' as UserRole,
   agreeToTerms: false,
 })
 

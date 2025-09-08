@@ -17,7 +17,7 @@ class AuthService
         private UserRepositoryInterface $userRepository
     ) {}
 
-    public function register(CreateUserDTO $userData): User
+    public function register(CreateUserDTO $userData): array
     {
         return DB::transaction(function () use ($userData) {
             // Check if user already exists
@@ -37,11 +37,17 @@ class AuthService
                 'avatar_url' => $userData->avatarUrl,
             ]);
 
+            // Create API token
+            $token = $user->createToken('auth-token')->plainTextToken;
+
             // Dispatch events and jobs
             event(new UserRegistered($user));
             SendWelcomeEmail::dispatch($user);
 
-            return $user;
+            return [
+                'user' => $user,
+                'token' => $token,
+            ];
         });
     }
 

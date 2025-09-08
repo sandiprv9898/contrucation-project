@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -19,6 +20,12 @@ Route::prefix('v1')->group(function () {
 
     // Protected user management routes
     Route::middleware('auth:sanctum')->group(function () {
+        // Dashboard routes
+        Route::prefix('dashboard')->group(function () {
+            Route::get('stats', [DashboardController::class, 'stats']);
+            Route::get('recent-activity', [DashboardController::class, 'recentActivity']);
+        });
+
         Route::prefix('users')->group(function () {
             Route::get('/', function () {
                 return response()->json(['message' => 'User list endpoint - to be implemented']);

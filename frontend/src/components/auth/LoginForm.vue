@@ -80,14 +80,15 @@
 
 <script setup lang="ts">
 import { reactive, computed, watch } from 'vue'
-import { useAuth, useLoginValidation } from '@/modules/auth'
+import { useAuth } from '@/modules/auth/composables/useAuth'
+import { useLoginValidation } from '@/modules/auth/composables/useAuthValidation'
 import VButton from '@/components/ui/VButton.vue'
 import VCheckbox from '@/components/ui/VCheckbox.vue'
 import VLabel from '@/components/ui/VLabel.vue'
 import VAlert from '@/components/ui/VAlert.vue'
 
 const { login, clearError, error, isLoading } = useAuth()
-const { errors, validate, clearErrors, isFormValid } = useLoginValidation()
+const { errors, validate, isFormValid } = useLoginValidation()
 
 const form = reactive({
   email: '',

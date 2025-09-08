@@ -163,7 +163,7 @@ interface Emits {
   close: [];
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   variant: 'default',
   showIcon: true,
   closable: false

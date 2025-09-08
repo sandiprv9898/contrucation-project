@@ -12,6 +12,7 @@ class ApiClient {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
       },
       timeout: API_CONFIG.TIMEOUT,
     })
@@ -27,6 +28,18 @@ class ApiClient {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
+        
+        // Add CSRF token for authentication requests
+        if (config.url?.includes('/auth/')) {
+          const csrfToken = this.getCSRFTokenFromCookie()
+          if (csrfToken) {
+            config.headers['X-XSRF-TOKEN'] = csrfToken
+            console.log('🔐 Adding CSRF token to request:', csrfToken.substring(0, 20) + '...')
+          } else {
+            console.warn('⚠️ No CSRF token found in cookie')
+          }
+        }
+        
         return config
       },
       (error: AxiosError) => Promise.reject(error)
@@ -56,8 +69,59 @@ class ApiClient {
   }
 
   public async post<T>(url: string, data?: unknown): Promise<T> {
+    // Get CSRF cookie for authentication endpoints
+    if (url.includes('/auth/')) {
+      console.log('🔒 Getting CSRF cookie for auth request:', url)
+      await this.getCsrfCookie()
+    }
+    
     const response = await this.client.post<T>(url, data)
     return response.data
+  }
+
+  // Get CSRF cookie for Sanctum SPA authentication
+  private async getCsrfCookie(): Promise<void> {
+    try {
+      const csrfUrl = `${API_CONFIG.BASE_URL.replace('/api/v1', '')}/sanctum/csrf-cookie`
+      console.log('🔒 Requesting CSRF cookie from:', csrfUrl)
+      
+      // Call CSRF endpoint directly without baseURL prefix
+      const response = await axios.get(csrfUrl, {
+        withCredentials: true,
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        }
+      })
+      
+      console.log('✅ CSRF cookie response status:', response.status)
+      
+      // Check if the CSRF token is now available in cookies
+      const token = this.getCSRFTokenFromCookie()
+      console.log('🍪 CSRF token after request:', token ? token.substring(0, 20) + '...' : 'Not found')
+    } catch (error) {
+      console.error('❌ Failed to get CSRF cookie:', error)
+    }
+  }
+
+  // Extract CSRF token from cookie
+  private getCSRFTokenFromCookie(): string | null {
+    try {
+      const name = 'XSRF-TOKEN'
+      const value = `; ${document.cookie}`
+      const parts = value.split(`; ${name}=`)
+      if (parts.length === 2) {
+        const cookieValue = parts.pop()?.split(';').shift()
+        if (cookieValue) {
+          // Decode the URL-encoded cookie value
+          return decodeURIComponent(cookieValue)
+        }
+      }
+      return null
+    } catch (error) {
+      console.error('Error reading CSRF token from cookie:', error)
+      return null
+    }
   }
 
   public async put<T>(url: string, data?: any): Promise<T> {

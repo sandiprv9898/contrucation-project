@@ -11,8 +11,8 @@
         <div class="flex flex-wrap gap-4">
           <VButton variant="primary">Primary Button</VButton>
           <VButton variant="secondary">Secondary Button</VButton>
-          <VButton variant="ghost">Ghost Button</VButton>
-          <VButton variant="destructive">Destructive Button</VButton>
+          <VButton variant="outline">Ghost Button</VButton>
+          <VButton variant="secondary">Destructive Button</VButton>
           <VButton variant="outline">Outline Button</VButton>
           <VButton variant="primary" :loading="true">Loading Button</VButton>
           <VButton variant="primary" :disabled="true">Disabled Button</VButton>
@@ -28,7 +28,7 @@
           <VButton size="sm">Small</VButton>
           <VButton size="md">Medium</VButton>
           <VButton size="lg">Large</VButton>
-          <VButton size="icon" variant="ghost">
+          <VButton size="sm" variant="outline">
             <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
