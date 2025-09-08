@@ -32,11 +32,12 @@ class AuthController extends Controller
                 'companyId' => $request->company_id,
             ]);
 
-            $user = $this->authService->register($userData);
+            $result = $this->authService->register($userData);
 
             return response()->json([
                 'message' => 'User registered successfully',
-                'user' => new UserResource($user),
+                'user' => new UserResource($result['user']),
+                'token' => $result['token'],
             ], 201);
         } catch (\Exception $e) {
             Log::error('User registration failed', [
