@@ -1,13 +1,17 @@
 <template>
   <div
-    :class="cn(
+    :class="[
       // Base alert styles
       'p-4 rounded-md border',
       // Variant styles
-      alertVariants[variant],
+      variant === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
+      variant === 'warning' ? 'bg-yellow-50 border-yellow-200 text-yellow-800' :
+      variant === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
+      variant === 'info' ? 'bg-blue-50 border-blue-200 text-blue-800' :
+      'bg-gray-50 border-gray-200 text-gray-800',
       // Custom classes
       className
-    )"
+    ]"
     role="alert"
   >
     <div class="flex items-start gap-3">
@@ -125,15 +129,11 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn';
-import { alertVariants } from '@/utils/variants';
-import type { AlertVariant } from '@/utils/variants';
-
 interface Props {
   /**
    * Alert variant style
    */
-  variant?: AlertVariant;
+  variant?: 'success' | 'warning' | 'error' | 'info' | 'default';
   /**
    * Alert title
    */

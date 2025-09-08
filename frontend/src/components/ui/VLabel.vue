@@ -1,20 +1,20 @@
 <template>
   <label
     :for="htmlFor"
-    :class="cn(
+    :class="[
       // Base label styles
-      'text-sm font-medium text-foreground',
+      'text-sm font-medium text-gray-700',
       'cursor-pointer select-none',
       // Custom classes
       className
-    )"
+    ]"
   >
     <slot>{{ text }}</slot>
     
     <!-- Required indicator -->
     <span 
       v-if="required"
-      class="ml-1 text-destructive"
+      class="ml-1 text-red-500"
       aria-label="Required field"
     >
       *
@@ -23,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/utils/cn';
 
 interface Props {
   /**

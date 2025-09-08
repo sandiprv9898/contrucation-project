@@ -43,7 +43,7 @@
       />
       <router-link
         to="/auth/forgot-password"
-        class="text-sm text-primary hover:text-primary-600 transition-colors"
+        class="text-sm text-orange-600 hover:text-orange-700 transition-colors"
       >
         Forgot password?
       </router-link>
@@ -63,11 +63,11 @@
 
     <!-- Register Link -->
     <div class="text-center">
-      <p class="text-muted-foreground">
+      <p class="text-gray-600">
         Don't have an account?
         <router-link
           to="/auth/register"
-          class="text-primary hover:text-primary-600 font-medium transition-colors"
+          class="text-orange-600 hover:text-orange-700 font-medium transition-colors"
         >
           Sign up
         </router-link>

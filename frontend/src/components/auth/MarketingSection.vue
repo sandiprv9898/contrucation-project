@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gradient-to-br from-primary via-primary-600 to-secondary h-full min-h-screen flex items-center justify-center p-8 text-white">
+  <div class="bg-gradient-to-br from-orange-600 via-orange-700 to-blue-800 h-full min-h-screen flex items-center justify-center p-8 text-white">
     <div class="max-w-lg text-center lg:text-left">
       <!-- Hero Section -->
       <div class="mb-8">

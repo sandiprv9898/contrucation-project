@@ -9,18 +9,18 @@
       :required="required"
       :value="modelValue"
       :autocomplete="autocomplete"
-      :class="cn(
-        // Base styles - h-8 as per project standards
-        'h-8 w-full px-3 py-2 text-sm rounded-md transition-colors',
-        'bg-background border border-border',
-        'placeholder:text-muted-foreground',
-        'focus:outline-none focus:ring-2 focus:ring-offset-1',
+      :class="[
+        // Base styles
+        'h-10 w-full px-3 py-2 text-sm rounded-md transition-colors',
+        'bg-white border border-gray-300',
+        'placeholder:text-gray-500',
+        'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        // Variant styles
-        inputVariants[variant],
+        // Error state
+        error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : '',
         // Custom classes
         className
-      )"
+      ]"
       @input="handleInput"
       @blur="handleBlur"
       @focus="handleFocus"
@@ -29,7 +29,7 @@
     <!-- Error message -->
     <p 
       v-if="error" 
-      class="mt-1 text-xs text-destructive"
+      class="mt-1 text-xs text-red-600"
       :id="`${inputId}-error`"
     >
       {{ error }}
@@ -38,7 +38,7 @@
     <!-- Help text -->
     <p 
       v-else-if="help" 
-      class="mt-1 text-xs text-muted-foreground"
+      class="mt-1 text-xs text-gray-500"
       :id="`${inputId}-help`"
     >
       {{ help }}
@@ -47,10 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { cn } from '@/utils/cn';
-import { inputVariants } from '@/utils/variants';
-import type { InputVariant } from '@/utils/variants';
+import { computed } from 'vue';
 
 interface Props {
   /**
@@ -88,7 +85,7 @@ interface Props {
   /**
    * Input variant for styling
    */
-  variant?: InputVariant;
+  variant?: 'default' | 'error';
   /**
    * Autocomplete attribute
    */

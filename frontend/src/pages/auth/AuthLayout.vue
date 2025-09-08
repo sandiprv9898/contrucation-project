@@ -6,7 +6,7 @@
     </div>
 
     <!-- Mobile Marketing Header -->
-    <div class="lg:hidden w-full bg-gradient-to-r from-primary to-primary-600 text-white p-6">
+    <div class="lg:hidden w-full bg-gradient-to-r from-orange-600 to-blue-800 text-white p-6">
       <div class="text-center">
         <h1 class="text-2xl font-bold mb-2">Construction Management Platform</h1>
         <p class="text-orange-100">Professional project management for construction teams</p>
@@ -14,13 +14,13 @@
     </div>
 
     <!-- Auth Forms Section - Right Side -->
-    <div class="w-full lg:w-1/2 flex items-center justify-center bg-background">
+    <div class="w-full lg:w-1/2 flex items-center justify-center bg-white">
       <div class="max-w-md w-full mx-auto p-6 lg:p-8">
         <div class="text-center mb-8">
-          <h2 class="text-3xl font-bold text-foreground mb-2">
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">
             Welcome
           </h2>
-          <p class="text-muted-foreground">
+          <p class="text-gray-600">
             {{ getWelcomeMessage() }}
           </p>
         </div>

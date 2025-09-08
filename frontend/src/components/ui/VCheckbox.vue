@@ -8,17 +8,16 @@
         :disabled="disabled"
         :required="required"
         :checked="modelValue"
-        :class="cn(
-          // Base styles - ensuring 44px touch target
-          'h-4 w-4 min-h-[44px] min-w-[44px] sm:h-4 sm:w-4 sm:min-h-[16px] sm:min-w-[16px]',
-          'border border-border rounded transition-colors',
-          'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1',
+        :class="[
+          // Base styles
+          'h-4 w-4 border border-gray-300 rounded transition-colors',
+          'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1',
           'disabled:cursor-not-allowed disabled:opacity-50',
           // Checked state
-          modelValue && 'bg-primary border-primary text-white',
+          modelValue ? 'bg-orange-600 border-orange-600 text-white' : 'bg-white',
           // Custom classes
           className
-        )"
+        ]"
         @change="handleChange"
       />
       
@@ -63,7 +62,7 @@
       <!-- Error message -->
       <p 
         v-if="error" 
-        class="mt-1 text-xs text-destructive"
+        class="mt-1 text-xs text-red-600"
       >
         {{ error }}
       </p>
@@ -73,7 +72,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { cn } from '@/utils/cn';
 
 interface Props {
   /**
