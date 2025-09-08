@@ -1,7 +1,10 @@
 <template>
   <div class="min-h-screen flex">
     <!-- Marketing Section - Left Side -->
-    <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-orange-500 via-orange-600 to-blue-600 text-white">
+    <div 
+      class="flex w-1/2 text-white" 
+      style="background: linear-gradient(135deg, #ff4500 0%, #ff6600 50%, #0066cc 100%)"
+    >
       <div class="w-full h-full flex items-center justify-center p-8">
         <div class="max-w-lg">
           <!-- Hero Section -->
