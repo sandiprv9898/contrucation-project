@@ -8,44 +8,48 @@
     <!-- Name Field -->
     <div class="space-y-2">
       <VLabel for="name" required>Full Name</VLabel>
-      <VInput
+      <input 
         id="name"
-        v-model="form.name"
-        type="text"
+        v-model="form.name" 
+        type="text" 
         placeholder="Enter your full name"
-        :error="errors.name"
         :disabled="authStore.isLoading"
         required
+        class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
+      <p v-if="errors.name" class="mt-1 text-xs text-red-600">{{ errors.name }}</p>
+      <p class="text-xs text-gray-500" v-if="form.name">Current: {{ form.name }}</p>
     </div>
 
     <!-- Email Field -->
     <div class="space-y-2">
       <VLabel for="email" required>Email Address</VLabel>
-      <VInput
+      <input 
         id="email"
-        v-model="form.email"
-        type="email"
+        v-model="form.email" 
+        type="email" 
         placeholder="Enter your email address"
-        :error="errors.email"
         :disabled="authStore.isLoading"
         required
+        class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
+      <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
     </div>
 
     <!-- Password Field -->
     <div class="space-y-2">
       <VLabel for="password" required>Password</VLabel>
-      <VInput
+      <input 
         id="password"
-        v-model="form.password"
-        type="password"
+        v-model="form.password" 
+        type="password" 
         placeholder="Enter your password"
-        :error="errors.password"
         :disabled="authStore.isLoading"
         required
+        class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
-      <p class="text-xs text-muted-foreground">
+      <p v-if="errors.password" class="mt-1 text-xs text-red-600">{{ errors.password }}</p>
+      <p class="text-xs text-gray-500">
         Password must be at least 8 characters with uppercase, lowercase, and number
       </p>
     </div>
@@ -53,15 +57,16 @@
     <!-- Confirm Password Field -->
     <div class="space-y-2">
       <VLabel for="password_confirmation" required>Confirm Password</VLabel>
-      <VInput
+      <input 
         id="password_confirmation"
-        v-model="form.password_confirmation"
-        type="password"
+        v-model="form.password_confirmation" 
+        type="password" 
         placeholder="Confirm your password"
-        :error="errors.password_confirmation"
         :disabled="authStore.isLoading"
         required
+        class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
+      <p v-if="errors.password_confirmation" class="mt-1 text-xs text-red-600">{{ errors.password_confirmation }}</p>
     </div>
 
     <!-- Role Selection -->
@@ -129,7 +134,6 @@
 import { reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/modules/auth'
-import VInput from '@/components/ui/VInput.vue'
 import VButton from '@/components/ui/VButton.vue'
 import VCheckbox from '@/components/ui/VCheckbox.vue'
 import VLabel from '@/components/ui/VLabel.vue'

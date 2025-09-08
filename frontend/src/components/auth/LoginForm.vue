@@ -8,29 +8,31 @@
     <!-- Email Field -->
     <div class="space-y-2">
       <VLabel for="email" required>Email Address</VLabel>
-      <VInput
+      <input 
         id="email"
-        v-model="form.email"
-        type="email"
+        v-model="form.email" 
+        type="email" 
         placeholder="Enter your email address"
-        :error="errors.email"
         :disabled="isLoading"
         required
+        class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
+      <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
     </div>
 
     <!-- Password Field -->
     <div class="space-y-2">
       <VLabel for="password" required>Password</VLabel>
-      <VInput
+      <input 
         id="password"
-        v-model="form.password"
-        type="password"
+        v-model="form.password" 
+        type="password" 
         placeholder="Enter your password"
-        :error="errors.password"
         :disabled="isLoading"
         required
+        class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
+      <p v-if="errors.password" class="mt-1 text-xs text-red-600">{{ errors.password }}</p>
     </div>
 
     <!-- Remember Me & Forgot Password -->
@@ -79,7 +81,6 @@
 <script setup lang="ts">
 import { reactive, computed, watch } from 'vue'
 import { useAuth, useLoginValidation } from '@/modules/auth'
-import VInput from '@/components/ui/VInput.vue'
 import VButton from '@/components/ui/VButton.vue'
 import VCheckbox from '@/components/ui/VCheckbox.vue'
 import VLabel from '@/components/ui/VLabel.vue'
