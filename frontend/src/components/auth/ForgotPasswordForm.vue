@@ -60,7 +60,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/modules/auth'
 import VInput from '@/components/ui/VInput.vue'
 import VButton from '@/components/ui/VButton.vue'
 import VLabel from '@/components/ui/VLabel.vue'

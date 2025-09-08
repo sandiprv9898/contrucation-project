@@ -3,7 +3,6 @@ import { computed, ref } from 'vue'
 import { AuthApi } from '../api/auth.api'
 import { TokenManager } from '@/modules/shared/utils/tokenManager'
 import type {
-  AuthState,
   User,
   LoginRequest,
   RegisterRequest,
@@ -59,8 +58,8 @@ export const useAuthStore = defineStore('auth', () => {
       setAuthData(response)
       
       return response
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Login failed'
+    } catch (err: unknown) {
+      const errorMessage = (err as any).response?.data?.message || 'Login failed'
       setError(errorMessage)
       throw err
     } finally {
@@ -77,8 +76,8 @@ export const useAuthStore = defineStore('auth', () => {
       setAuthData(response)
       
       return response
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Registration failed'
+    } catch (err: unknown) {
+      const errorMessage = (err as any).response?.data?.message || 'Registration failed'
       setError(errorMessage)
       throw err
     } finally {
@@ -93,8 +92,8 @@ export const useAuthStore = defineStore('auth', () => {
       
       // Call logout API endpoint
       await AuthApi.logout()
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Logout failed'
+    } catch (err: unknown) {
+      const errorMessage = (err as any).response?.data?.message || 'Logout failed'
       setError(errorMessage)
     } finally {
       // Clear auth data regardless of API call success
@@ -109,8 +108,8 @@ export const useAuthStore = defineStore('auth', () => {
       setError(null)
       
       await AuthApi.forgotPassword(data)
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Password reset request failed'
+    } catch (err: unknown) {
+      const errorMessage = (err as any).response?.data?.message || 'Password reset request failed'
       setError(errorMessage)
       throw err
     } finally {
@@ -132,8 +131,8 @@ export const useAuthStore = defineStore('auth', () => {
       TokenManager.setUser(response.user)
       
       return response.user
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Failed to get user information'
+    } catch (err: unknown) {
+      const errorMessage = (err as any).response?.data?.message || 'Failed to get user information'
       setError(errorMessage)
       clearAuthData()
       throw err
@@ -159,10 +158,10 @@ export const useAuthStore = defineStore('auth', () => {
   // Export store interface
   return {
     // State
-    user: readonly(user),
-    token: readonly(token),
-    isLoading: readonly(isLoading),
-    error: readonly(error),
+    user,
+    token,
+    isLoading,
+    error,
     
     // Getters
     isAuthenticated,

@@ -22,7 +22,7 @@ class ApiClient {
   private setupInterceptors(): void {
     // Request interceptor
     this.client.interceptors.request.use(
-      (config) => {
+      (config: any) => {
         const token = TokenManager.getToken()
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
@@ -50,12 +50,12 @@ class ApiClient {
   }
 
   // Generic API methods
-  public async get<T>(url: string, params?: any): Promise<T> {
+  public async get<T>(url: string, params?: Record<string, unknown>): Promise<T> {
     const response = await this.client.get<T>(url, { params })
     return response.data
   }
 
-  public async post<T>(url: string, data?: any): Promise<T> {
+  public async post<T>(url: string, data?: unknown): Promise<T> {
     const response = await this.client.post<T>(url, data)
     return response.data
   }
