@@ -9,7 +9,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      beforeEnter: (to, from, next) => {
+      beforeEnter: (_to, _from, next) => {
         const authStore = useAuthStore()
         if (authStore.isAuthenticated) {
           next('/dashboard')
@@ -67,7 +67,7 @@ const router = createRouter({
 })
 
 // Navigation guards
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
   
   // Initialize auth state if not already done
