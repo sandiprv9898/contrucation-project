@@ -1,64 +1,60 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-6">
-    <!-- Error Alert -->
-    <VAlert v-if="authStore.error" variant="error" class="mb-4">
-      {{ authStore.error }}
-    </VAlert>
-
-    <!-- Test Simple Reactivity -->
-    <div class="space-y-2 border-2 border-red-500 p-4 mb-4">
-      <h3 class="text-red-600 font-bold">DEBUG: Test Simple Input</h3>
-      <input 
-        v-model="testValue"
-        type="text" 
-        placeholder="Type here to test..."
-        class="w-full px-3 py-2 border border-blue-500 rounded"
-      />
-      <p class="text-blue-600">Test value: "{{ testValue }}"</p>
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
+      <p class="text-gray-600">Join our construction management platform</p>
     </div>
 
-    <!-- Name Field -->
+    <!-- Error Alert -->
+    <div v-if="error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+      {{ error }}
+    </div>
+
+    <!-- Full Name -->
     <div class="space-y-2">
-      <VLabel for="name" required>Full Name</VLabel>
+      <label for="name" class="block text-sm font-medium text-gray-700">
+        Full Name <span class="text-red-500">*</span>
+      </label>
       <input 
         id="name"
-        v-model="form.name" 
+        v-model="form.name"
         type="text" 
         placeholder="Enter your full name"
-        :disabled="authStore.isLoading"
+        :disabled="loading"
         required
         class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
-        @input="(e) => console.log('Input event:', e.target.value)"
       />
       <p v-if="errors.name" class="mt-1 text-xs text-red-600">{{ errors.name }}</p>
-      <p class="text-xs text-gray-500">Current name: "{{ form.name }}" (length: {{ form.name?.length || 0 }})</p>
-      <p class="text-xs text-blue-500">Form object: {{ JSON.stringify(form) }}</p>
     </div>
 
-    <!-- Email Field -->
+    <!-- Email -->
     <div class="space-y-2">
-      <VLabel for="email" required>Email Address</VLabel>
+      <label for="email" class="block text-sm font-medium text-gray-700">
+        Email Address <span class="text-red-500">*</span>
+      </label>
       <input 
         id="email"
-        v-model="form.email" 
+        v-model="form.email"
         type="email" 
         placeholder="Enter your email address"
-        :disabled="authStore.isLoading"
+        :disabled="loading"
         required
         class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
       <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
     </div>
 
-    <!-- Password Field -->
+    <!-- Password -->
     <div class="space-y-2">
-      <VLabel for="password" required>Password</VLabel>
+      <label for="password" class="block text-sm font-medium text-gray-700">
+        Password <span class="text-red-500">*</span>
+      </label>
       <input 
         id="password"
-        v-model="form.password" 
+        v-model="form.password"
         type="password" 
         placeholder="Enter your password"
-        :disabled="authStore.isLoading"
+        :disabled="loading"
         required
         class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
@@ -68,15 +64,17 @@
       </p>
     </div>
 
-    <!-- Confirm Password Field -->
+    <!-- Confirm Password -->
     <div class="space-y-2">
-      <VLabel for="password_confirmation" required>Confirm Password</VLabel>
+      <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
+        Confirm Password <span class="text-red-500">*</span>
+      </label>
       <input 
         id="password_confirmation"
-        v-model="form.password_confirmation" 
+        v-model="form.password_confirmation"
         type="password" 
         placeholder="Confirm your password"
-        :disabled="authStore.isLoading"
+        :disabled="loading"
         required
         class="h-10 w-full px-3 py-2 text-sm rounded-md transition-colors bg-white border border-gray-300 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
@@ -85,12 +83,12 @@
 
     <!-- Role Selection -->
     <div class="space-y-2">
-      <VLabel for="role">Role (Optional)</VLabel>
+      <label for="role" class="block text-sm font-medium text-gray-700">Role (Optional)</label>
       <select
         id="role"
         v-model="form.role"
-        :disabled="authStore.isLoading"
-        class="h-8 px-3 py-2 border border-border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed bg-background text-foreground"
+        :disabled="loading"
+        class="h-10 px-3 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:opacity-50 disabled:cursor-not-allowed bg-white text-gray-900"
       >
         <option value="field_worker">Field Worker</option>
         <option value="supervisor">Supervisor</option>
@@ -101,41 +99,40 @@
 
     <!-- Terms Agreement -->
     <div class="space-y-2">
-      <VCheckbox
-        id="terms"
-        v-model="form.agreeToTerms"
-        :disabled="authStore.isLoading"
-        :error="errors.terms"
-        required
-      >
-        <template #label>
+      <label class="flex items-start gap-3">
+        <input
+          type="checkbox"
+          v-model="form.agreeToTerms"
+          :disabled="loading"
+          required
+          class="mt-0.5 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+        />
+        <span class="text-sm text-gray-700">
           I agree to the
-          <a href="#" class="text-primary hover:text-primary-600 underline">Terms of Service</a>
+          <a href="#" class="text-orange-600 hover:text-orange-700 underline">Terms of Service</a>
           and
-          <a href="#" class="text-primary hover:text-primary-600 underline">Privacy Policy</a>
-        </template>
-      </VCheckbox>
+          <a href="#" class="text-orange-600 hover:text-orange-700 underline">Privacy Policy</a>
+        </span>
+      </label>
+      <p v-if="errors.terms" class="mt-1 text-xs text-red-600">{{ errors.terms }}</p>
     </div>
 
-    <!-- Register Button -->
-    <VButton
+    <!-- Submit Button -->
+    <button
       type="submit"
-      variant="primary"
-      size="md"
-      :loading="authStore.isLoading"
-      :disabled="!isFormValid"
-      class="w-full"
+      :disabled="!canSubmit || loading"
+      class="w-full h-10 px-4 py-2 text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-500 focus:ring-opacity-50 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      {{ authStore.isLoading ? 'Creating account...' : 'Create account' }}
-    </VButton>
+      {{ loading ? 'Creating account...' : 'Create account' }}
+    </button>
 
     <!-- Login Link -->
     <div class="text-center">
-      <p class="text-muted-foreground">
+      <p class="text-gray-600">
         Already have an account?
         <router-link
           to="/auth/login"
-          class="text-primary hover:text-primary-600 font-medium transition-colors"
+          class="text-orange-600 hover:text-orange-700 font-medium transition-colors"
         >
           Sign in
         </router-link>
@@ -147,18 +144,10 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/modules/auth'
-import VButton from '@/components/ui/VButton.vue'
-import VCheckbox from '@/components/ui/VCheckbox.vue'
-import VLabel from '@/components/ui/VLabel.vue'
-import VAlert from '@/components/ui/VAlert.vue'
 
-const authStore = useAuthStore()
 const router = useRouter()
 
-// DEBUG: Simple test value
-const testValue = ref('')
-
+// Simple reactive form
 const form = reactive({
   name: '',
   email: '',
@@ -169,14 +158,16 @@ const form = reactive({
 })
 
 const errors = ref<Record<string, string>>({})
+const loading = ref(false)
+const error = ref('')
 
-const isFormValid = computed(() => {
+const canSubmit = computed(() => {
   return form.name.length > 0 && 
          form.email.length > 0 && 
          form.password.length > 0 &&
          form.password_confirmation.length > 0 &&
          form.agreeToTerms &&
-         !Object.keys(errors.value).length
+         Object.keys(errors.value).length === 0
 })
 
 const validateForm = () => {
@@ -223,21 +214,23 @@ const validateForm = () => {
 const handleSubmit = async () => {
   if (!validateForm()) return
 
-  try {
-    authStore.clearError()
-    await authStore.register({
-      name: form.name,
-      email: form.email,
-      password: form.password,
-      password_confirmation: form.password_confirmation,
-      role: form.role as any,
-    })
+  loading.value = true
+  error.value = ''
 
-    // Redirect to dashboard on successful registration
+  try {
+    // TODO: Connect to auth store/API
+    console.log('Form submitted:', form)
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    // Success - redirect to dashboard
     router.push('/dashboard')
-  } catch (error) {
-    // Error is handled by the store
-    console.error('Registration failed:', error)
+  } catch (err) {
+    error.value = 'Registration failed. Please try again.'
+    console.error('Registration error:', err)
+  } finally {
+    loading.value = false
   }
 }
 </script>
