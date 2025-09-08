@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <LoginForm />
-  </div>
+  <CleanLoginForm />
 </template>
 
 <script setup lang="ts">
-import LoginForm from '@/components/auth/LoginForm.vue'
+import CleanLoginForm from '@/components/auth/CleanLoginForm.vue'
 </script>

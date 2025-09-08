@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <ForgotPasswordForm />
-  </div>
+  <ForgotPasswordForm />
 </template>
 
 <script setup lang="ts">
