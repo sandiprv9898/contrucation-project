@@ -18,12 +18,15 @@ export { default as VLabel } from './VLabel.vue';
 export { default as VSelect } from './VSelect.vue';
 export { default as VTextarea } from './VTextarea.vue';
 export { default as VFormField } from './VFormField.vue';
+export { default as VFormBuilder } from './VFormBuilder.vue';
+export { default as VValidatedField } from './VValidatedField.vue';
 
 // Layout Components
 export { default as VCard } from './VCard.vue';
 export { default as VAlert } from './VAlert.vue';
 export { default as VBadge } from './VBadge.vue';
 export { default as VModal } from './VModal.vue';
+export { default as VThemeCustomizer } from './VThemeCustomizer.vue';
 
 // Menu Components
 export { default as VDropdownMenu } from './VDropdownMenu.vue';
@@ -47,3 +50,44 @@ export {
   type BadgeVariant,
   type InputVariant
 } from '@/utils/variants';
+
+// Theme utilities
+export { useTheme, initializeTheme } from '@/composables/useTheme';
+export {
+  themeButtonVariants,
+  themeInputVariants,
+  themeAlertVariants,
+  themeBadgeVariants,
+  themeCardVariants,
+  themeFocusRing,
+  themeTransitions,
+  themeColorClass,
+  themeSpacingClass,
+  themeBorderRadiusClass,
+  themeShadowClass,
+  createThemeComponentClasses,
+  type ThemeButtonVariant,
+  type ThemeButtonSize,
+  type ThemeInputVariant,
+  type ThemeInputSize,
+  type ThemeAlertVariant,
+  type ThemeBadgeVariant,
+  type ThemeBadgeSize,
+  type ThemeCardVariant,
+  type ThemeCardSize
+} from '@/utils/theme-variants';
+
+// Validation utilities
+export { 
+  useValidation, 
+  useFieldValidation, 
+  validationRules, 
+  commonValidations,
+  createValidationSchema,
+  combineValidationRules,
+  type ValidationRule,
+  type FieldValidationConfig,
+  type ValidationSchema,
+  type ValidationError,
+  type ValidationState
+} from '@/composables/useValidation';

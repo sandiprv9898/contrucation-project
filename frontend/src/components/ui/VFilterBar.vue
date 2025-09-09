@@ -96,38 +96,38 @@
               <!-- Date Range Filter -->
               <div v-else-if="filter.type === 'date-range'" class="flex items-center space-x-2">
                 <VInput
-                  v-model="filterValues[filter.key]?.from"
+                  :value="filterValues[filter.key]?.from"
+                  @update:model-value="(val) => updateDateRange(filter.key, 'from', val)"
                   type="date"
                   :size="size"
                   placeholder="From date"
-                  @change="handleDateRangeChange(filter.key)"
                 />
                 <span class="text-gray-400">to</span>
                 <VInput
-                  v-model="filterValues[filter.key]?.to"
+                  :value="filterValues[filter.key]?.to"
+                  @update:model-value="(val) => updateDateRange(filter.key, 'to', val)"
                   type="date"
                   :size="size"
                   placeholder="To date"
-                  @change="handleDateRangeChange(filter.key)"
                 />
               </div>
               
               <!-- Number Range Filter -->
               <div v-else-if="filter.type === 'number-range'" class="flex items-center space-x-2">
                 <VInput
-                  v-model="filterValues[filter.key]?.min"
+                  :value="filterValues[filter.key]?.min"
+                  @update:model-value="(val) => updateNumberRange(filter.key, 'min', val)"
                   type="number"
                   :size="size"
                   :placeholder="filter.minPlaceholder || 'Min'"
-                  @change="handleNumberRangeChange(filter.key)"
                 />
                 <span class="text-gray-400">-</span>
                 <VInput
-                  v-model="filterValues[filter.key]?.max"
+                  :value="filterValues[filter.key]?.max"
+                  @update:model-value="(val) => updateNumberRange(filter.key, 'max', val)"
                   type="number"
                   :size="size"
                   :placeholder="filter.maxPlaceholder || 'Max'"
-                  @change="handleNumberRangeChange(filter.key)"
                 />
               </div>
             </template>
@@ -388,6 +388,22 @@ const handleSearchChange = (): void => {
 
 const handleFilterChange = (key: string, value: any): void => {
   filterValues[key] = value;
+  emitFilterChange();
+};
+
+const updateDateRange = (key: string, field: 'from' | 'to', value: string): void => {
+  if (!filterValues[key]) {
+    filterValues[key] = { from: '', to: '' };
+  }
+  filterValues[key][field] = value;
+  emitFilterChange();
+};
+
+const updateNumberRange = (key: string, field: 'min' | 'max', value: string): void => {
+  if (!filterValues[key]) {
+    filterValues[key] = { min: null, max: null };
+  }
+  filterValues[key][field] = value ? Number(value) : null;
   emitFilterChange();
 };
 

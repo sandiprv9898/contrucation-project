@@ -1,7 +1,7 @@
 <template>
   <textarea
     :id="fieldId"
-    v-model="modelValue"
+    :value="modelValue"
     :disabled="disabled"
     :required="required"
     :placeholder="placeholder"
