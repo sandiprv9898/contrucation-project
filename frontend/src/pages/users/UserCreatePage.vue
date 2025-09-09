@@ -1,13 +1,11 @@
 <template>
-  <MainLayout>
-    <div class="max-w-4xl mx-auto">
-      <UserForm 
-        :loading="loading"
-        @submit="handleCreateUser"
-        @cancel="handleCancel"
-      />
-    </div>
-  </MainLayout>
+  <div class="max-w-4xl mx-auto">
+    <UserForm 
+      :loading="loading"
+      @submit="handleCreateUser"
+      @cancel="handleCancel"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -15,7 +13,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { UserForm } from '@/modules/users'
 import { UsersApi } from '@/modules/users/api/users.api'
-import MainLayout from '@/layouts/MainLayout.vue'
 import type { CreateUserRequest } from '@/modules/users/types/users.types';
 
 const router = useRouter();

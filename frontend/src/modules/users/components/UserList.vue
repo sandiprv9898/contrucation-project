@@ -1,257 +1,264 @@
 <template>
   <div class="space-y-6">
-    <!-- Header with Stats -->
-    <div class="bg-white rounded-lg shadow-sm border p-6">
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900">Team Members</h1>
-          <p class="text-gray-600 mt-1">Manage your construction team and their roles</p>
+    <!-- Enhanced Header with Stats and Theme -->
+    <VCard variant="elevated" class="border-l-4 border-orange-500">
+      <template #header>
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+              <Users class="w-6 h-6 text-orange-600" />
+              Team Members
+            </h1>
+            <p class="text-gray-600 mt-1">Manage your construction team and their roles</p>
+          </div>
+          
+          <!-- Enhanced Stats with Icons -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+            <div class="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg">
+              <Users class="w-4 h-4 text-blue-600" />
+              <div>
+                <div class="font-semibold text-blue-900">{{ statistics.total }}</div>
+                <div class="text-blue-600 text-xs">Total</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 bg-green-50 rounded-lg">
+              <UserCheck class="w-4 h-4 text-green-600" />
+              <div>
+                <div class="font-semibold text-green-900">{{ statistics.active }}</div>
+                <div class="text-green-600 text-xs">Active</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg">
+              <CheckCircle class="w-4 h-4 text-purple-600" />
+              <div>
+                <div class="font-semibold text-purple-900">{{ statistics.verified }}</div>
+                <div class="text-purple-600 text-xs">Verified</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2 bg-orange-50 rounded-lg">
+              <Plus class="w-4 h-4 text-orange-600" />
+              <div>
+                <div class="font-semibold text-orange-900">{{ statistics.thisMonth }}</div>
+                <div class="text-orange-600 text-xs">This Month</div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <!-- Inline Stats -->
-        <div class="flex items-center gap-6 text-sm text-gray-600">
-          <span>Total: <strong class="text-gray-900">{{ statistics.total }}</strong></span>
-          <span>Active: <strong class="text-green-600">{{ statistics.active }}</strong></span>
-          <span>Verified: <strong class="text-gray-900">{{ statistics.verified }}</strong></span>
-          <span>This Month: <strong class="text-blue-600">{{ statistics.thisMonth }}</strong></span>
-        </div>
-      </div>
-    </div>
+      </template>
+    </VCard>
 
-    <!-- Filters -->
-    <div class="bg-white rounded-lg shadow-sm border p-4">
-      <div class="flex flex-wrap items-center gap-4">
-        <!-- Search -->
-        <div class="relative flex-1 min-w-[200px]">
-          <Search class="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-          <VInput
-            v-model="searchTerm"
-            placeholder="Search by name or email..."
-            class="pl-9"
-          />
-        </div>
-        
-        <!-- Role Filter -->
-        <div class="lg:w-48">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-          <select 
-            v-model="selectedRole"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-          >
-            <option value="">All Roles</option>
-            <option value="admin">Administrator</option>
-            <option value="project_manager">Project Manager</option>
-            <option value="supervisor">Supervisor</option>
-            <option value="field_worker">Field Worker</option>
-          </select>
-        </div>
-        
-        <!-- Department Filter -->
-        <div class="lg:w-48">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
-          <select 
-            v-model="selectedDepartment"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-          >
-            <option value="">All Departments</option>
-            <option value="construction">Construction</option>
-            <option value="engineering">Engineering</option>
-            <option value="safety">Safety</option>
-            <option value="management">Management</option>
-            <option value="logistics">Logistics</option>
-          </select>
-        </div>
-        
-        <!-- Status Filter -->
-        <div class="lg:w-40">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-          <select 
-            v-model="selectedVerification"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-          >
-            <option value="">All Status</option>
-            <option value="true">Verified</option>
-            <option value="false">Pending</option>
-          </select>
-        </div>
-        
-        <!-- Clear Filters -->
-        <VButton 
-          v-if="hasActiveFilters"
-          variant="outline" 
-          @click="clearFilters"
-          class="flex items-center gap-2"
+    <!-- Advanced Data Management -->
+    <VCard>
+      <template #content>
+        <!-- Enhanced Filter Bar -->
+        <VFilterBar
+          title="User Management Filters"
+          searchable
+          search-placeholder="Search users by name, email, phone, or department..."
+          :filters="filterDefinitions"
+          show-clear-button
+          show-active-filters
+          layout="horizontal"
+          show-toggle
+          @search-change="handleSearchChange"
+          @filter-change="handleFilterChange"
+          @clear-filters="handleClearFilters"
         >
-          <X class="h-4 w-4" />
-          Clear Filters
-        </VButton>
-        
-        <!-- Add User Button -->
-        <VButton 
-          v-if="canCreateUsers"
-          @click="handleCreateUser"
-          class="bg-orange-600 hover:bg-orange-700 text-white"
-        >
-          <Plus class="mr-2 h-4 w-4" />
-          Add Member
-        </VButton>
-      </div>
-    </div>
-
-    <!-- User Table -->
-    <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Member
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Role & Department
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Joined
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <!-- Loading State -->
-            <tr v-if="loading">
-              <td colspan="5" class="px-6 py-12 text-center text-gray-500">
-                <div class="flex items-center justify-center">
-                  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
-                  <span class="ml-3">Loading team members...</span>
-                </div>
-              </td>
-            </tr>
-            
-            <!-- Empty State -->
-            <tr v-else-if="displayedUsers.length === 0">
-              <td colspan="5" class="px-6 py-12 text-center">
-                <div class="text-gray-400">
-                  <Users class="h-16 w-16 mx-auto mb-4" />
-                  <h3 class="text-lg font-medium text-gray-900 mb-2">No members found</h3>
-                  <p class="text-gray-500">
-                    {{ hasActiveFilters ? 'Try adjusting your filters' : 'Get started by adding your first team member' }}
-                  </p>
-                  <VButton 
-                    v-if="!hasActiveFilters && canCreateUsers"
-                    @click="handleCreateUser"
-                    class="mt-4 bg-orange-600 hover:bg-orange-700 text-white"
-                  >
-                    <Plus class="mr-2 h-4 w-4" />
-                    Add First Member
-                  </VButton>
-                </div>
-              </td>
-            </tr>
-            
-            <!-- User Rows -->
-            <tr 
-              v-else
-              v-for="user in displayedUsers" 
-              :key="user.id"
-              class="hover:bg-gray-50 transition-colors cursor-pointer"
-              @click="handleViewUser(user)"
+          <template #actions="{ size }">
+            <VButton
+              variant="outline"
+              :size="size"
+              @click="exportUsers"
             >
-              <!-- Member Info -->
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-4">
-                  <div class="relative">
-                    <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
-                      <span class="text-sm font-medium text-orange-800">
-                        {{ user.name.split(' ').map(n => n[0]).join('').toUpperCase() }}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="min-w-0 flex-1">
-                    <div class="text-sm font-medium text-gray-900 truncate">
-                      {{ user.name }}
-                    </div>
-                    <div class="text-sm text-gray-500 truncate">
-                      {{ user.email }}
-                    </div>
-                  </div>
-                </div>
-              </td>
-              
-              <!-- Role & Department -->
-              <td class="px-6 py-4">
-                <div class="space-y-1">
-                  <VBadge :variant="getRoleVariant(user.role)" class="text-xs flex items-center gap-1">
-                    <component :is="getRoleIcon(user.role)" class="w-3 h-3" />
-                    {{ formatRole(user.role) }}
-                  </VBadge>
-                  <div class="text-xs text-gray-500 flex items-center gap-1">
-                    <component :is="getDepartmentIcon(user.department || 'construction')" class="w-3 h-3" />
-                    {{ formatDepartment(user.department || 'construction') }}
-                  </div>
-                </div>
-              </td>
-              
-              <!-- Status -->
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-2">
-                  <VBadge :variant="user.email_verified_at ? 'success' : 'warning'" class="text-xs">
-                    <component :is="user.email_verified_at ? CheckCircle : Clock" class="w-3 h-3 mr-1" />
-                    {{ user.email_verified_at ? 'Verified' : 'Pending' }}
-                  </VBadge>
-                </div>
-              </td>
-              
-              <!-- Joined Date -->
-              <td class="px-6 py-4">
-                <div class="text-sm text-gray-900">{{ formatDate(user.created_at) }}</div>
-                <div class="text-xs text-gray-500">{{ getRelativeTime(user.created_at) }}</div>
-              </td>
-              
-              <!-- Actions -->
-              <td class="px-6 py-4 text-right" @click.stop>
-                <VButton variant="outline" size="sm" @click.stop="handleViewUser(user)">
-                  <Edit class="h-4 w-4 mr-1" />
-                  Edit
-                </VButton>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <!-- Pagination -->
-      <div class="flex items-center justify-between p-4 border-t border-gray-200">
-        <div class="text-sm text-gray-600">
-          Showing {{ startIndex }}-{{ endIndex }} of {{ totalUsers }}
+              <Download class="w-4 h-4 mr-1" />
+              Export
+            </VButton>
+            <VButton
+              variant="outline"
+              :size="size"
+              @click="showBulkActions = !showBulkActions"
+            >
+              <MoreVertical class="w-4 h-4 mr-1" />
+              Bulk Actions
+            </VButton>
+            <VButton
+              v-if="canCreateUsers"
+              :size="size"
+              @click="handleCreateUser"
+            >
+              <UserPlus class="w-4 h-4 mr-1" />
+              Add User
+            </VButton>
+          </template>
+        </VFilterBar>
+
+        <!-- Bulk Actions Panel -->
+        <div v-if="showBulkActions" class="border-t border-gray-200 p-4 bg-gray-50">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <span class="text-sm text-gray-600">
+                {{ selectedUsers.length }} users selected
+              </span>
+              <VButton
+                variant="outline"
+                size="sm"
+                @click="selectAllUsers"
+                v-if="selectedUsers.length < filteredUsers.length"
+              >
+                Select All ({{ filteredUsers.length }})
+              </VButton>
+              <VButton
+                variant="outline"
+                size="sm"
+                @click="clearSelection"
+                v-else
+              >
+                Clear Selection
+              </VButton>
+            </div>
+            <div class="flex items-center gap-2">
+              <VButton
+                variant="outline"
+                size="sm"
+                :disabled="selectedUsers.length === 0"
+                @click="bulkExport"
+              >
+                <Download class="w-4 h-4 mr-1" />
+                Export Selected
+              </VButton>
+              <VButton
+                variant="destructive"
+                size="sm"
+                :disabled="selectedUsers.length === 0"
+                @click="bulkDelete"
+              >
+                <Trash class="w-4 h-4 mr-1" />
+                Delete Selected
+              </VButton>
+            </div>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <VButton 
-            variant="outline"
-            :disabled="currentPage === 1"
-            @click="handlePageChange(currentPage - 1)"
-            class="text-sm px-3 py-1"
-          >
-            Previous
-          </VButton>
-          <span class="px-2 text-sm text-gray-600">
-            Page {{ currentPage }} of {{ totalPages }}
-          </span>
-          <VButton 
-            variant="outline"
-            :disabled="currentPage === totalPages"
-            @click="handlePageChange(currentPage + 1)"
-            class="text-sm px-3 py-1"
-          >
-            Next
-          </VButton>
+
+
+        <!-- Advanced Data Table -->
+        <VDataTable
+          :columns="tableColumns"
+          :data="filteredUsers"
+          :loading="loading"
+          :searchable="false"
+          :sortable="true"
+          :resizable="true"
+          :exportable="true"
+          :paginated="true"
+          :perPage="pageSize"
+          :selectable="showBulkActions"
+          :clickableRows="true"
+          :emptyTitle="'No team members found'"
+          :emptyMessage="hasActiveFilters ? 'No users match your current filters.' : 'Get started by adding your first team member.'"
+          :emptyIcon="Users"
+          @row-click="handleViewUser"
+          @selection-change="selectedUsers = $event"
+          class="border-0 shadow-none"
+        >
+          <template #cell-member="{ row }">
+            <div class="flex items-center gap-4">
+              <div class="relative">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-sm">
+                  <span class="text-sm font-medium text-white">
+                    {{ row.name.split(' ').map(n => n[0]).join('').toUpperCase() }}
+                  </span>
+                </div>
+                <div v-if="row.email_verified_at" class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center ring-2 ring-white">
+                  <CheckCircle class="w-2.5 h-2.5 text-white" />
+                </div>
+                <div v-else class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center ring-2 ring-white">
+                  <Clock class="w-2.5 h-2.5 text-white" />
+                </div>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-sm font-medium text-gray-900 truncate">
+                  {{ row.name }}
+                </div>
+                <div class="text-sm text-gray-500 truncate flex items-center gap-1">
+                  <Mail class="w-3 h-3" />
+                  {{ row.email }}
+                </div>
+                <div v-if="row.phone" class="text-xs text-gray-400 truncate flex items-center gap-1 mt-0.5">
+                  <Phone class="w-3 h-3" />
+                  {{ row.phone }}
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template #cell-role="{ row }">
+            <div class="space-y-2">
+              <VBadge :variant="getRoleVariant(row.role)" class="text-xs flex items-center gap-1 w-fit">
+                <component :is="getRoleIcon(row.role)" class="w-3 h-3" />
+                {{ formatRole(row.role) }}
+              </VBadge>
+              <div class="text-xs text-gray-500 flex items-center gap-1">
+                <component :is="getDepartmentIcon(row.department || 'construction')" class="w-3 h-3" />
+                {{ formatDepartment(row.department || 'construction') }}
+              </div>
+            </div>
+          </template>
+
+          <template #cell-status="{ row }">
+            <div class="space-y-1">
+              <VBadge :variant="row.email_verified_at ? 'success' : 'warning'" class="text-xs w-fit">
+                <component :is="row.email_verified_at ? CheckCircle : Clock" class="w-3 h-3 mr-1" />
+                {{ row.email_verified_at ? 'Verified' : 'Pending' }}
+              </VBadge>
+              <div class="text-xs text-gray-500">
+                Last login: {{ row.last_login_at ? formatDate(row.last_login_at) : 'Never' }}
+              </div>
+            </div>
+          </template>
+
+          <template #cell-joined="{ row }">
+            <div class="text-sm text-gray-900">{{ formatDate(row.created_at) }}</div>
+            <div class="text-xs text-gray-500">{{ getRelativeTime(row.created_at) }}</div>
+          </template>
+
+          <template #cell-actions="{ row }">
+            <div class="flex items-center gap-1" @click.stop>
+              <VButton variant="ghost" size="sm" @click.stop="handleViewUser(row)" class="h-8 w-8 p-0">
+                <Eye class="h-4 w-4" />
+              </VButton>
+              <VButton variant="ghost" size="sm" @click.stop="handleEditUser(row)" class="h-8 w-8 p-0">
+                <Edit class="h-4 w-4" />
+              </VButton>
+              <VButton 
+                v-if="canDeleteUser(row)"
+                variant="ghost" 
+                size="sm" 
+                @click.stop="handleDeleteUser(row)"
+                class="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash class="h-4 w-4" />
+              </VButton>
+              <VButton variant="ghost" size="sm" @click.stop="showUserMenu(row)" class="h-8 w-8 p-0">
+                <MoreVertical class="h-4 w-4" />
+              </VButton>
+            </div>
+          </template>
+        </VDataTable>
+      </template>
+    </VCard>
+
+    <!-- User Action Modal (for bulk operations, etc.) -->
+    <VModal v-if="showUserModal" @close="showUserModal = false">
+      <template #header>
+        <h3 class="text-lg font-semibold">User Actions</h3>
+      </template>
+      <template #content>
+        <div class="space-y-4">
+          <p class="text-gray-600">Choose an action to perform on the selected user(s):</p>
+          <!-- Modal content would go here -->
         </div>
-      </div>
-    </div>
+      </template>
+    </VModal>
   </div>
 </template>
 
@@ -260,9 +267,38 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsers } from '../composables/useUsers';
 import { useUserPermissions } from '../composables/useUserPermissions';
-import { VButton, VCard, VInput, VBadge } from '@/components/ui';
-import { Plus, Search, Edit, Trash, CheckCircle, Clock, X, MoreVertical, Mail, Shield, UserCheck, Users, Check, ArrowUpDown, Crown, ClipboardList, HardHat, Hammer, Building2, Settings, ShieldCheck, Briefcase, Package } from 'lucide-vue-next';
+import { VButton, VCard, VInput, VBadge, VDataTable, VFilterBar, VModal } from '@/components/ui';
+// FontAwesome icon components for UserList
+const Plus = { template: '<font-awesome-icon icon="plus" />' };
+const Search = { template: '<font-awesome-icon icon="search" />' };
+const Edit = { template: '<font-awesome-icon icon="edit" />' };
+const Trash = { template: '<font-awesome-icon icon="trash" />' };
+const CheckCircle = { template: '<font-awesome-icon icon="check-circle" />' };
+const Clock = { template: '<font-awesome-icon icon="clock" />' };
+const X = { template: '<font-awesome-icon icon="times" />' };
+const MoreVertical = { template: '<font-awesome-icon icon="ellipsis-v" />' };
+const Mail = { template: '<font-awesome-icon icon="envelope" />' };
+const Shield = { template: '<font-awesome-icon icon="shield" />' };
+const UserCheck = { template: '<font-awesome-icon icon="user" />' };
+const Users = { template: '<font-awesome-icon icon="users" />' };
+const Check = { template: '<font-awesome-icon icon="check" />' };
+const ArrowUpDown = { template: '<font-awesome-icon icon="sort" />' };
+const Crown = { template: '<font-awesome-icon icon="crown" />' };
+const ClipboardList = { template: '<font-awesome-icon icon="clipboard" />' };
+const HardHat = { template: '<font-awesome-icon icon="hard-hat" />' };
+const Hammer = { template: '<font-awesome-icon icon="hammer" />' };
+const Building2 = { template: '<font-awesome-icon icon="building" />' };
+const Settings = { template: '<font-awesome-icon icon="cog" />' };
+const ShieldCheck = { template: '<font-awesome-icon icon="shield" />' };
+const Briefcase = { template: '<font-awesome-icon icon="briefcase" />' };
+const Package = { template: '<font-awesome-icon icon="box" />' };
+const Download = { template: '<font-awesome-icon icon="download" />' };
+const UserPlus = { template: '<font-awesome-icon icon="user-plus" />' };
+const Eye = { template: '<font-awesome-icon icon="eye" />' };
+const Phone = { template: '<font-awesome-icon icon="phone" />' };
+import { formatDate } from '@/utils/date';
 import type { UserListItem } from '../types/users.types';
+import type { DataTableColumn } from '@/components/ui/VDataTable.vue';
 
 // ==================== COMPOSABLES ====================
 const router = useRouter();
@@ -280,19 +316,110 @@ const { hasPermission, canEditUser, canDeleteUser } = useUserPermissions();
 
 // ==================== STATE ====================
 const searchTerm = ref('');
-const selectedRole = ref('');
-const selectedVerification = ref('');
-const selectedDepartment = ref('');
-const sortBy = ref('created_at');
-const sortDirection = ref<'asc' | 'desc'>('desc');
-const currentPage = ref(1);
-const pageSize = ref(50);
+const activeFilters = ref({});
+const pageSize = ref(25);
+const selectedUsers = ref<UserListItem[]>([]);
+const showBulkActions = ref(false);
+const showUserModal = ref(false);
+
+// Table Configuration
+const tableColumns = computed<DataTableColumn[]>(() => [
+  {
+    key: 'member',
+    label: 'Team Member',
+    sortable: true,
+    resizable: true,
+    width: 320,
+    sticky: 'left'
+  },
+  {
+    key: 'role',
+    label: 'Role & Department',
+    sortable: true,
+    resizable: true,
+    width: 220
+  },
+  {
+    key: 'status',
+    label: 'Status & Activity',
+    sortable: true,
+    resizable: true,
+    width: 160,
+    filterable: true
+  },
+  {
+    key: 'joined',
+    label: 'Joined Date',
+    sortable: true,
+    resizable: true,
+    width: 140
+  },
+  {
+    key: 'actions',
+    label: 'Actions',
+    sortable: false,
+    resizable: false,
+    width: 140,
+    sticky: 'right'
+  }
+]);
+
+// Filter Definitions
+const filterDefinitions = computed(() => [
+  {
+    key: 'role',
+    label: 'Role',
+    type: 'select' as const,
+    placeholder: 'All Roles',
+    options: [
+      { label: 'Administrator', value: 'admin' },
+      { label: 'Project Manager', value: 'project_manager' },
+      { label: 'Supervisor', value: 'supervisor' },
+      { label: 'Field Worker', value: 'field_worker' }
+    ]
+  },
+  {
+    key: 'verification',
+    label: 'Verification Status',
+    type: 'select' as const,
+    placeholder: 'All Users',
+    options: [
+      { label: 'Verified', value: 'verified' },
+      { label: 'Pending', value: 'pending' }
+    ]
+  },
+  {
+    key: 'department',
+    label: 'Department',
+    type: 'multi-select' as const,
+    placeholder: 'All Departments',
+    options: [
+      { label: 'Construction', value: 'construction' },
+      { label: 'Engineering', value: 'engineering' },
+      { label: 'Safety & Compliance', value: 'safety' },
+      { label: 'Project Management', value: 'management' },
+      { label: 'Logistics & Supply', value: 'logistics' },
+      { label: 'Equipment Maintenance', value: 'maintenance' },
+      { label: 'Quality Assurance', value: 'quality' }
+    ]
+  },
+  {
+    key: 'joinedDate',
+    label: 'Joined Date Range',
+    type: 'date-range' as const
+  },
+  {
+    key: 'lastLogin',
+    label: 'Last Login Range',
+    type: 'date-range' as const
+  }
+]);
 
 // ==================== COMPUTED ====================
 const canCreateUsers = computed(() => hasPermission('canManageUsers'));
 
 const hasActiveFilters = computed(() => {
-  return !!(searchTerm.value || selectedRole.value || selectedVerification.value || selectedDepartment.value);
+  return !!(searchTerm.value || Object.keys(activeFilters.value).length > 0);
 });
 
 const filteredUsers = computed(() => {
@@ -304,49 +431,60 @@ const filteredUsers = computed(() => {
     filtered = filtered.filter(user => 
       user.name.toLowerCase().includes(search) ||
       user.email.toLowerCase().includes(search) ||
-      (user.department && user.department.toLowerCase().includes(search))
+      (user.department && user.department.toLowerCase().includes(search)) ||
+      (user.phone && user.phone.toLowerCase().includes(search))
     );
   }
   
-  // Role filter
-  if (selectedRole.value) {
-    filtered = filtered.filter(user => user.role === selectedRole.value);
+  // Apply additional filters
+  filtered = applyFilters(filtered);
+  
+  return filtered;
+});
+
+// ==================== METHODS ====================
+
+/**
+ * Apply filters to users
+ */
+const applyFilters = (users: UserListItem[]): UserListItem[] => {
+  let filtered = [...users];
+  
+  // Apply role filter
+  if (activeFilters.value.role) {
+    filtered = filtered.filter(user => user.role === activeFilters.value.role);
   }
   
-  // Verification filter
-  if (selectedVerification.value !== '') {
-    const isVerified = selectedVerification.value === 'true';
+  // Apply verification filter
+  if (activeFilters.value.verification) {
+    const isVerified = activeFilters.value.verification === 'verified';
     filtered = filtered.filter(user => 
       isVerified ? !!user.email_verified_at : !user.email_verified_at
     );
   }
   
-  // Department filter
-  if (selectedDepartment.value) {
-    filtered = filtered.filter(user => user.department === selectedDepartment.value);
+  // Apply department filter (multi-select)
+  if (activeFilters.value.department && Array.isArray(activeFilters.value.department) && activeFilters.value.department.length > 0) {
+    filtered = filtered.filter(user => 
+      activeFilters.value.department.includes(user.department)
+    );
+  }
+  
+  // Apply date range filters
+  if (activeFilters.value.joinedDate?.from || activeFilters.value.joinedDate?.to) {
+    const fromDate = activeFilters.value.joinedDate.from ? new Date(activeFilters.value.joinedDate.from) : null;
+    const toDate = activeFilters.value.joinedDate.to ? new Date(activeFilters.value.joinedDate.to) : null;
+    
+    filtered = filtered.filter(user => {
+      const userDate = new Date(user.created_at);
+      if (fromDate && userDate < fromDate) return false;
+      if (toDate && userDate > toDate) return false;
+      return true;
+    });
   }
   
   return filtered;
-});
-
-const totalUsers = computed(() => filteredUsers.value.length);
-const totalPages = computed(() => Math.ceil(totalUsers.value / pageSize.value));
-
-const startIndex = computed(() => {
-  return totalUsers.value === 0 ? 0 : (currentPage.value - 1) * pageSize.value + 1;
-});
-
-const endIndex = computed(() => {
-  return Math.min(currentPage.value * pageSize.value, totalUsers.value);
-});
-
-const displayedUsers = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value;
-  const end = start + pageSize.value;
-  return filteredUsers.value.slice(start, end);
-});
-
-// ==================== METHODS ====================
+};
 
 /**
  * Get department icon
@@ -357,7 +495,9 @@ const getDepartmentIcon = (department: string) => {
     engineering: Settings,
     safety: ShieldCheck,
     management: Briefcase,
-    logistics: Package
+    logistics: Package,
+    maintenance: Settings,
+    quality: CheckCircle
   };
   return icons[department] || ClipboardList;
 };
@@ -409,9 +549,11 @@ const formatDepartment = (department: string): string => {
   const departmentMap: { [key: string]: string } = {
     construction: 'Construction',
     engineering: 'Engineering',
-    safety: 'Safety',
-    management: 'Management',
-    logistics: 'Logistics'
+    safety: 'Safety & Compliance',
+    management: 'Project Management',
+    logistics: 'Logistics & Supply',
+    maintenance: 'Equipment Maintenance',
+    quality: 'Quality Assurance'
   };
   return departmentMap[department] || department;
 };
@@ -442,52 +584,83 @@ const getRoleVariant = (role: string): string => {
   return variants[role] || 'outline';
 };
 
+
 /**
- * Format date
+ * Handle search change
  */
-const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString();
+const handleSearchChange = (search: string): void => {
+  searchTerm.value = search;
 };
 
 /**
- * Clear all filters
+ * Handle filter change
  */
-const clearFilters = (): void => {
+const handleFilterChange = (filters: Record<string, any>): void => {
+  activeFilters.value = filters;
+  searchTerm.value = filters.search || '';
+};
+
+/**
+ * Handle clear filters
+ */
+const handleClearFilters = (): void => {
+  activeFilters.value = {};
   searchTerm.value = '';
-  selectedRole.value = '';
-  selectedVerification.value = '';
-  selectedDepartment.value = '';
-  currentPage.value = 1;
 };
 
 /**
- * Handle page change
+ * Export users data
  */
-const handlePageChange = (page: number): void => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-  }
+const exportUsers = (): void => {
+  const dataToExport = filteredUsers.value.map(user => ({
+    name: user.name,
+    email: user.email,
+    phone: user.phone || '',
+    role: formatRole(user.role),
+    department: formatDepartment(user.department || 'construction'),
+    status: user.email_verified_at ? 'Verified' : 'Pending',
+    joined: formatDate(user.created_at),
+    lastLogin: user.last_login_at ? formatDate(user.last_login_at) : 'Never'
+  }));
+  
+  // Create CSV content
+  const headers = ['Name', 'Email', 'Phone', 'Role', 'Department', 'Status', 'Joined', 'Last Login'];
+  const csvContent = [
+    headers.join(','),
+    ...dataToExport.map(row => 
+      Object.values(row).map(value => `"${value}"`).join(',')
+    )
+  ].join('\n');
+  
+  // Download CSV
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `team-members-${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
 };
 
 /**
  * Handle view user
  */
 const handleViewUser = (user: UserListItem): void => {
-  router.push(`/users/${user.id}`);
+  router.push(`/app/users/${user.id}`);
 };
 
 /**
  * Handle create user
  */
 const handleCreateUser = (): void => {
-  router.push('/users/create');
+  router.push('/app/users/create');
 };
 
 /**
  * Handle edit user
  */
 const handleEditUser = (user: UserListItem): void => {
-  router.push(`/users/${user.id}/edit`);
+  router.push(`/app/users/${user.id}/edit`);
 };
 
 /**
@@ -500,11 +673,59 @@ const handleDeleteUser = async (user: UserListItem): Promise<void> => {
 
   try {
     await deleteUser(user.id);
-    // Reload users list
     await loadUsers();
   } catch (error) {
     console.error('Failed to delete user:', error);
-    // Show error message (would use toast in real implementation)
+  }
+};
+
+/**
+ * Show user context menu
+ */
+const showUserMenu = (user: UserListItem): void => {
+  // Implementation for showing user context menu
+  console.log('Show menu for user:', user.name);
+};
+
+/**
+ * Select all users
+ */
+const selectAllUsers = (): void => {
+  selectedUsers.value = [...filteredUsers.value];
+};
+
+/**
+ * Clear user selection
+ */
+const clearSelection = (): void => {
+  selectedUsers.value = [];
+};
+
+/**
+ * Bulk export selected users
+ */
+const bulkExport = (): void => {
+  // Export only selected users
+  console.log('Bulk export:', selectedUsers.value.length, 'users');
+};
+
+/**
+ * Bulk delete selected users
+ */
+const bulkDelete = async (): Promise<void> => {
+  if (!confirm(`Are you sure you want to delete ${selectedUsers.value.length} users?`)) {
+    return;
+  }
+  
+  try {
+    // Implementation for bulk delete
+    for (const user of selectedUsers.value) {
+      await deleteUser(user.id);
+    }
+    await loadUsers();
+    clearSelection();
+  } catch (error) {
+    console.error('Failed to bulk delete users:', error);
   }
 };
 

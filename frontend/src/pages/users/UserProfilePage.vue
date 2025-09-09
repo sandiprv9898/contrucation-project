@@ -1,5 +1,4 @@
 <template>
-  <MainLayout>
     <div>
     <UserProfile 
       v-if="user"
@@ -16,7 +15,6 @@
       <div v-else class="text-red-500">User not found</div>
     </div>
     </div>
-  </MainLayout>
 </template>
 
 <script setup lang="ts">
@@ -24,7 +22,6 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { UserProfile } from '@/modules/users'
 import { UsersApi } from '@/modules/users/api/users.api'
-import MainLayout from '@/layouts/MainLayout.vue'
 import type { UserProfile as UserProfileType } from '@/modules/users/types/users.types';
 
 const route = useRoute();

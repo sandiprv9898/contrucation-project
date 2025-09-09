@@ -2,6 +2,7 @@ import { ref, computed, watch, readonly } from 'vue';
 import { useRoute } from 'vue-router';
 import { useUsersStore } from '../stores/users.store';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
+import { userService } from '../api/user.service';
 import type { UserListItem, UserProfile, UserFilters } from '../types/users.types';
 import type { UserRole } from '@/modules/auth/types/auth.types';
 
@@ -253,10 +254,34 @@ export function useUsers(userId?: string) {
   }
   
   /**
+   * Export users data
+   */
+  async function exportUsers(format: 'csv' | 'xlsx' = 'csv', filters?: Partial<UserFilters>) {
+    loading.value = true;
+    error.value = null;
+    
+    try {
+      await userService.exportUsers(format, filters);
+    } catch (err) {
+      error.value = err as Error;
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  }
+  
+  /**
    * Refresh users list
    */
-  function refresh() {
+  function refreshUsers() {
     return loadUsers(undefined, true);
+  }
+  
+  /**
+   * Refresh users list (alias for backwards compatibility)
+   */
+  function refresh() {
+    return refreshUsers();
   }
 
   // ==================== LIFECYCLE ====================
@@ -296,6 +321,8 @@ export function useUsers(userId?: string) {
     changePage,
     changePageSize,
     clearError,
+    exportUsers,
+    refreshUsers,
     refresh
   };
 }

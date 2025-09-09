@@ -30,7 +30,7 @@ defineOptions({ name: 'SidebarLink' })
 
 const props = defineProps<{
   to: string
-  icon: string
+  icon: string | any
   name: string
   badge?: string
 }>()

@@ -1,6 +1,5 @@
 <template>
-  <MainLayout>
-    <div class="space-y-6">
+  <div class="space-y-6">
         <!-- Welcome Section -->
         <div class="bg-white overflow-hidden shadow rounded-lg mb-6">
           <div class="px-4 py-5 sm:p-6">
@@ -227,15 +226,13 @@
             </div>
           </div>
         </div>
-    </div>
-  </MainLayout>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useAuthStore } from '@/modules/auth'
 import { useDashboardStore } from '@/modules/dashboard/stores/dashboard.store'
-import MainLayout from '@/layouts/MainLayout.vue'
 import { Users, CheckCircle, Building2, Wrench, ClipboardList, BarChart3, User } from 'lucide-vue-next'
 
 // Define component name

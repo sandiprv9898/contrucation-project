@@ -1,5 +1,4 @@
 <template>
-  <MainLayout>
     <div class="max-w-2xl mx-auto">
     <VCard>
       <div class="p-6">
@@ -78,7 +77,6 @@
       </div>
     </VCard>
     </div>
-  </MainLayout>
 </template>
 
 <script setup lang="ts">
@@ -87,7 +85,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { VCard, VButton, VLabel, VBadge } from '@/components/ui';
 import { AlertTriangle } from 'lucide-vue-next';
 import { UsersApi } from '@/modules/users/api/users.api'
-import MainLayout from '@/layouts/MainLayout.vue'
 import { useUserPermissions } from '@/modules/users/composables/useUserPermissions';
 import { ROLE_LABELS, ROLE_BADGE_VARIANTS } from '@/modules/users/constants/users.constants';
 import type { UserProfile } from '@/modules/users/types/users.types';

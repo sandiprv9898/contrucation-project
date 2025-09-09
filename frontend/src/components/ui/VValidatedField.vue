@@ -14,7 +14,8 @@
     <component
       :is="fieldComponent"
       :id="fieldId"
-      v-model="modelValue"
+      :model-value="modelValue"
+      @update:model-value="handleInput"
       v-bind="fieldProps"
       :disabled="disabled"
       :readonly="readonly"

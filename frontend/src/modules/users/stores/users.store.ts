@@ -56,15 +56,28 @@ export const useUsersStore = defineStore('users', () => {
     users.value.filter(u => u.email_verified_at)
   );
 
-  const statistics = computed(() => ({
-    total: users.value.length,
-    verified: verifiedUsers.value.length,
-    active: activeUsers.value.length,
-    admins: users.value.filter(u => u.role === 'admin').length,
-    project_managers: users.value.filter(u => u.role === 'project_manager').length,
-    supervisors: users.value.filter(u => u.role === 'supervisor').length,
-    field_workers: users.value.filter(u => u.role === 'field_worker').length
-  }));
+  const statistics = computed(() => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    
+    const thisMonth = users.value.filter(user => {
+      const createdAt = new Date(user.created_at);
+      return createdAt.getMonth() === currentMonth && 
+             createdAt.getFullYear() === currentYear;
+    }).length;
+
+    return {
+      total: users.value.length,
+      verified: verifiedUsers.value.length,
+      active: activeUsers.value.length,
+      thisMonth,
+      admins: users.value.filter(u => u.role === 'admin').length,
+      project_managers: users.value.filter(u => u.role === 'project_manager').length,
+      supervisors: users.value.filter(u => u.role === 'supervisor').length,
+      field_workers: users.value.filter(u => u.role === 'field_worker').length
+    };
+  });
 
   const filteredUsers = computed(() => {
     let result = [...users.value];

@@ -96,6 +96,7 @@
         </div>
       </div>
 
+
       <!-- Empty State -->
       <div v-else-if="!filteredData.length" class="text-center py-12">
         <slot name="empty">
@@ -359,11 +360,22 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, reactive, nextTick } from 'vue';
 import { VButton, VCheckbox, VInput, VSelect, VModal, VFilterBar } from '@/components/ui';
-import { 
-  Search, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, 
-  ChevronsLeft, ChevronsRight, Table, Download, Settings, Filter,
-  X, Menu, Grid, List
-} from 'lucide-vue-next';
+// FontAwesome icon components for VDataTable
+const Search = { template: '<font-awesome-icon icon="search" class="w-4 h-4" />' };
+const ChevronUp = { template: '<font-awesome-icon icon="chevron-up" class="w-3 h-3" />' };
+const ChevronDown = { template: '<font-awesome-icon icon="chevron-down" class="w-3 h-3" />' };
+const ChevronLeft = { template: '<font-awesome-icon icon="chevron-left" class="w-4 h-4" />' };
+const ChevronRight = { template: '<font-awesome-icon icon="chevron-right" class="w-4 h-4" />' };
+const ChevronsLeft = { template: '<div class="w-4 h-4 text-center">⟨⟨</div>' };
+const ChevronsRight = { template: '<div class="w-4 h-4 text-center">⟩⟩</div>' };
+const Table = { template: '<font-awesome-icon icon="table" class="w-12 h-12" />' };
+const Download = { template: '<font-awesome-icon icon="download" class="w-4 h-4" />' };
+const Settings = { template: '<font-awesome-icon icon="cog" class="w-4 h-4" />' };
+const Filter = { template: '<font-awesome-icon icon="filter" class="w-3 h-3" />' };
+const X = { template: '<font-awesome-icon icon="times" class="w-3 h-3" />' };
+const Menu = { template: '<font-awesome-icon icon="list" class="w-4 h-4" />' };
+const Grid = { template: '<font-awesome-icon icon="grip" class="w-4 h-4" />' };
+const List = { template: '<font-awesome-icon icon="list" class="w-4 h-4" />' };
 import { cn } from '@/utils/cn';
 
 // Types

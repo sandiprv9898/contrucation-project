@@ -23,6 +23,7 @@ export { useUsersStore } from './stores/users.store';
 export { useUsers } from './composables/useUsers';
 export { useUserPermissions } from './composables/useUserPermissions';
 export { useUserValidation } from './composables/useUserValidation';
+export { useUserStats } from './composables/useUserStats';
 
 // ==================== COMPONENTS ====================
 export { default as UserList } from './components/UserList.vue';
@@ -30,6 +31,7 @@ export { default as UserForm } from './components/UserForm.vue';
 export { default as UserProfile } from './components/UserProfile.vue';
 export { default as RoleBadge } from './components/RoleBadge.vue';
 export { default as PermissionGuard } from './components/PermissionGuard.vue';
+export { default as UserManagementDashboard } from './components/UserManagementDashboard.vue';
 
 // ==================== TYPES ====================
 export type {

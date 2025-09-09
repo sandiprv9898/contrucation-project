@@ -1,5 +1,4 @@
 <template>
-  <MainLayout>
     <div class="text-center py-12">
       <div class="max-w-md mx-auto">
         <div class="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -14,11 +13,9 @@
         </div>
       </div>
     </div>
-  </MainLayout>
 </template>
 
 <script setup lang="ts">
-import MainLayout from '@/layouts/MainLayout.vue'
 import { ClipboardList } from 'lucide-vue-next'
 
 defineOptions({ name: 'ProjectsPage' })

@@ -17,6 +17,31 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
+  // Initialize with mock user for development if no user exists
+  if (!user.value && !token.value) {
+    const mockUser: User = {
+      id: '1',
+      name: 'John Administrator',
+      email: 'admin@construction.com',
+      role: 'admin',
+      avatar_url: null,
+      company: {
+        id: '1',
+        name: 'Construction Corp'
+      },
+      email_verified_at: '2024-01-15T10:00:00Z',
+      created_at: '2024-01-01T09:00:00Z',
+      updated_at: '2024-01-15T10:00:00Z'
+    }
+    const mockToken = 'mock-token-for-development'
+    
+    user.value = mockUser
+    token.value = mockToken
+    TokenManager.setToken(mockToken)
+    TokenManager.setUser(mockUser)
+    console.log('Initialized with mock admin user for development')
+  }
+
   // Getters
   const isAuthenticated = computed(() => !!token.value && !!user.value)
   const currentUser = computed(() => user.value)

@@ -170,29 +170,29 @@ const canViewReports = computed(() =>
 const mainNavigation = computed(() => [
   {
     name: 'Dashboard',
-    to: '/dashboard',
+    to: '/app/dashboard',
     icon: Home,
   },
   {
     name: 'Projects',
-    to: '/projects',
+    to: '/app/projects',
     icon: ClipboardList,
     badge: '12', // This could be dynamic
   },
   {
     name: 'Tasks',
-    to: '/tasks',
+    to: '/app/tasks',
     icon: CheckSquare,
     badge: '8',
   },
   {
     name: 'Calendar',
-    to: '/calendar',
+    to: '/app/calendar',
     icon: Calendar,
   },
   {
     name: 'Documents',
-    to: '/documents',
+    to: '/app/documents',
     icon: FileText,
   },
 ])
@@ -203,7 +203,7 @@ const managementNavigation = computed(() => {
   if (hasPermission('canViewUsers') && !hasPermission('canManageUsers')) {
     items.push({
       name: 'Team Members',
-      to: '/users',
+      to: '/app/users',
       icon: Users,
     })
   }
@@ -211,7 +211,7 @@ const managementNavigation = computed(() => {
   if (hasPermission('canManageProjects')) {
     items.push({
       name: 'Project Settings',
-      to: '/projects/settings',
+      to: '/app/projects/settings',
       icon: Settings,
     })
   }
@@ -219,7 +219,7 @@ const managementNavigation = computed(() => {
   if (hasPermission('canAssignTasks')) {
     items.push({
       name: 'Task Assignment',
-      to: '/tasks/assign',
+      to: '/app/tasks/assign',
       icon: Edit,
     })
   }
@@ -233,7 +233,7 @@ const adminNavigation = computed(() => {
   if (hasPermission('canManageUsers')) {
     items.push({
       name: 'User Management',
-      to: '/users',
+      to: '/app/users',
       icon: UserCog,
     })
   }
@@ -241,12 +241,12 @@ const adminNavigation = computed(() => {
   if (hasPermission('canManageCompany')) {
     items.push({
       name: 'Company Settings',
-      to: '/admin/company',
+      to: '/app/admin/company',
       icon: Building2,
     })
     items.push({
       name: 'System Settings',
-      to: '/admin/settings',
+      to: '/app/admin/settings',
       icon: Settings,
     })
   }
@@ -258,22 +258,22 @@ const reportsNavigation = computed(() =>
   hasPermission('canViewReports') ? [
     {
       name: 'Project Reports',
-      to: '/reports/projects',
+      to: '/app/reports/projects',
       icon: BarChart3,
     },
     {
       name: 'Time Tracking',
-      to: '/reports/time',
+      to: '/app/reports/time',
       icon: Clock,
     },
     {
       name: 'Cost Analysis',
-      to: '/reports/costs',
+      to: '/app/reports/costs',
       icon: DollarSign,
     },
     {
       name: 'Performance',
-      to: '/reports/performance',
+      to: '/app/reports/performance',
       icon: TrendingUp,
     },
   ] : []
