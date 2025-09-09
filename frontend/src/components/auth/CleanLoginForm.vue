@@ -172,7 +172,7 @@ const handleSubmit = async () => {
     })
     
     // Success - redirect to dashboard
-    router.push('/dashboard')
+    router.push('/app/dashboard')
   } catch (err) {
     console.error('Login error:', err)
     // Error is handled by the store

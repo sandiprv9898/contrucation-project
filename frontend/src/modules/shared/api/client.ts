@@ -50,8 +50,21 @@ class ApiClient {
       (response: AxiosResponse) => response,
       (error: AxiosError) => {
         if (error.response?.status === 401) {
+          console.warn('[AUTH] 401 Unauthorized - clearing authentication and redirecting to login')
+          
+          // Clear token from storage
           TokenManager.removeToken()
-          window.location.href = '/auth/login'
+          
+          // Clear auth store state
+          import('@/modules/auth').then(({ useAuthStore }) => {
+            const authStore = useAuthStore()
+            authStore.clearAuthData()
+          }).catch(console.error)
+          
+          // Redirect to login page
+          import('@/router').then(({ default: router }) => {
+            router.push('/auth/login')
+          }).catch(console.error)
         }
         return Promise.reject(error)
       }

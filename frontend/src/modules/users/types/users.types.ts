@@ -1,5 +1,8 @@
-// Re-export auth types for consistency
-export type { User, Company, UserRole } from '@/modules/auth/types/auth.types'
+// Import auth types for consistency
+import type { User, Company, UserRole } from '../../auth/types/auth.types'
+
+// Re-export for external consumption
+export type { User, Company, UserRole }
 
 // User management specific types
 export interface UserListItem {
@@ -71,10 +74,10 @@ export interface UsersListResponse {
 }
 
 export interface UserFilters {
-  role?: UserRole | ''
-  company_id?: string | ''
+  role?: UserRole | '' | undefined
+  company_id?: string | '' | undefined
   search?: string
-  verified?: boolean | ''
+  verified?: boolean | '' | undefined
   page?: number
   per_page?: number
 }

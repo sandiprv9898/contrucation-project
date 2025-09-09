@@ -1,3 +1,12 @@
+// User role definition (defined first to avoid circular dependencies)
+export type UserRole = 'admin' | 'project_manager' | 'supervisor' | 'field_worker'
+
+export interface Company {
+  id: string
+  name: string
+  industry: string
+}
+
 // Authentication request types
 export interface LoginRequest {
   email: string
@@ -42,13 +51,6 @@ export interface User {
   updated_at: string
 }
 
-export interface Company {
-  id: string
-  name: string
-  industry: string
-}
-
-export type UserRole = 'admin' | 'project_manager' | 'supervisor' | 'field_worker'
 
 // State types
 export interface AuthState {

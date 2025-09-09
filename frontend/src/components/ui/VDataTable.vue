@@ -470,7 +470,7 @@ const props = withDefaults(defineProps<Props>(), {
   loadingText: 'Loading...',
   emptyTitle: 'No data available',
   emptyMessage: 'There are no records to display.',
-  emptyIcon: Table,
+  emptyIcon: () => ({ template: '<font-awesome-icon icon="table" class="w-12 h-12" />' }),
   searchPlaceholder: 'Search...',
   perPage: 50,
   perPageOptions: () => [10, 25, 50, 100, 250],

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use App\Models\User;
+use App\Domain\User\Models\User;
 use App\Domain\User\Models\Company;
 use Exception;
 

@@ -5,7 +5,6 @@ import type {
   UserListItem, 
   UserProfile, 
   UserFilters, 
-  UserState,
   CreateUserRequest,
   UpdateUserRequest,
   UsersListResponse 
@@ -93,7 +92,7 @@ export const useUsersStore = defineStore('users', () => {
     }
     
     // Apply role filter
-    if (filters.value.role && filters.value.role !== '') {
+    if (filters.value.role && filters.value.role !== '' as UserRole) {
       result = result.filter(user => user.role === filters.value.role);
     }
 
@@ -161,9 +160,9 @@ export const useUsersStore = defineStore('users', () => {
           name: user.name,
           email: user.email,
           role: user.role,
-          avatar_url: user.avatar_url,
-          company: user.company,
-          email_verified_at: user.email_verified_at,
+          ...(user.avatar_url && { avatar_url: user.avatar_url }),
+          ...(user.company && { company: user.company }),
+          ...(user.email_verified_at && { email_verified_at: user.email_verified_at }),
           created_at: user.created_at,
           updated_at: user.updated_at
         };
@@ -195,9 +194,9 @@ export const useUsersStore = defineStore('users', () => {
         name: user.name,
         email: user.email,
         role: user.role,
-        avatar_url: user.avatar_url,
-        company: user.company,
-        email_verified_at: user.email_verified_at,
+        ...(user.avatar_url && { avatar_url: user.avatar_url }),
+        ...(user.company && { company: user.company }),
+        ...(user.email_verified_at && { email_verified_at: user.email_verified_at }),
         created_at: user.created_at,
         updated_at: user.updated_at
       };
@@ -229,9 +228,9 @@ export const useUsersStore = defineStore('users', () => {
           name: updated.name,
           email: updated.email,
           role: updated.role,
-          avatar_url: updated.avatar_url,
-          company: updated.company,
-          email_verified_at: updated.email_verified_at,
+          ...(updated.avatar_url && { avatar_url: updated.avatar_url }),
+          ...(updated.company && { company: updated.company }),
+          ...(updated.email_verified_at && { email_verified_at: updated.email_verified_at }),
           created_at: updated.created_at,
           updated_at: updated.updated_at
         };

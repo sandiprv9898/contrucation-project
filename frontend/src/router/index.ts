@@ -12,7 +12,7 @@ const router = createRouter({
       beforeEnter: (_to, _from, next) => {
         const authStore = useAuthStore()
         if (authStore.isAuthenticated) {
-          next('/dashboard')
+          next('/app/dashboard')
         } else {
           next()
         }
@@ -198,15 +198,6 @@ const router = createRouter({
 router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
   
-  // Initialize auth state if not already done
-  if (!authStore.currentUser && authStore.token) {
-    try {
-      await authStore.initAuth()
-    } catch (error) {
-      console.warn('Auth initialization failed:', error)
-    }
-  }
-  
   // Check if route requires authentication
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!authStore.isAuthenticated) {
@@ -218,7 +209,7 @@ router.beforeEach(async (to, _from, next) => {
   // Check if route requires guest (not authenticated)
   if (to.matched.some(record => record.meta.requiresGuest)) {
     if (authStore.isAuthenticated) {
-      next('/dashboard')
+      next('/app/dashboard')
       return
     }
   }

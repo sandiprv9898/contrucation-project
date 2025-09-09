@@ -13,15 +13,17 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { UserForm } from '@/modules/users'
 import { UsersApi } from '@/modules/users/api/users.api'
-import type { CreateUserRequest } from '@/modules/users/types/users.types';
+import type { CreateUserRequest, UpdateUserRequest } from '@/modules/users/types/users.types';
 
 const router = useRouter();
 const loading = ref(false);
 
-const handleCreateUser = async (userData: CreateUserRequest) => {
+const handleCreateUser = async (userData: CreateUserRequest | UpdateUserRequest) => {
+  // Type guard to ensure we have the required fields for creating a user
+  const createData = userData as CreateUserRequest;
   loading.value = true;
   try {
-    await UsersApi.createUser(userData);
+    await UsersApi.createUser(createData);
     // Show success message (would use toast in real implementation)
     console.log('User created successfully');
     router.push({ name: 'users.index' });
