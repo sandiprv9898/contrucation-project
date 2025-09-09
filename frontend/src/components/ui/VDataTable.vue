@@ -566,7 +566,16 @@ const densityLabels = {
 };
 
 const filteredData = computed(() => {
+  console.log('📋 [VDataTable] Computing filteredData...');
+  console.log('📋 [VDataTable] props.data:', props.data);
+  console.log('📋 [VDataTable] props.data type:', typeof props.data);
+  console.log('📋 [VDataTable] props.data length:', props.data?.length);
+  console.log('📋 [VDataTable] Array.isArray(props.data):', Array.isArray(props.data));
+  console.log('📋 [VDataTable] VDataTable component is executing!');
+  
   let filtered = [...props.data];
+  console.log('📋 [VDataTable] filtered after spread:', filtered);
+  console.log('📋 [VDataTable] filtered length:', filtered.length);
   
   // Apply search filter
   if (searchQuery.value && props.searchable) {
@@ -614,6 +623,8 @@ const filteredData = computed(() => {
     });
   }
   
+  console.log('📋 [VDataTable] Final filtered result:', filtered);
+  console.log('📋 [VDataTable] Final filtered length:', filtered.length);
   return filtered;
 });
 
@@ -1041,6 +1052,12 @@ const getSortIconClass = (column: string, direction: 'asc' | 'desc'): string => 
     isActive ? 'text-orange-500' : 'text-gray-300 group-hover:text-gray-400'
   );
 };
+
+// Lifecycle
+onMounted(() => {
+  console.log('📋 [VDataTable] Component mounted!');
+  console.log('📋 [VDataTable] props:', props);
+});
 
 // Watchers
 watch(() => props.data, () => {

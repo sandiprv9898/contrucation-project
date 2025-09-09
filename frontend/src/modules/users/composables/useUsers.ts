@@ -106,7 +106,11 @@ export function useUsers(userId?: string) {
    * Load users list with filters
    */
   async function loadUsers(filters?: Partial<UserFilters>, forceRefresh = false) {
+    console.log('🔧 [USE USERS] loadUsers called with filters:', filters, 'forceRefresh:', forceRefresh);
+    console.log('🔧 [USE USERS] Current store users length:', usersStore.users.length);
+    
     if (!forceRefresh && usersStore.users.length > 0 && !filters) {
+      console.log('🔧 [USE USERS] Returning cached users:', usersStore.users);
       return usersStore.users;
     }
     
@@ -114,9 +118,13 @@ export function useUsers(userId?: string) {
     error.value = null;
     
     try {
+      console.log('🔧 [USE USERS] Calling usersStore.fetchUsers...');
       await usersStore.fetchUsers(filters);
+      console.log('🔧 [USE USERS] Store fetch completed. Store users:', usersStore.users);
+      console.log('🔧 [USE USERS] Store users length:', usersStore.users.length);
       return usersStore.users;
     } catch (err) {
+      console.error('🔧 [USE USERS] Error in loadUsers:', err);
       error.value = err as Error;
       throw err;
     } finally {

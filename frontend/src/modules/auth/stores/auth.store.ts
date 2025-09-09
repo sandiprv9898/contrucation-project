@@ -156,6 +156,13 @@ export const useAuthStore = defineStore('auth', () => {
     setError(null)
   }
 
+  function setDemoAuth(demoUser: User, demoToken: string): void {
+    user.value = demoUser
+    token.value = demoToken
+    TokenManager.setToken(demoToken)
+    TokenManager.setUser(demoUser)
+  }
+
   // Export store interface
   return {
     // State
@@ -182,5 +189,6 @@ export const useAuthStore = defineStore('auth', () => {
     initAuth,
     clearError,
     clearAuthData,
+    setDemoAuth,
   }
 })

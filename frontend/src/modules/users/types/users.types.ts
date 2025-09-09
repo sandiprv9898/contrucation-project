@@ -11,6 +11,9 @@ export interface UserListItem {
   email: string
   role: UserRole
   avatar_url?: string
+  phone?: string
+  department?: string
+  last_login_at?: string
   company?: {
     id: string
     name: string

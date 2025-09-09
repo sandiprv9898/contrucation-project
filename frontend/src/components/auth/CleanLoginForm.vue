@@ -99,6 +99,18 @@
       </div>
     </div>
 
+    <!-- Demo Login -->
+    <div class="text-center">
+      <button
+        type="button"
+        @click="handleDemoLogin"
+        :disabled="authStore.isLoading"
+        class="inline-flex items-center justify-center w-full h-12 px-4 text-sm font-semibold text-white bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/20 disabled:opacity-50 shadow-lg shadow-purple-500/25"
+      >
+        {{ authStore.isLoading ? 'Signing in...' : '🚀 Demo Login (Admin)' }}
+      </button>
+    </div>
+
     <!-- Register Link -->
     <div class="text-center">
       <router-link
@@ -176,6 +188,37 @@ const handleSubmit = async () => {
   } catch (err) {
     console.error('Login error:', err)
     // Error is handled by the store
+  }
+}
+
+const handleDemoLogin = async () => {
+  authStore.clearError()
+  
+  try {
+    // Create demo user session
+    const demoUser = {
+      id: 'demo-1',
+      name: 'John Administrator',
+      email: 'admin@demo.construction.com',
+      role: 'admin' as const,
+      avatar_url: null,
+      company: {
+        id: 'demo-company-1',
+        name: 'Demo Construction Corp',
+        industry: 'Construction'
+      },
+      email_verified_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+    
+    // Set demo authentication
+    authStore.setDemoAuth(demoUser, 'demo-token-123')
+    
+    // Redirect to dashboard
+    router.push('/app/dashboard')
+  } catch (err) {
+    console.error('Demo login error:', err)
   }
 }
 </script>

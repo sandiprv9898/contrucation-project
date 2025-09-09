@@ -121,9 +121,15 @@ export const useUsersStore = defineStore('users', () => {
     
     try {
       const appliedFilters = { ...filters.value, ...customFilters };
+      console.log('🏪 [USERS STORE] Calling UsersApi.getUsers with filters:', appliedFilters);
       const response: UsersListResponse = await UsersApi.getUsers(appliedFilters);
+      console.log('🏪 [USERS STORE] API response received:', response);
+      console.log('🏪 [USERS STORE] Response data array:', response.data);
+      console.log('🏪 [USERS STORE] Response data length:', response.data?.length);
       
       users.value = response.data;
+      console.log('🏪 [USERS STORE] Users set in store:', users.value);
+      console.log('🏪 [USERS STORE] Store users length after set:', users.value?.length);
       pagination.value = {
         current_page: response.meta.current_page,
         per_page: response.meta.per_page,

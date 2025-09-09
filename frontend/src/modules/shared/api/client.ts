@@ -50,21 +50,35 @@ class ApiClient {
       (response: AxiosResponse) => response,
       (error: AxiosError) => {
         if (error.response?.status === 401) {
-          console.warn('[AUTH] 401 Unauthorized - clearing authentication and redirecting to login')
+          const token = TokenManager.getToken()
           
-          // Clear token from storage
-          TokenManager.removeToken()
+          // For demo tokens, let APIs handle fallbacks instead of logging out
+          if (token && token.startsWith('demo-token')) {
+            console.warn('[AUTH] 401 response with demo token - letting API handle fallback')
+            return Promise.reject(error)
+          }
           
-          // Clear auth store state
-          import('@/modules/auth').then(({ useAuthStore }) => {
-            const authStore = useAuthStore()
-            authStore.clearAuthData()
-          }).catch(console.error)
-          
-          // Redirect to login page
-          import('@/router').then(({ default: router }) => {
-            router.push('/auth/login')
-          }).catch(console.error)
+          // Check if user is authenticated - only auto-logout if they had a valid session
+          if (token) {
+            console.warn('[AUTH] 401 Unauthorized - clearing authentication and redirecting to login')
+            
+            // Clear token from storage
+            TokenManager.removeToken()
+            
+            // Clear auth store state
+            import('@/modules/auth').then(({ useAuthStore }) => {
+              const authStore = useAuthStore()
+              authStore.clearAuthData()
+            }).catch(console.error)
+            
+            // Redirect to login page
+            import('@/router').then(({ default: router }) => {
+              router.push('/auth/login')
+            }).catch(console.error)
+          } else {
+            // No token means user wasn't authenticated anyway - let API methods handle fallbacks
+            console.warn('[AUTH] 401 response for unauthenticated user - letting API handle fallback')
+          }
         }
         return Promise.reject(error)
       }
