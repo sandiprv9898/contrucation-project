@@ -20,169 +20,151 @@
           <!-- Personal Information -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Name -->
-            <div>
-              <VLabel for="name" class="text-sm font-medium text-gray-700">
-                Full Name *
-              </VLabel>
-              <VInput
-                id="name"
-                v-model="formData.name"
-                type="text"
-                class="mt-1"
-                :class="{ 'border-red-500': hasError('name') }"
-                placeholder="Enter full name"
-                required
-              />
-              <div v-if="hasError('name')" class="mt-1 text-sm text-red-600">
-                {{ getFirstError('name') }}
-              </div>
-            </div>
+            <VFormField
+              label="Full Name"
+              :error-message="getFirstError('name')"
+              required
+            >
+              <template #default="{ fieldId, inputClass }">
+                <VInput
+                  :id="fieldId"
+                  v-model="formData.name"
+                  type="text"
+                  :class="inputClass"
+                  placeholder="Enter full name"
+                  required
+                />
+              </template>
+            </VFormField>
 
             <!-- Email -->
-            <div>
-              <VLabel for="email" class="text-sm font-medium text-gray-700">
-                Email Address *
-              </VLabel>
-              <VInput
-                id="email"
-                v-model="formData.email"
-                type="email"
-                class="mt-1"
-                :class="{ 'border-red-500': hasError('email') }"
-                placeholder="Enter email address"
-                required
-              />
-              <div v-if="hasError('email')" class="mt-1 text-sm text-red-600">
-                {{ getFirstError('email') }}
-              </div>
-            </div>
+            <VFormField
+              label="Email Address"
+              :error-message="getFirstError('email')"
+              required
+            >
+              <template #default="{ fieldId, inputClass }">
+                <VInput
+                  :id="fieldId"
+                  v-model="formData.email"
+                  type="email"
+                  :class="inputClass"
+                  placeholder="Enter email address"
+                  required
+                />
+              </template>
+            </VFormField>
           </div>
 
           <!-- Role and Company -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Role -->
-            <div>
-              <VLabel for="role" class="text-sm font-medium text-gray-700">
-                Role *
-              </VLabel>
-              <select
-                id="role"
-                v-model="formData.role"
-                class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-sm"
-                :class="{ 'border-red-500': hasError('role') }"
-                required
-              >
-                <option value="">Select a role</option>
-                <option 
-                  v-for="role in availableRoles" 
-                  :key="role.value" 
-                  :value="role.value"
-                >
-                  {{ role.label }}
-                </option>
-              </select>
-              <div v-if="hasError('role')" class="mt-1 text-sm text-red-600">
-                {{ getFirstError('role') }}
-              </div>
-            </div>
+            <VFormField
+              label="Role"
+              :error-message="getFirstError('role')"
+              required
+            >
+              <template #default="{ fieldId, hasError }">
+                <VSelect
+                  :id="fieldId"
+                  v-model="formData.role"
+                  :items="availableRoles"
+                  placeholder="Select a role"
+                  :has-error="hasError"
+                  required
+                />
+              </template>
+            </VFormField>
 
             <!-- Phone -->
-            <div>
-              <VLabel for="phone" class="text-sm font-medium text-gray-700">
-                Phone Number
-              </VLabel>
-              <VInput
-                id="phone"
-                v-model="formData.phone"
-                type="tel"
-                class="mt-1"
-                :class="{ 'border-red-500': hasError('phone') }"
-                placeholder="Enter phone number"
-              />
-              <div v-if="hasError('phone')" class="mt-1 text-sm text-red-600">
-                {{ getFirstError('phone') }}
-              </div>
-            </div>
+            <VFormField
+              label="Phone Number"
+              :error-message="getFirstError('phone')"
+            >
+              <template #default="{ fieldId, inputClass }">
+                <VInput
+                  :id="fieldId"
+                  v-model="formData.phone"
+                  type="tel"
+                  :class="inputClass"
+                  placeholder="Enter phone number"
+                />
+              </template>
+            </VFormField>
           </div>
 
           <!-- Department -->
-          <div>
-            <VLabel for="department" class="text-sm font-medium text-gray-700">
-              Department
-            </VLabel>
-            <VInput
-              id="department"
-              v-model="formData.department"
-              type="text"
-              class="mt-1"
-              :class="{ 'border-red-500': hasError('department') }"
-              placeholder="Enter department"
-            />
-            <div v-if="hasError('department')" class="mt-1 text-sm text-red-600">
-              {{ getFirstError('department') }}
-            </div>
-          </div>
+          <VFormField
+            label="Department"
+            :error-message="getFirstError('department')"
+          >
+            <template #default="{ fieldId, inputClass }">
+              <VInput
+                :id="fieldId"
+                v-model="formData.department"
+                type="text"
+                :class="inputClass"
+                placeholder="Enter department"
+              />
+            </template>
+          </VFormField>
 
           <!-- Password fields (only for creation) -->
           <div v-if="!isEditing" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Password -->
-            <div>
-              <VLabel for="password" class="text-sm font-medium text-gray-700">
-                Password *
-              </VLabel>
-              <VInput
-                id="password"
-                v-model="formData.password"
-                type="password"
-                class="mt-1"
-                :class="{ 'border-red-500': hasError('password') }"
-                placeholder="Enter password"
-                required
-              />
-              <div v-if="hasError('password')" class="mt-1 text-sm text-red-600">
-                {{ getFirstError('password') }}
-              </div>
-              <div class="mt-1 text-xs text-gray-500">
-                Password must contain at least 8 characters with uppercase, lowercase, number, and special character.
-              </div>
-            </div>
+            <VFormField
+              label="Password"
+              :error-message="getFirstError('password')"
+              help-text="Password must contain at least 8 characters with uppercase, lowercase, number, and special character."
+              required
+            >
+              <template #default="{ fieldId, inputClass }">
+                <VInput
+                  :id="fieldId"
+                  v-model="formData.password"
+                  type="password"
+                  :class="inputClass"
+                  placeholder="Enter password"
+                  required
+                />
+              </template>
+            </VFormField>
 
             <!-- Password Confirmation -->
-            <div>
-              <VLabel for="password_confirmation" class="text-sm font-medium text-gray-700">
-                Confirm Password *
-              </VLabel>
-              <VInput
-                id="password_confirmation"
-                v-model="formData.password_confirmation"
-                type="password"
-                class="mt-1"
-                :class="{ 'border-red-500': hasError('password_confirmation') }"
-                placeholder="Confirm password"
-                required
-              />
-              <div v-if="hasError('password_confirmation')" class="mt-1 text-sm text-red-600">
-                {{ getFirstError('password_confirmation') }}
-              </div>
-            </div>
+            <VFormField
+              label="Confirm Password"
+              :error-message="getFirstError('password_confirmation')"
+              required
+            >
+              <template #default="{ fieldId, inputClass }">
+                <VInput
+                  :id="fieldId"
+                  v-model="formData.password_confirmation"
+                  type="password"
+                  :class="inputClass"
+                  placeholder="Confirm password"
+                  required
+                />
+              </template>
+            </VFormField>
           </div>
 
           <!-- Bio (for updates) -->
           <div v-if="isEditing">
-            <VLabel for="bio" class="text-sm font-medium text-gray-700">
-              Bio
-            </VLabel>
-            <textarea
-              id="bio"
-              v-model="formData.bio"
-              rows="3"
-              class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-              :class="{ 'border-red-500': hasError('bio') }"
-              placeholder="Tell us about yourself..."
-            ></textarea>
-            <div v-if="hasError('bio')" class="mt-1 text-sm text-red-600">
-              {{ getFirstError('bio') }}
-            </div>
+            <VFormField
+              label="Bio"
+              :error-message="getFirstError('bio')"
+            >
+              <template #default="{ fieldId, hasError }">
+                <VTextarea
+                  :id="fieldId"
+                  v-model="formData.bio"
+                  :rows="3"
+                  :has-error="hasError"
+                  placeholder="Tell us about yourself..."
+                />
+              </template>
+            </VFormField>
           </div>
 
           <!-- Form Actions -->
@@ -212,7 +194,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { useUserValidation } from '../composables/useUserValidation';
 import { useUserPermissions } from '../composables/useUserPermissions';
-import { VButton, VCard, VInput, VLabel } from '@/components/ui';
+import { VButton, VCard, VFormField, VInput, VSelect, VTextarea } from '@/components/ui';
 import type { CreateUserRequest, UpdateUserRequest, UserProfile } from '../types/users.types';
 import type { UserRole } from '@/modules/auth/types/auth.types';
 
