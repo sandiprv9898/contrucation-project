@@ -30,12 +30,12 @@ export interface RecentActivity {
 class DashboardService {
   async getStats(): Promise<DashboardStats> {
     const response = await apiClient.get<{ data: DashboardStats }>('/dashboard/stats')
-    return response.data.data
+    return response.data
   }
 
   async getRecentActivity(): Promise<RecentActivity[]> {
     const response = await apiClient.get<{ data: RecentActivity[] }>('/dashboard/recent-activity')
-    return response.data.data
+    return response.data
   }
 }
 

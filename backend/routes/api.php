@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,16 +27,17 @@ Route::prefix('v1')->group(function () {
             Route::get('recent-activity', [DashboardController::class, 'recentActivity']);
         });
 
+        // User Management Routes
         Route::prefix('users')->group(function () {
-            Route::get('/', function () {
-                return response()->json(['message' => 'User list endpoint - to be implemented']);
-            });
-            Route::get('/{user}', function () {
-                return response()->json(['message' => 'User details endpoint - to be implemented']);
-            });
-            Route::put('/{user}', function () {
-                return response()->json(['message' => 'Update user endpoint - to be implemented']);
-            });
+            Route::get('/', [UserController::class, 'index']);
+            Route::post('/', [UserController::class, 'store']);
+            Route::get('/by-role', [UserController::class, 'getUsersByRole']);
+            Route::get('/company', [UserController::class, 'getCompanyUsers']);
+            Route::get('/{user}', [UserController::class, 'show']);
+            Route::put('/{user}', [UserController::class, 'update']);
+            Route::delete('/{user}', [UserController::class, 'destroy']);
+            Route::post('/{user}/avatar', [UserController::class, 'uploadAvatar']);
+            Route::post('/{user}/resend-verification', [UserController::class, 'resendVerification']);
         });
     });
 });

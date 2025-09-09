@@ -61,7 +61,82 @@ const router = createRouter({
       path: '/dashboard',
       name: 'Dashboard',
       component: () => import('../pages/DashboardPage.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, title: 'Dashboard' }
+    },
+    // Main Navigation Routes
+    {
+      path: '/projects',
+      name: 'Projects',
+      component: () => import('../pages/ProjectsPage.vue'),
+      meta: { requiresAuth: true, title: 'Projects' }
+    },
+    {
+      path: '/tasks',
+      name: 'Tasks',
+      component: () => import('../pages/TasksPage.vue'),
+      meta: { requiresAuth: true, title: 'Tasks' }
+    },
+    {
+      path: '/calendar',
+      name: 'Calendar',
+      component: () => import('../pages/CalendarPage.vue'),
+      meta: { requiresAuth: true, title: 'Calendar' }
+    },
+    {
+      path: '/documents',
+      name: 'Documents',
+      component: () => import('../pages/DocumentsPage.vue'),
+      meta: { requiresAuth: true, title: 'Documents' }
+    },
+    // Admin Routes
+    {
+      path: '/admin/company',
+      name: 'CompanySettings',
+      component: () => import('../pages/admin/CompanySettingsPage.vue'),
+      meta: { requiresAuth: true, requiresPermission: 'canManageCompany', title: 'Company Settings' }
+    },
+    {
+      path: '/admin/settings',
+      name: 'SystemSettings',
+      component: () => import('../pages/admin/SystemSettingsPage.vue'),
+      meta: { requiresAuth: true, requiresPermission: 'canManageCompany', title: 'System Settings' }
+    },
+    // User Management Routes
+    {
+      path: '/users',
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: '',
+          name: 'users.index',
+          component: () => import('../pages/users/UsersListPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canViewUsers', title: 'Team Members' }
+        },
+        {
+          path: 'create',
+          name: 'users.create',
+          component: () => import('../pages/users/UserCreatePage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canManageUsers', title: 'Add New User' }
+        },
+        {
+          path: ':id',
+          name: 'users.view',
+          component: () => import('../pages/users/UserProfilePage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canViewUsers', title: 'User Profile' }
+        },
+        {
+          path: ':id/edit',
+          name: 'users.edit',
+          component: () => import('../pages/users/UserEditPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canEditUser', title: 'Edit User' }
+        },
+        {
+          path: ':id/role',
+          name: 'users.role',
+          component: () => import('../pages/users/UserRoleChangePage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canManageUsers', title: 'Change User Role' }
+        }
+      ]
     }
   ],
 })

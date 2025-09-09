@@ -20,6 +20,10 @@ export { default as VCard } from './VCard.vue';
 export { default as VAlert } from './VAlert.vue';
 export { default as VBadge } from './VBadge.vue';
 
+// Menu Components
+export { default as VDropdownMenu } from './VDropdownMenu.vue';
+export { default as VDropdownMenuItem } from './VDropdownMenuItem.vue';
+
 // Utility exports
 export { cn } from '@/utils/cn';
 export { 
