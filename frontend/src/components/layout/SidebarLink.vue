@@ -6,9 +6,11 @@
     :class="linkClasses"
     active-class="bg-orange-50 text-orange-700 border-r-2 border-orange-500"
   >
-    <span class="flex-shrink-0 mr-3 text-lg" :class="iconClasses">
-      {{ icon }}
-    </span>
+    <component 
+      :is="icon" 
+      class="flex-shrink-0 mr-3 w-5 h-5" 
+      :class="iconClasses"
+    />
     <span class="flex-1 truncate">{{ name }}</span>
     <span
       v-if="badge"

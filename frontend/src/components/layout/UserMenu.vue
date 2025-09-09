@@ -86,7 +86,7 @@
             @click="isOpen = false"
             class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
-            <span class="mr-3">👤</span>
+            <User class="mr-3 w-4 h-4" />
             My Profile
           </router-link>
           <router-link
@@ -94,7 +94,7 @@
             @click="isOpen = false"
             class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
-            <span class="mr-3">⚙️</span>
+            <Settings class="mr-3 w-4 h-4" />
             Settings
           </router-link>
           <router-link
@@ -102,7 +102,7 @@
             @click="isOpen = false"
             class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
-            <span class="mr-3">🔔</span>
+            <Bell class="mr-3 w-4 h-4" />
             Notifications
             <span class="ml-auto bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">3</span>
           </router-link>
@@ -115,7 +115,7 @@
             :disabled="authStore.isLoading"
             class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
           >
-            <span class="mr-3">🚪</span>
+            <LogOut class="mr-3 w-4 h-4" />
             {{ authStore.isLoading ? 'Signing out...' : 'Sign out' }}
           </button>
         </div>
@@ -128,6 +128,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/modules/auth'
+import { User, Settings, Bell, LogOut } from 'lucide-vue-next'
 
 defineOptions({ name: 'UserMenu' })
 

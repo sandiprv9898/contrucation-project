@@ -34,9 +34,9 @@ class ApiClient {
           const csrfToken = this.getCSRFTokenFromCookie()
           if (csrfToken) {
             config.headers['X-XSRF-TOKEN'] = csrfToken
-            console.log('🔐 Adding CSRF token to request:', csrfToken.substring(0, 20) + '...')
+            console.log('[AUTH] Adding CSRF token to request:', csrfToken.substring(0, 20) + '...')
           } else {
-            console.warn('⚠️ No CSRF token found in cookie')
+            console.warn('[AUTH] No CSRF token found in cookie')
           }
         }
         
@@ -71,7 +71,7 @@ class ApiClient {
   public async post<T>(url: string, data?: unknown): Promise<T> {
     // Get CSRF cookie for authentication endpoints
     if (url.includes('/auth/')) {
-      console.log('🔒 Getting CSRF cookie for auth request:', url)
+      console.log('[AUTH] Getting CSRF cookie for auth request:', url)
       await this.getCsrfCookie()
     }
     
@@ -83,7 +83,7 @@ class ApiClient {
   private async getCsrfCookie(): Promise<void> {
     try {
       const csrfUrl = `${API_CONFIG.BASE_URL.replace('/api/v1', '')}/sanctum/csrf-cookie`
-      console.log('🔒 Requesting CSRF cookie from:', csrfUrl)
+      console.log('[AUTH] Requesting CSRF cookie from:', csrfUrl)
       
       // Call CSRF endpoint directly without baseURL prefix
       const response = await axios.get(csrfUrl, {
@@ -94,13 +94,13 @@ class ApiClient {
         }
       })
       
-      console.log('✅ CSRF cookie response status:', response.status)
+      console.log('[AUTH] CSRF cookie response status:', response.status)
       
       // Check if the CSRF token is now available in cookies
       const token = this.getCSRFTokenFromCookie()
-      console.log('🍪 CSRF token after request:', token ? token.substring(0, 20) + '...' : 'Not found')
+      console.log('[AUTH] CSRF token after request:', token ? token.substring(0, 20) + '...' : 'Not found')
     } catch (error) {
-      console.error('❌ Failed to get CSRF cookie:', error)
+      console.error('[AUTH] Failed to get CSRF cookie:', error)
     }
   }
 

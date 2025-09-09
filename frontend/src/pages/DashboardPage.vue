@@ -22,7 +22,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
-                      <span class="text-white text-sm">👥</span>
+                      <Users class="text-white w-4 h-4" />
                     </div>
                   </div>
                   <div class="ml-5 w-0 flex-1">
@@ -43,7 +43,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                      <span class="text-white text-sm">✅</span>
+                      <CheckCircle class="text-white w-4 h-4" />
                     </div>
                   </div>
                   <div class="ml-5 w-0 flex-1">
@@ -64,7 +64,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                      <span class="text-white text-sm">🏢</span>
+                      <Building2 class="text-white w-4 h-4" />
                     </div>
                   </div>
                   <div class="ml-5 w-0 flex-1">
@@ -85,7 +85,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                      <span class="text-white text-sm">🛠️</span>
+                      <Wrench class="text-white w-4 h-4" />
                     </div>
                   </div>
                   <div class="ml-5 w-0 flex-1">
@@ -140,7 +140,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
-                      <span class="text-white text-lg">📋</span>
+                      <ClipboardList class="text-white w-4 h-4" />
                     </div>
                   </div>
                   <div class="ml-4">
@@ -154,7 +154,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
-                      <span class="text-white text-lg">👥</span>
+                      <Users class="text-white w-4 h-4" />
                     </div>
                   </div>
                   <div class="ml-4">
@@ -168,7 +168,7 @@
                 <div class="flex items-center">
                   <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
-                      <span class="text-white text-lg">📊</span>
+                      <BarChart3 class="text-white w-4 h-4" />
                     </div>
                   </div>
                   <div class="ml-4">
@@ -201,7 +201,7 @@
                     <div class="relative flex space-x-3">
                       <div>
                         <span class="h-8 w-8 bg-orange-500 rounded-full flex items-center justify-center ring-8 ring-white">
-                          <span class="text-white text-sm">👤</span>
+                          <User class="text-white w-4 h-4" />
                         </span>
                       </div>
                       <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
@@ -236,6 +236,7 @@ import { onMounted } from 'vue'
 import { useAuthStore } from '@/modules/auth'
 import { useDashboardStore } from '@/modules/dashboard/stores/dashboard.store'
 import MainLayout from '@/layouts/MainLayout.vue'
+import { Users, CheckCircle, Building2, Wrench, ClipboardList, BarChart3, User } from 'lucide-vue-next'
 
 // Define component name
 defineOptions({ name: 'DashboardPage' })

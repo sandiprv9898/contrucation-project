@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <!-- Header Section -->
+    <!-- Header with Stats -->
     <div class="bg-white rounded-lg shadow-sm border p-6">
       <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
@@ -8,43 +8,27 @@
           <p class="text-gray-600 mt-1">Manage your construction team and their roles</p>
         </div>
         
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-          <div class="text-center lg:text-left">
-            <div class="text-2xl font-bold text-gray-900">{{ statistics.total }}</div>
-            <div class="text-sm text-gray-500">Total Members</div>
-          </div>
-          <div class="text-center lg:text-left">
-            <div class="text-2xl font-bold text-green-600">{{ statistics.verified }}</div>
-            <div class="text-sm text-gray-500">Verified</div>
-          </div>
-          <div class="text-center lg:text-left">
-            <div class="text-2xl font-bold text-orange-600">{{ statistics.admins }}</div>
-            <div class="text-sm text-gray-500">Administrators</div>
-          </div>
-          <div class="text-center lg:text-left">
-            <div class="text-2xl font-bold text-blue-600">{{ thisMonthUsers }}</div>
-            <div class="text-sm text-gray-500">New This Month</div>
-          </div>
+        <!-- Inline Stats -->
+        <div class="flex items-center gap-6 text-sm text-gray-600">
+          <span>Total: <strong class="text-gray-900">{{ statistics.total }}</strong></span>
+          <span>Active: <strong class="text-green-600">{{ statistics.active }}</strong></span>
+          <span>Verified: <strong class="text-gray-900">{{ statistics.verified }}</strong></span>
+          <span>This Month: <strong class="text-blue-600">{{ statistics.thisMonth }}</strong></span>
         </div>
       </div>
     </div>
 
-    <!-- Enhanced Filters Section -->
-    <div class="bg-white rounded-lg shadow-sm border p-6">
-      <div class="flex flex-col lg:flex-row gap-4">
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm border p-4">
+      <div class="flex flex-wrap items-center gap-4">
         <!-- Search -->
-        <div class="flex-1 lg:max-w-md">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Search Members</label>
-          <div class="relative">
-            <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <VInput 
-              v-model="searchTerm"
-              placeholder="Search by name, email, or department..."
-              class="pl-10 h-11"
-              @input="handleSearch"
-            />
-          </div>
+        <div class="relative flex-1 min-w-[200px]">
+          <Search class="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+          <VInput
+            v-model="searchTerm"
+            placeholder="Search by name or email..."
+            class="pl-9"
+          />
         </div>
         
         <!-- Role Filter -->
@@ -53,27 +37,12 @@
           <select 
             v-model="selectedRole"
             class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            @change="handleFilterChange"
           >
             <option value="">All Roles</option>
-            <option value="admin">👑 Administrator</option>
-            <option value="project_manager">📋 Project Manager</option>
-            <option value="supervisor">👷 Supervisor</option>
-            <option value="field_worker">🔨 Field Worker</option>
-          </select>
-        </div>
-        
-        <!-- Status Filter -->
-        <div class="lg:w-48">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-          <select 
-            v-model="selectedVerification"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            @change="handleFilterChange"
-          >
-            <option value="">All Statuses</option>
-            <option value="true">✅ Verified</option>
-            <option value="false">⏳ Pending Verification</option>
+            <option value="admin">Administrator</option>
+            <option value="project_manager">Project Manager</option>
+            <option value="supervisor">Supervisor</option>
+            <option value="field_worker">Field Worker</option>
           </select>
         </div>
         
@@ -83,119 +52,89 @@
           <select 
             v-model="selectedDepartment"
             class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            @change="handleFilterChange"
           >
             <option value="">All Departments</option>
-            <option value="construction">🏗️ Construction</option>
-            <option value="engineering">⚙️ Engineering</option>
-            <option value="safety">🦺 Safety</option>
-            <option value="management">💼 Management</option>
-            <option value="logistics">📦 Logistics</option>
+            <option value="construction">Construction</option>
+            <option value="engineering">Engineering</option>
+            <option value="safety">Safety</option>
+            <option value="management">Management</option>
+            <option value="logistics">Logistics</option>
           </select>
         </div>
         
-        <!-- Actions -->
-        <div class="flex flex-col lg:justify-end gap-2">
-          <VButton 
-            v-if="canCreateUsers"
-            @click="handleCreateUser"
-            class="bg-orange-600 hover:bg-orange-700 text-white"
+        <!-- Status Filter -->
+        <div class="lg:w-40">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+          <select 
+            v-model="selectedVerification"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
           >
-            <Plus class="mr-2 h-4 w-4" />
-            Add Member
-          </VButton>
-          <VButton 
-            variant="outline" 
-            @click="clearFilters"
-            :disabled="!hasActiveFilters"
-          >
-            <X class="mr-2 h-4 w-4" />
-            Clear Filters
-          </VButton>
+            <option value="">All Status</option>
+            <option value="true">Verified</option>
+            <option value="false">Pending</option>
+          </select>
         </div>
-      </div>
-      
-      <!-- Active Filters Display -->
-      <div v-if="hasActiveFilters" class="mt-4 flex flex-wrap gap-2">
-        <span class="text-sm text-gray-600">Active filters:</span>
-        <span v-if="searchTerm" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-          Search: "{{ searchTerm }}"
-          <button @click="searchTerm = ''" class="ml-1 text-blue-600 hover:text-blue-800">
-            <X class="h-3 w-3" />
-          </button>
-        </span>
-        <span v-if="selectedRole" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-          Role: {{ getRoleLabel(selectedRole) }}
-          <button @click="selectedRole = ''" class="ml-1 text-green-600 hover:text-green-800">
-            <X class="h-3 w-3" />
-          </button>
-        </span>
-        <span v-if="selectedVerification" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-          Status: {{ selectedVerification === 'true' ? 'Verified' : 'Pending' }}
-          <button @click="selectedVerification = ''" class="ml-1 text-yellow-600 hover:text-yellow-800">
-            <X class="h-3 w-3" />
-          </button>
-        </span>
-        <span v-if="selectedDepartment" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-          Department: {{ selectedDepartment }}
-          <button @click="selectedDepartment = ''" class="ml-1 text-purple-600 hover:text-purple-800">
-            <X class="h-3 w-3" />
-          </button>
-        </span>
+        
+        <!-- Clear Filters -->
+        <VButton 
+          v-if="hasActiveFilters"
+          variant="outline" 
+          @click="clearFilters"
+          class="flex items-center gap-2"
+        >
+          <X class="h-4 w-4" />
+          Clear Filters
+        </VButton>
+        
+        <!-- Add User Button -->
+        <VButton 
+          v-if="canCreateUsers"
+          @click="handleCreateUser"
+          class="bg-orange-600 hover:bg-orange-700 text-white"
+        >
+          <Plus class="mr-2 h-4 w-4" />
+          Add Member
+        </VButton>
       </div>
     </div>
 
-    <!-- Results Section -->
-    <div class="bg-white rounded-lg shadow-sm border">
-      <!-- Results Header -->
-      <div class="px-6 py-4 border-b border-gray-200">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-4">
-            <h3 class="text-lg font-medium text-gray-900">
-              {{ filteredUsers.length }} Member{{ filteredUsers.length !== 1 ? 's' : '' }}
-              <span v-if="hasActiveFilters" class="text-gray-500">(filtered)</span>
-            </h3>
-            <div class="text-sm text-gray-500">
-              Showing {{ startIndex }}-{{ endIndex }} of {{ totalUsers }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Enhanced Data Table -->
+    <!-- User Table -->
+    <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full">
+        <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="text-left px-6 py-4 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" @click="handleSort('name')">
-                <div class="flex items-center gap-2">
-                  Member
-                  <ArrowUpDown class="h-4 w-4 text-gray-400" />
-                </div>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Member
               </th>
-              <th class="text-left px-6 py-4 font-semibold text-gray-900">Role</th>
-              <th class="text-left px-6 py-4 font-semibold text-gray-900">Department</th>
-              <th class="text-left px-6 py-4 font-semibold text-gray-900">Status</th>
-              <th class="text-left px-6 py-4 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" @click="handleSort('created_at')">
-                <div class="flex items-center gap-2">
-                  Joined
-                  <ArrowUpDown class="h-4 w-4 text-gray-400" />
-                </div>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Role & Department
               </th>
-              <th class="text-right px-6 py-4 font-semibold text-gray-900">Actions</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Joined
+              </th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200">
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- Loading State -->
             <tr v-if="loading">
-              <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+              <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                 <div class="flex items-center justify-center">
                   <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
                   <span class="ml-3">Loading team members...</span>
                 </div>
               </td>
             </tr>
+            
+            <!-- Empty State -->
             <tr v-else-if="displayedUsers.length === 0">
-              <td colspan="6" class="px-6 py-12 text-center">
+              <td colspan="5" class="px-6 py-12 text-center">
                 <div class="text-gray-400">
                   <Users class="h-16 w-16 mx-auto mb-4" />
                   <h3 class="text-lg font-medium text-gray-900 mb-2">No members found</h3>
@@ -213,6 +152,8 @@
                 </div>
               </td>
             </tr>
+            
+            <!-- User Rows -->
             <tr 
               v-else
               v-for="user in displayedUsers" 
@@ -224,58 +165,42 @@
               <td class="px-6 py-4">
                 <div class="flex items-center gap-4">
                   <div class="relative">
-                    <img
-                      v-if="user.avatar_url"
-                      :src="user.avatar_url"
-                      :alt="user.name"
-                      class="h-12 w-12 rounded-full object-cover"
-                    >
-                    <div
-                      v-else
-                      class="h-12 w-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-lg"
-                    >
-                      {{ user.name.charAt(0).toUpperCase() }}
-                    </div>
-                    <div v-if="user.email_verified_at" class="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 rounded-full border-2 border-white">
-                      <Check class="h-2 w-2 text-white ml-0.5 mt-0.5" />
+                    <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
+                      <span class="text-sm font-medium text-orange-800">
+                        {{ user.name.split(' ').map(n => n[0]).join('').toUpperCase() }}
+                      </span>
                     </div>
                   </div>
-                  <div>
-                    <div class="font-semibold text-gray-900">{{ user.name }}</div>
-                    <div class="text-sm text-gray-600">{{ user.email }}</div>
-                    <div v-if="user.department" class="text-xs text-gray-500 mt-1">{{ user.department }}</div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-sm font-medium text-gray-900 truncate">
+                      {{ user.name }}
+                    </div>
+                    <div class="text-sm text-gray-500 truncate">
+                      {{ user.email }}
+                    </div>
                   </div>
                 </div>
               </td>
               
-              <!-- Role -->
+              <!-- Role & Department -->
               <td class="px-6 py-4">
-                <VBadge 
-                  :variant="getRoleVariant(user.role)"
-                  class="font-medium"
-                >
-                  {{ getRoleLabel(user.role) }}
-                </VBadge>
-              </td>
-              
-              <!-- Department -->
-              <td class="px-6 py-4">
-                <div v-if="user.department" class="flex items-center gap-2">
-                  <span class="text-lg">{{ getDepartmentIcon(user.department) }}</span>
-                  <span class="text-sm font-medium text-gray-900 capitalize">{{ user.department }}</span>
+                <div class="space-y-1">
+                  <VBadge :variant="getRoleVariant(user.role)" class="text-xs flex items-center gap-1">
+                    <component :is="getRoleIcon(user.role)" class="w-3 h-3" />
+                    {{ formatRole(user.role) }}
+                  </VBadge>
+                  <div class="text-xs text-gray-500 flex items-center gap-1">
+                    <component :is="getDepartmentIcon(user.department || 'construction')" class="w-3 h-3" />
+                    {{ formatDepartment(user.department || 'construction') }}
+                  </div>
                 </div>
-                <span v-else class="text-sm text-gray-400">Not specified</span>
               </td>
               
               <!-- Status -->
               <td class="px-6 py-4">
                 <div class="flex items-center gap-2">
-                  <VBadge 
-                    :variant="user.email_verified_at ? 'success' : 'warning'"
-                    class="text-xs"
-                  >
-                    <CheckCircle v-if="user.email_verified_at" class="mr-1 h-3 w-3" />
-                    <Clock v-else class="mr-1 h-3 w-3" />
+                  <VBadge :variant="user.email_verified_at ? 'success' : 'warning'" class="text-xs">
+                    <component :is="user.email_verified_at ? CheckCircle : Clock" class="w-3 h-3 mr-1" />
                     {{ user.email_verified_at ? 'Verified' : 'Pending' }}
                   </VBadge>
                 </div>
@@ -289,49 +214,10 @@
               
               <!-- Actions -->
               <td class="px-6 py-4 text-right" @click.stop>
-                <VDropdownMenu align="end">
-                  <template #trigger>
-                    <VButton variant="outline" class="h-8 w-8 p-0">
-                      <MoreVertical class="h-4 w-4" />
-                    </VButton>
-                  </template>
-                  <template #content>
-                    <VDropdownMenuItem @click="handleViewUser(user)">
-                      <UserCheck class="mr-2 h-4 w-4" />
-                      View Profile
-                    </VDropdownMenuItem>
-                    <VDropdownMenuItem 
-                      v-if="canEditUser(user)"
-                      @click="handleEditUser(user)"
-                    >
-                      <Edit class="mr-2 h-4 w-4" />
-                      Edit Details
-                    </VDropdownMenuItem>
-                    <VDropdownMenuItem 
-                      v-if="!user.email_verified_at && canEditUser(user)"
-                      @click="handleResendVerification(user)"
-                    >
-                      <Mail class="mr-2 h-4 w-4" />
-                      Resend Verification
-                    </VDropdownMenuItem>
-                    <VDropdownMenuItem 
-                      v-if="canEditUser(user)"
-                      @click="handleChangeRole(user)"
-                    >
-                      <Shield class="mr-2 h-4 w-4" />
-                      Change Role
-                    </VDropdownMenuItem>
-                    <div class="border-t border-gray-100 my-1" v-if="canDeleteUser(user)"></div>
-                    <VDropdownMenuItem 
-                      v-if="canDeleteUser(user)"
-                      variant="destructive"
-                      @click="handleDeleteUser(user)"
-                    >
-                      <Trash class="mr-2 h-4 w-4" />
-                      Remove Member
-                    </VDropdownMenuItem>
-                  </template>
-                </VDropdownMenu>
+                <VButton variant="outline" size="sm" @click.stop="handleViewUser(user)">
+                  <Edit class="h-4 w-4 mr-1" />
+                  Edit
+                </VButton>
               </td>
             </tr>
           </tbody>
@@ -374,25 +260,23 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUsers } from '../composables/useUsers';
 import { useUserPermissions } from '../composables/useUserPermissions';
-import { VButton, VCard, VInput, VBadge, VDropdownMenu, VDropdownMenuItem } from '@/components/ui';
-import { Plus, Search, Edit, Trash, CheckCircle, Clock, X, MoreVertical, Mail, Shield, UserCheck, Users, Check, ArrowUpDown } from 'lucide-vue-next';
+import { VButton, VCard, VInput, VBadge } from '@/components/ui';
+import { Plus, Search, Edit, Trash, CheckCircle, Clock, X, MoreVertical, Mail, Shield, UserCheck, Users, Check, ArrowUpDown, Crown, ClipboardList, HardHat, Hammer, Building2, Settings, ShieldCheck, Briefcase, Package } from 'lucide-vue-next';
 import type { UserListItem } from '../types/users.types';
 
 // ==================== COMPOSABLES ====================
 const router = useRouter();
 const { 
-  users, 
+  users,
   statistics, 
   loading,
-  loadUsers, 
-  deleteUser
+  error,
+  loadUsers,
+  deleteUser,
+  updateUser
 } = useUsers();
 
-const { 
-  hasPermission,
-  canEditUser,
-  canDeleteUser
-} = useUserPermissions();
+const { hasPermission, canEditUser, canDeleteUser } = useUserPermissions();
 
 // ==================== STATE ====================
 const searchTerm = ref('');
@@ -445,119 +329,37 @@ const filteredUsers = computed(() => {
   return filtered;
 });
 
+const totalUsers = computed(() => filteredUsers.value.length);
+const totalPages = computed(() => Math.ceil(totalUsers.value / pageSize.value));
+
+const startIndex = computed(() => {
+  return totalUsers.value === 0 ? 0 : (currentPage.value - 1) * pageSize.value + 1;
+});
+
+const endIndex = computed(() => {
+  return Math.min(currentPage.value * pageSize.value, totalUsers.value);
+});
+
 const displayedUsers = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
   const end = start + pageSize.value;
   return filteredUsers.value.slice(start, end);
 });
 
-const totalUsers = computed(() => filteredUsers.value.length);
-
-const totalPages = computed(() => Math.ceil(totalUsers.value / pageSize.value));
-
-const startIndex = computed(() => 
-  filteredUsers.value.length === 0 ? 0 : (currentPage.value - 1) * pageSize.value + 1
-);
-
-const endIndex = computed(() => 
-  Math.min(currentPage.value * pageSize.value, totalUsers.value)
-);
-
-const thisMonthUsers = computed(() => {
-  const thisMonth = new Date();
-  thisMonth.setDate(1);
-  thisMonth.setHours(0, 0, 0, 0);
-  
-  return users.value.filter((user: any) => 
-    new Date(user.created_at) >= thisMonth
-  ).length;
-});
-
 // ==================== METHODS ====================
-/**
- * Simple date formatter
- */
-const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString();
-};
-
-/**
- * Get role label
- */
-const getRoleLabel = (role: string): string => {
-  const labels: { [key: string]: string } = {
-    admin: 'Administrator',
-    project_manager: 'Project Manager',
-    supervisor: 'Supervisor',
-    field_worker: 'Field Worker'
-  };
-  return labels[role] || role;
-};
-
-/**
- * Get role badge variant
- */
-const getRoleVariant = (role: string): 'default' | 'outline' | 'success' | 'warning' | 'destructive' => {
-  const variants: { [key: string]: 'default' | 'outline' | 'success' | 'warning' | 'destructive' } = {
-    admin: 'destructive',
-    project_manager: 'default',
-    supervisor: 'warning',
-    field_worker: 'success'
-  };
-  return variants[role] || 'default';
-};
-
-/**
- * Handle search with debouncing
- */
-const handleSearch = () => {
-  // Reset to first page when searching
-  currentPage.value = 1;
-};
-
-/**
- * Handle filter changes
- */
-const handleFilterChange = () => {
-  currentPage.value = 1;
-};
-
-/**
- * Handle sorting
- */
-const handleSort = (field: string): void => {
-  if (sortBy.value === field) {
-    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
-  } else {
-    sortBy.value = field;
-    sortDirection.value = 'asc';
-  }
-  
-  // Apply sorting to filteredUsers would happen here
-  // For now, we'll just track the sort state
-};
-
-/**
- * Handle page change
- */
-const handlePageChange = (page: number): void => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-  }
-};
 
 /**
  * Get department icon
  */
-const getDepartmentIcon = (department: string): string => {
-  const icons: { [key: string]: string } = {
-    construction: '🏗️',
-    engineering: '⚙️',
-    safety: '🦺',
-    management: '💼',
-    logistics: '📦'
+const getDepartmentIcon = (department: string) => {
+  const icons: { [key: string]: any } = {
+    construction: Building2,
+    engineering: Settings,
+    safety: ShieldCheck,
+    management: Briefcase,
+    logistics: Package
   };
-  return icons[department] || '📋';
+  return icons[department] || ClipboardList;
 };
 
 /**
@@ -588,6 +390,66 @@ const getRelativeTime = (dateString: string): string => {
 };
 
 /**
+ * Format role display
+ */
+const formatRole = (role: string): string => {
+  const roleMap: { [key: string]: string } = {
+    admin: 'Administrator',
+    project_manager: 'Project Manager',
+    supervisor: 'Supervisor',
+    field_worker: 'Field Worker'
+  };
+  return roleMap[role] || role;
+};
+
+/**
+ * Format department display
+ */
+const formatDepartment = (department: string): string => {
+  const departmentMap: { [key: string]: string } = {
+    construction: 'Construction',
+    engineering: 'Engineering',
+    safety: 'Safety',
+    management: 'Management',
+    logistics: 'Logistics'
+  };
+  return departmentMap[department] || department;
+};
+
+/**
+ * Get role icon
+ */
+const getRoleIcon = (role: string) => {
+  const icons: { [key: string]: any } = {
+    admin: Crown,
+    project_manager: ClipboardList,
+    supervisor: HardHat,
+    field_worker: Hammer
+  };
+  return icons[role] || UserCheck;
+};
+
+/**
+ * Get role badge variant
+ */
+const getRoleVariant = (role: string): string => {
+  const variants: { [key: string]: string } = {
+    admin: 'destructive',
+    project_manager: 'default',
+    supervisor: 'secondary',
+    field_worker: 'outline'
+  };
+  return variants[role] || 'outline';
+};
+
+/**
+ * Format date
+ */
+const formatDate = (dateString: string): string => {
+  return new Date(dateString).toLocaleDateString();
+};
+
+/**
  * Clear all filters
  */
 const clearFilters = (): void => {
@@ -599,59 +461,47 @@ const clearFilters = (): void => {
 };
 
 /**
- * Handle create user
+ * Handle page change
  */
-const handleCreateUser = (): void => {
-  router.push({ name: 'users.create' });
+const handlePageChange = (page: number): void => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
 };
 
 /**
- * Handle view user profile
+ * Handle view user
  */
 const handleViewUser = (user: UserListItem): void => {
-  router.push({ name: 'users.view', params: { id: user.id } });
+  router.push(`/users/${user.id}`);
+};
+
+/**
+ * Handle create user
+ */
+const handleCreateUser = (): void => {
+  router.push('/users/create');
 };
 
 /**
  * Handle edit user
  */
 const handleEditUser = (user: UserListItem): void => {
-  router.push({ name: 'users.edit', params: { id: user.id } });
-};
-
-/**
- * Handle resend verification email
- */
-const handleResendVerification = async (user: UserListItem): Promise<void> => {
-  try {
-    // This would call the API to resend verification
-    console.log(`Resending verification email to ${user.email}`);
-    // Show success message
-  } catch (error) {
-    console.error('Failed to resend verification:', error);
-  }
-};
-
-/**
- * Handle change user role
- */
-const handleChangeRole = (user: UserListItem): void => {
-  // This could open a modal or navigate to a role change page
-  router.push({ name: 'users.role', params: { id: user.id } });
+  router.push(`/users/${user.id}/edit`);
 };
 
 /**
  * Handle delete user
  */
 const handleDeleteUser = async (user: UserListItem): Promise<void> => {
-  if (!confirm(`Are you sure you want to delete ${user.name}? This action cannot be undone.`)) {
+  if (!confirm(`Are you sure you want to remove ${user.name} from the team?`)) {
     return;
   }
-  
+
   try {
     await deleteUser(user.id);
-    // Show success message (would use toast in real implementation)
-    console.log('User deleted successfully');
+    // Reload users list
+    await loadUsers();
   } catch (error) {
     console.error('Failed to delete user:', error);
     // Show error message (would use toast in real implementation)

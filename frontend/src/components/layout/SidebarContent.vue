@@ -5,7 +5,7 @@
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-            <span class="text-orange-600 font-bold text-lg">🏗️</span>
+            <Building2 class="text-orange-600 w-5 h-5" />
           </div>
         </div>
         <div class="ml-3 text-white">
@@ -122,6 +122,22 @@ import { computed } from 'vue'
 import { useAuthStore } from '@/modules/auth'
 import { useUserPermissions } from '@/modules/users'
 import SidebarLink from './SidebarLink.vue'
+import { 
+  Building2, 
+  Home, 
+  ClipboardList, 
+  CheckSquare, 
+  Calendar, 
+  FileText, 
+  Users, 
+  Settings, 
+  Edit, 
+  UserCog, 
+  BarChart3, 
+  Clock, 
+  DollarSign, 
+  TrendingUp 
+} from 'lucide-vue-next'
 
 defineOptions({ name: 'SidebarContent' })
 
@@ -155,29 +171,29 @@ const mainNavigation = computed(() => [
   {
     name: 'Dashboard',
     to: '/dashboard',
-    icon: '🏠',
+    icon: Home,
   },
   {
     name: 'Projects',
     to: '/projects',
-    icon: '📋',
+    icon: ClipboardList,
     badge: '12', // This could be dynamic
   },
   {
     name: 'Tasks',
     to: '/tasks',
-    icon: '✅',
+    icon: CheckSquare,
     badge: '8',
   },
   {
     name: 'Calendar',
     to: '/calendar',
-    icon: '📅',
+    icon: Calendar,
   },
   {
     name: 'Documents',
     to: '/documents',
-    icon: '📄',
+    icon: FileText,
   },
 ])
 
@@ -188,7 +204,7 @@ const managementNavigation = computed(() => {
     items.push({
       name: 'Team Members',
       to: '/users',
-      icon: '👥',
+      icon: Users,
     })
   }
   
@@ -196,7 +212,7 @@ const managementNavigation = computed(() => {
     items.push({
       name: 'Project Settings',
       to: '/projects/settings',
-      icon: '⚙️',
+      icon: Settings,
     })
   }
   
@@ -204,7 +220,7 @@ const managementNavigation = computed(() => {
     items.push({
       name: 'Task Assignment',
       to: '/tasks/assign',
-      icon: '📝',
+      icon: Edit,
     })
   }
   
@@ -218,7 +234,7 @@ const adminNavigation = computed(() => {
     items.push({
       name: 'User Management',
       to: '/users',
-      icon: '👤',
+      icon: UserCog,
     })
   }
   
@@ -226,12 +242,12 @@ const adminNavigation = computed(() => {
     items.push({
       name: 'Company Settings',
       to: '/admin/company',
-      icon: '🏢',
+      icon: Building2,
     })
     items.push({
       name: 'System Settings',
       to: '/admin/settings',
-      icon: '⚙️',
+      icon: Settings,
     })
   }
   
@@ -243,22 +259,22 @@ const reportsNavigation = computed(() =>
     {
       name: 'Project Reports',
       to: '/reports/projects',
-      icon: '📊',
+      icon: BarChart3,
     },
     {
       name: 'Time Tracking',
       to: '/reports/time',
-      icon: '⏱️',
+      icon: Clock,
     },
     {
       name: 'Cost Analysis',
       to: '/reports/costs',
-      icon: '💰',
+      icon: DollarSign,
     },
     {
       name: 'Performance',
       to: '/reports/performance',
-      icon: '📈',
+      icon: TrendingUp,
     },
   ] : []
 )
