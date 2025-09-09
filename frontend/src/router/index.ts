@@ -56,88 +56,141 @@ const router = createRouter({
         }
       ]
     },
-    // Protected Routes
+    // Protected Routes with Shared Layout
     {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: () => import('../pages/DashboardPage.vue'),
-      meta: { requiresAuth: true, title: 'Dashboard' }
-    },
-    // Main Navigation Routes
-    {
-      path: '/projects',
-      name: 'Projects',
-      component: () => import('../pages/ProjectsPage.vue'),
-      meta: { requiresAuth: true, title: 'Projects' }
-    },
-    {
-      path: '/tasks',
-      name: 'Tasks',
-      component: () => import('../pages/TasksPage.vue'),
-      meta: { requiresAuth: true, title: 'Tasks' }
-    },
-    {
-      path: '/calendar',
-      name: 'Calendar',
-      component: () => import('../pages/CalendarPage.vue'),
-      meta: { requiresAuth: true, title: 'Calendar' }
-    },
-    {
-      path: '/documents',
-      name: 'Documents',
-      component: () => import('../pages/DocumentsPage.vue'),
-      meta: { requiresAuth: true, title: 'Documents' }
-    },
-    // Admin Routes
-    {
-      path: '/admin/company',
-      name: 'CompanySettings',
-      component: () => import('../pages/admin/CompanySettingsPage.vue'),
-      meta: { requiresAuth: true, requiresPermission: 'canManageCompany', title: 'Company Settings' }
-    },
-    {
-      path: '/admin/settings',
-      name: 'SystemSettings',
-      component: () => import('../pages/admin/SystemSettingsPage.vue'),
-      meta: { requiresAuth: true, requiresPermission: 'canManageCompany', title: 'System Settings' }
-    },
-    // User Management Routes
-    {
-      path: '/users',
+      path: '/app',
+      component: () => import('../layouts/AppLayout.vue'),
       meta: { requiresAuth: true },
       children: [
         {
           path: '',
+          redirect: '/app/dashboard'
+        },
+        {
+          path: 'dashboard',
+          name: 'Dashboard',
+          component: () => import('../pages/DashboardPage.vue'),
+          meta: { requiresAuth: true, title: 'Dashboard' }
+        },
+        // Main Navigation Routes
+        {
+          path: 'projects',
+          name: 'Projects',
+          component: () => import('../pages/ProjectsPage.vue'),
+          meta: { requiresAuth: true, title: 'Projects' }
+        },
+        {
+          path: 'projects/settings',
+          name: 'ProjectSettings',
+          component: () => import('../pages/projects/ProjectSettingsPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canManageProjects', title: 'Project Settings' }
+        },
+        {
+          path: 'tasks',
+          name: 'Tasks',
+          component: () => import('../pages/TasksPage.vue'),
+          meta: { requiresAuth: true, title: 'Tasks' }
+        },
+        {
+          path: 'tasks/assign',
+          name: 'TaskAssign',
+          component: () => import('../pages/tasks/TaskAssignPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canAssignTasks', title: 'Task Assignment' }
+        },
+        {
+          path: 'calendar',
+          name: 'Calendar',
+          component: () => import('../pages/CalendarPage.vue'),
+          meta: { requiresAuth: true, title: 'Calendar' }
+        },
+        {
+          path: 'documents',
+          name: 'Documents',
+          component: () => import('../pages/DocumentsPage.vue'),
+          meta: { requiresAuth: true, title: 'Documents' }
+        },
+        // Admin Routes
+        {
+          path: 'admin/company',
+          name: 'CompanySettings',
+          component: () => import('../pages/admin/CompanySettingsPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canManageCompany', title: 'Company Settings' }
+        },
+        {
+          path: 'admin/settings',
+          name: 'SystemSettings',
+          component: () => import('../pages/admin/SystemSettingsPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canManageCompany', title: 'System Settings' }
+        },
+        // User Management Routes
+        {
+          path: 'users',
           name: 'users.index',
           component: () => import('../pages/users/UsersListPage.vue'),
           meta: { requiresAuth: true, requiresPermission: 'canViewUsers', title: 'Team Members' }
         },
         {
-          path: 'create',
+          path: 'users/create',
           name: 'users.create',
           component: () => import('../pages/users/UserCreatePage.vue'),
           meta: { requiresAuth: true, requiresPermission: 'canManageUsers', title: 'Add New User' }
         },
         {
-          path: ':id',
+          path: 'users/:id',
           name: 'users.view',
           component: () => import('../pages/users/UserProfilePage.vue'),
           meta: { requiresAuth: true, requiresPermission: 'canViewUsers', title: 'User Profile' }
         },
         {
-          path: ':id/edit',
+          path: 'users/:id/edit',
           name: 'users.edit',
           component: () => import('../pages/users/UserEditPage.vue'),
           meta: { requiresAuth: true, requiresPermission: 'canEditUser', title: 'Edit User' }
         },
         {
-          path: ':id/role',
+          path: 'users/:id/role',
           name: 'users.role',
           component: () => import('../pages/users/UserRoleChangePage.vue'),
           meta: { requiresAuth: true, requiresPermission: 'canManageUsers', title: 'Change User Role' }
+        },
+        // Report Routes
+        {
+          path: 'reports/projects',
+          name: 'reports.projects',
+          component: () => import('../pages/reports/ProjectReportsPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canViewReports', title: 'Project Reports' }
+        },
+        {
+          path: 'reports/time',
+          name: 'reports.time',
+          component: () => import('../pages/reports/TimeReportsPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canViewReports', title: 'Time Tracking Reports' }
+        },
+        {
+          path: 'reports/costs',
+          name: 'reports.costs',
+          component: () => import('../pages/reports/CostAnalysisPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canViewReports', title: 'Cost Analysis' }
+        },
+        {
+          path: 'reports/performance',
+          name: 'reports.performance',
+          component: () => import('../pages/reports/PerformanceReportsPage.vue'),
+          meta: { requiresAuth: true, requiresPermission: 'canViewReports', title: 'Performance Reports' }
         }
       ]
-    }
+    },
+    // Legacy redirects
+    {
+      path: '/dashboard',
+      redirect: '/app/dashboard'
+    },
+    {
+      path: '/users',
+      redirect: '/app/users'
+    },
+    // Reports Routes (temporarily disabled due to import issues)
+    // TODO: Re-enable once import issues are resolved
   ],
 })
 

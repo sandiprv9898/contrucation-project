@@ -1,10 +1,7 @@
 <template>
-  <MainLayout>
-    <UserList />
-  </MainLayout>
+  <WorkingUserList />
 </template>
 
 <script setup lang="ts">
-import { UserList } from '@/modules/users'
-import MainLayout from '@/layouts/MainLayout.vue'
+import WorkingUserList from '@/modules/users/components/WorkingUserList.vue'
 </script>
