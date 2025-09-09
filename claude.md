@@ -16,6 +16,7 @@ Construction Management Platform is a Laravel 11.x (backend) and Vue.js 3/TypeSc
 8. **Filters must be INLINE** - No large filter sections
 9. **Table Sorting is MANDATORY** - All columns sortable
 10. **Use Lucide Vue icons ONLY** - No other icon libraries
+11. **NO EMOJIS** - Use Lucide icon components instead
 
 ### Backend (Laravel) Rules
 1. **ALWAYS use Repository Pattern** - No direct Eloquent in controllers
@@ -590,6 +591,91 @@ const columns: ColumnDef[] = [
     )
   }
 ];
+```
+
+#### Icon Standards (NO EMOJIS)
+```vue
+<!-- ✅ GOOD - Using Lucide Vue Next icons -->
+<template>
+  <div class="navigation">
+    <Button>
+      <Home class="mr-2 h-4 w-4" />
+      Dashboard
+    </Button>
+    <Button>
+      <Users class="mr-2 h-4 w-4" />
+      Team
+    </Button>
+    <Button>
+      <Settings class="mr-2 h-4 w-4" />
+      Settings
+    </Button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Home, Users, Settings } from 'lucide-vue-next';
+</script>
+
+<!-- ❌ BAD - Using emojis -->
+<template>
+  <div class="navigation">
+    <Button>🏠 Dashboard</Button>     <!-- NEVER use emojis -->
+    <Button>👥 Team</Button>          <!-- NEVER use emojis -->
+    <Button>⚙️ Settings</Button>      <!-- NEVER use emojis -->
+  </div>
+</template>
+
+<!-- ❌ BAD - Even in console logs -->
+<script setup lang="ts">
+// NEVER use emojis in console logs
+console.log('🔒 Auth token loaded');  // BAD
+console.log('[AUTH] Token loaded');   // GOOD
+
+// NEVER use emojis in navigation data
+const navigation = [
+  { name: 'Dashboard', icon: '🏠' },  // BAD
+  { name: 'Dashboard', icon: Home },  // GOOD
+];
+</script>
+```
+
+#### Icon Implementation Patterns
+```typescript
+// ✅ GOOD - Dynamic icon components in navigation
+const navigationItems = computed(() => [
+  {
+    name: 'Dashboard',
+    to: '/dashboard',
+    icon: Home,  // Component reference
+  },
+  {
+    name: 'Projects', 
+    to: '/projects',
+    icon: ClipboardList,  // Component reference
+  },
+  {
+    name: 'Users',
+    to: '/users', 
+    icon: Users,  // Component reference
+  }
+]);
+
+// ✅ GOOD - Using dynamic component rendering
+<component :is="item.icon" class="w-5 h-5" />
+
+// ✅ GOOD - Icon sizing standards
+class="w-4 h-4"    // Small icons (16px)
+class="w-5 h-5"    // Medium icons (20px) 
+class="w-6 h-6"    // Large icons (24px)
+class="w-12 h-12"  // Feature icons (48px)
+
+// ✅ GOOD - Required icon imports
+import { 
+  Home, Users, Settings, ClipboardList, CheckSquare,
+  Calendar, FileText, Building2, Edit, Trash, Plus,
+  MoreHorizontal, Bell, LogOut, User
+} from 'lucide-vue-next';
 ```
 
 ### 5. Project Structure
