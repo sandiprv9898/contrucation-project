@@ -64,4 +64,20 @@ class User extends Authenticatable
     {
         return $this->role === 'project_manager';
     }
+
+    /**
+     * Check if user has one of the given roles
+     */
+    public function hasRole(array $roles): bool
+    {
+        return in_array($this->role, $roles);
+    }
+
+    /**
+     * Get user role names as collection
+     */
+    public function getRoleNames()
+    {
+        return collect([$this->role]);
+    }
 }

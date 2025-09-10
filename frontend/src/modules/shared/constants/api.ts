@@ -15,6 +15,16 @@ export const API_CONFIG = {
       UPDATE: (id: string) => `/users/${id}`,
       DELETE: (id: string) => `/users/${id}`,
     },
+    SETTINGS: {
+      LIST: '/settings',
+      UPDATE: (category: string) => `/settings/${category}`,
+      PERMISSIONS: '/settings/permissions',
+      VALIDATIONS: '/settings/validations',
+      EXPORT: '/settings/export',
+      IMPORT: '/settings/import',
+      SYSTEM_HEALTH: '/settings/system/health',
+      MAINTENANCE: '/settings/system/maintenance',
+    },
   },
 } as const
 

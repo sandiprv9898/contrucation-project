@@ -119,7 +119,7 @@ const router = createRouter({
         {
           path: 'admin/settings',
           name: 'SystemSettings',
-          component: () => import('../pages/admin/SystemSettingsPage.vue'),
+          component: () => import('../modules/settings/pages/SettingsPage.vue'),
           meta: { requiresAuth: true, requiresPermission: 'canManageCompany', title: 'System Settings' }
         },
         // User Management Routes

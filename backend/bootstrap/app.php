@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(append: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
+        
+        // Configure authentication for API routes  
+        $middleware->redirectGuestsTo('/api/unauthenticated');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
