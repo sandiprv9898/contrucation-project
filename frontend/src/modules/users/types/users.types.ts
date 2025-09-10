@@ -131,20 +131,33 @@ export interface UserFilters {
   roles?: UserRole[]
   company_id?: string | '' | undefined
   verified?: boolean | '' | undefined
-  department?: string
+  department?: string | '' | undefined
   
   // Advanced filters
   email_domain?: string
-  has_phone?: boolean
-  active?: boolean
+  has_phone?: boolean | '' | undefined
+  active?: boolean | '' | undefined
+  last_login_from?: string
+  last_login_to?: string
   
   // Date range filters
   created_from?: string
   created_to?: string
+  hire_date_from?: string
+  hire_date_to?: string
+  
+  // Activity filters
+  recently_active?: boolean | '' | undefined // Last 7 days
+  never_logged_in?: boolean | '' | undefined
+  dormant_users?: boolean | '' | undefined // No login for 30+ days
   
   // Sorting
-  sort_by?: string
+  sort_by?: 'name' | 'email' | 'created_at' | 'last_login_at' | 'role' | 'department' | ''
   sort_direction?: 'asc' | 'desc'
+  
+  // Multiple selection filters
+  departments?: string[]
+  email_domains?: string[]
   
   // Pagination
   page?: number

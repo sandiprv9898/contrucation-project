@@ -26,7 +26,8 @@
 
     <!-- Search and Filter Bar -->
     <div class="px-6">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-4">
+        <!-- Primary filters row -->
         <div class="flex items-center justify-between space-x-4">
           <div class="flex-1 max-w-md">
             <div class="relative">
@@ -64,6 +65,42 @@
               <option value="verified">Verified</option>
               <option value="pending">Pending</option>
             </select>
+
+            <select
+              v-model="departmentFilter"
+              class="block px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            >
+              <option value="">All Departments</option>
+              <option value="engineering">Engineering</option>
+              <option value="construction">Construction</option>
+              <option value="project_management">Project Management</option>
+              <option value="safety">Safety</option>
+              <option value="quality_control">Quality Control</option>
+              <option value="equipment">Equipment</option>
+              <option value="administration">Administration</option>
+            </select>
+
+            <select
+              v-model="sortFilter"
+              class="block px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            >
+              <option value="">Default Sort</option>
+              <option value="name_asc">Name (A-Z)</option>
+              <option value="name_desc">Name (Z-A)</option>
+              <option value="email_asc">Email (A-Z)</option>
+              <option value="email_desc">Email (Z-A)</option>
+              <option value="created_at_desc">Newest First</option>
+              <option value="created_at_asc">Oldest First</option>
+              <option value="last_login_at_desc">Recently Active</option>
+              <option value="role_asc">Role (A-Z)</option>
+            </select>
+
+            <button
+              @click="toggleAdvancedFilters"
+              class="px-3 py-2 text-sm text-orange-600 hover:text-orange-700 border border-orange-300 rounded-md hover:bg-orange-50"
+            >
+              {{ showAdvancedFilters ? 'Fewer Filters' : 'More Filters' }}
+            </button>
             
             <button
               v-if="hasFilters"
@@ -73,6 +110,70 @@
             >
               {{ isClearing ? 'Clearing...' : 'Clear Filters' }}
             </button>
+          </div>
+        </div>
+
+        <!-- Advanced filters row (collapsible) -->
+        <div v-if="showAdvancedFilters" class="border-t pt-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Activity Filters -->
+            <select
+              v-model="activityFilter"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            >
+              <option value="">All Activity</option>
+              <option value="recently_active">Recently Active (7 days)</option>
+              <option value="never_logged_in">Never Logged In</option>
+              <option value="dormant_users">Dormant (30+ days)</option>
+            </select>
+
+            <!-- Phone Filter -->
+            <select
+              v-model="phoneFilter"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            >
+              <option value="">Any Phone Status</option>
+              <option value="has_phone">Has Phone</option>
+              <option value="no_phone">No Phone</option>
+            </select>
+
+            <!-- Date Range Filters -->
+            <input
+              v-model="createdFromFilter"
+              type="date"
+              placeholder="Created From"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            />
+
+            <input
+              v-model="createdToFilter"
+              type="date"
+              placeholder="Created To"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            />
+
+            <!-- Email Domain Filter -->
+            <input
+              v-model="emailDomainFilter"
+              type="text"
+              placeholder="Email domain (e.g., company.com)"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            />
+
+            <!-- Active Status Filter -->
+            <select
+              v-model="activeFilter"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            >
+              <option value="">Any Status</option>
+              <option value="active">Active Users</option>
+              <option value="inactive">Inactive Users</option>
+            </select>
+          </div>
+
+          <!-- Filter Summary -->
+          <div v-if="appliedFiltersCount > 0" class="mt-3 text-sm text-gray-600">
+            {{ appliedFiltersCount }} filter{{ appliedFiltersCount !== 1 ? 's' : '' }} applied
           </div>
         </div>
       </div>
@@ -216,22 +317,99 @@
       </div>
     </div>
 
-    <!-- Table Footer with Pagination Info -->
+    <!-- Table Footer with Pagination -->
     <div class="px-6">
-      <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 rounded-b-lg">
-        <div class="flex-1 flex justify-between sm:hidden">
-          <p class="text-sm text-gray-700">
-            Showing {{ filteredUsers.length }} team members
+      <div class="bg-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 sm:px-6 rounded-b-lg space-y-3 sm:space-y-0">
+        <!-- Pagination Info -->
+        <div class="flex items-center space-x-4">
+          <div class="text-sm text-gray-700">
+            Showing 
+            <span class="font-medium">{{ ((pagination.current_page - 1) * pagination.per_page) + 1 }}</span>
+            to 
+            <span class="font-medium">{{ Math.min(pagination.current_page * pagination.per_page, pagination.total) }}</span>
+            of 
+            <span class="font-medium">{{ pagination.total }}</span>
+            team members
             <span v-if="hasFilters" class="text-gray-500">(filtered)</span>
-          </p>
-        </div>
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-          <div>
-            <p class="text-sm text-gray-700">
-              Showing <span class="font-medium">{{ filteredUsers.length }}</span> team members
-              <span v-if="hasFilters" class="text-gray-500">(filtered)</span>
-            </p>
           </div>
+          
+          <!-- Page Size Selector -->
+          <div class="flex items-center space-x-2">
+            <label class="text-sm text-gray-700">Show:</label>
+            <select
+              :value="pagination.per_page"
+              @change="handlePageSizeChange"
+              class="border border-gray-300 rounded text-sm px-2 py-1 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+            >
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Pagination Navigation -->
+        <div class="flex items-center space-x-1" v-if="pagination.last_page > 1">
+          <!-- Previous Button -->
+          <button
+            @click="changePage(pagination.current_page - 1)"
+            :disabled="pagination.current_page <= 1"
+            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+
+          <!-- Page Numbers -->
+          <div class="flex items-center space-x-1">
+            <!-- First page -->
+            <button
+              v-if="startPage > 1"
+              @click="changePage(1)"
+              class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              1
+            </button>
+            
+            <!-- Ellipsis after first page -->
+            <span v-if="startPage > 2" class="px-3 py-2 text-sm text-gray-500">...</span>
+            
+            <!-- Visible page numbers -->
+            <button
+              v-for="page in visiblePages"
+              :key="page"
+              @click="changePage(page)"
+              :class="[
+                'px-3 py-2 text-sm font-medium rounded-md',
+                page === pagination.current_page
+                  ? 'text-orange-600 bg-orange-50 border border-orange-500'
+                  : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+              ]"
+            >
+              {{ page }}
+            </button>
+            
+            <!-- Ellipsis before last page -->
+            <span v-if="endPage < pagination.last_page - 1" class="px-3 py-2 text-sm text-gray-500">...</span>
+            
+            <!-- Last page -->
+            <button
+              v-if="endPage < pagination.last_page"
+              @click="changePage(pagination.last_page)"
+              class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              {{ pagination.last_page }}
+            </button>
+          </div>
+
+          <!-- Next Button -->
+          <button
+            @click="changePage(pagination.current_page + 1)"
+            :disabled="pagination.current_page >= pagination.last_page"
+            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
@@ -246,17 +424,81 @@ import { useUsers } from '../composables/useUsers';
 import type { UserListItem, UserFilters } from '../types/users.types';
 
 const router = useRouter();
-const { users, loading, loadUsers, deleteUser, updateFilters, clearError } = useUsers();
+const { users, loading, loadUsers, deleteUser, updateFilters, clearError, pagination, changePage, changePageSize } = useUsers();
 
-// Filters and search
+// Basic filters
 const searchTerm = ref('');
 const roleFilter = ref('');
 const statusFilter = ref('');
+const departmentFilter = ref('');
+const sortFilter = ref('');
+
+// Advanced filters
+const showAdvancedFilters = ref(false);
+const activityFilter = ref('');
+const phoneFilter = ref('');
+const createdFromFilter = ref('');
+const createdToFilter = ref('');
+const emailDomainFilter = ref('');
+const activeFilter = ref('');
+
+// Control flags
 const isClearing = ref(false); // Flag to prevent watcher conflicts during clear
 
 // Computed properties
 const hasFilters = computed(() => {
-  return !!(searchTerm.value || roleFilter.value || statusFilter.value);
+  return !!(
+    searchTerm.value || 
+    roleFilter.value || 
+    statusFilter.value ||
+    departmentFilter.value ||
+    sortFilter.value ||
+    activityFilter.value ||
+    phoneFilter.value ||
+    createdFromFilter.value ||
+    createdToFilter.value ||
+    emailDomainFilter.value ||
+    activeFilter.value
+  );
+});
+
+const appliedFiltersCount = computed(() => {
+  let count = 0;
+  if (searchTerm.value) count++;
+  if (roleFilter.value) count++;
+  if (statusFilter.value) count++;
+  if (departmentFilter.value) count++;
+  if (sortFilter.value) count++;
+  if (activityFilter.value) count++;
+  if (phoneFilter.value) count++;
+  if (createdFromFilter.value) count++;
+  if (createdToFilter.value) count++;
+  if (emailDomainFilter.value) count++;
+  if (activeFilter.value) count++;
+  return count;
+});
+
+// Pagination computed properties
+const startPage = computed(() => {
+  const maxVisible = 5;
+  let start = Math.max(1, pagination.value.current_page - Math.floor(maxVisible / 2));
+  const end = Math.min(start + maxVisible - 1, pagination.value.last_page);
+  start = Math.max(1, end - maxVisible + 1);
+  return start;
+});
+
+const endPage = computed(() => {
+  const maxVisible = 5;
+  const start = startPage.value;
+  return Math.min(start + maxVisible - 1, pagination.value.last_page);
+});
+
+const visiblePages = computed(() => {
+  const pages = [];
+  for (let i = startPage.value; i <= endPage.value; i++) {
+    pages.push(i);
+  }
+  return pages;
 });
 
 // Use server-side filtered users directly from API
@@ -275,6 +517,7 @@ const filteredUsers = computed(() => {
 const currentFilters = computed((): Partial<UserFilters> => {
   const filters: Partial<UserFilters> = {};
   
+  // Basic filters
   if (searchTerm.value.trim()) {
     filters.search = searchTerm.value.trim();
   }
@@ -286,6 +529,52 @@ const currentFilters = computed((): Partial<UserFilters> => {
   if (statusFilter.value) {
     filters.verified = statusFilter.value === 'verified';
   }
+
+  if (departmentFilter.value) {
+    filters.department = departmentFilter.value;
+  }
+
+  // Sorting
+  if (sortFilter.value) {
+    const [sortBy, sortDirection] = sortFilter.value.split('_');
+    filters.sort_by = sortBy as any;
+    filters.sort_direction = sortDirection as 'asc' | 'desc';
+  }
+
+  // Advanced filters
+  if (activityFilter.value) {
+    if (activityFilter.value === 'recently_active') {
+      filters.recently_active = true;
+    } else if (activityFilter.value === 'never_logged_in') {
+      filters.never_logged_in = true;
+    } else if (activityFilter.value === 'dormant_users') {
+      filters.dormant_users = true;
+    }
+  }
+
+  if (phoneFilter.value) {
+    filters.has_phone = phoneFilter.value === 'has_phone';
+  }
+
+  if (createdFromFilter.value) {
+    filters.created_from = createdFromFilter.value;
+  }
+
+  if (createdToFilter.value) {
+    filters.created_to = createdToFilter.value;
+  }
+
+  if (emailDomainFilter.value.trim()) {
+    filters.email_domain = emailDomainFilter.value.trim();
+  }
+
+  if (activeFilter.value) {
+    filters.active = activeFilter.value === 'active';
+  }
+  
+  // Add pagination parameters
+  filters.page = pagination.value.current_page;
+  filters.per_page = pagination.value.per_page;
   
   return filters;
 });
@@ -386,14 +675,28 @@ const clearFilters = async (): Promise<void> => {
     // Clear any existing errors first
     clearError();
     
-    // Clear all filter values in the UI
+    // Clear all basic filter values in the UI
     searchTerm.value = '';
     roleFilter.value = '';
     statusFilter.value = '';
+    departmentFilter.value = '';
+    sortFilter.value = '';
+    
+    // Clear all advanced filter values
+    activityFilter.value = '';
+    phoneFilter.value = '';
+    createdFromFilter.value = '';
+    createdToFilter.value = '';
+    emailDomainFilter.value = '';
+    activeFilter.value = '';
+    
+    // Close advanced filters panel
+    showAdvancedFilters.value = false;
     
     // Explicitly load users without any filters - this will clear store filters too
+    // Note: loadUsers will reset pagination to page 1 when clearing filters
     await loadUsers({}, true); // Pass empty filters object and force refresh
-    console.log('✅ [USER LIST] Filters cleared and users reloaded successfully');
+    console.log('✅ [USER LIST] All filters cleared and users reloaded successfully');
     console.log('🔍 [USER LIST] Current users count after clear:', users.value?.length || 0);
   } catch (error) {
     console.error('❌ [USER LIST] Error clearing filters:', error);
@@ -401,6 +704,19 @@ const clearFilters = async (): Promise<void> => {
   } finally {
     isClearing.value = false;
   }
+};
+
+// Toggle advanced filters
+const toggleAdvancedFilters = (): void => {
+  showAdvancedFilters.value = !showAdvancedFilters.value;
+};
+
+// Pagination functions
+const handlePageSizeChange = (event: Event): void => {
+  const target = event.target as HTMLSelectElement;
+  const newSize = parseInt(target.value);
+  console.log('📄 [USER LIST] Changing page size to:', newSize);
+  changePageSize(newSize);
 };
 
 // Apply filters immediately for dropdowns, debounced for search
@@ -454,6 +770,7 @@ const exportUsers = (): void => {
 };
 
 // Watchers for filter changes
+// Basic filters
 watch(() => searchTerm.value, () => {
   if (isClearing.value) return; // Skip if clearing filters
   console.log('🔍 [USER LIST] Search term changed:', searchTerm.value);
@@ -469,6 +786,55 @@ watch(() => roleFilter.value, () => {
 watch(() => statusFilter.value, () => {
   if (isClearing.value) return; // Skip if clearing filters
   console.log('🔍 [USER LIST] Status filter changed:', statusFilter.value);
+  applyFilters(false); // Apply immediately
+});
+
+watch(() => departmentFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Department filter changed:', departmentFilter.value);
+  applyFilters(false); // Apply immediately
+});
+
+watch(() => sortFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Sort filter changed:', sortFilter.value);
+  applyFilters(false); // Apply immediately
+});
+
+// Advanced filters
+watch(() => activityFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Activity filter changed:', activityFilter.value);
+  applyFilters(false); // Apply immediately
+});
+
+watch(() => phoneFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Phone filter changed:', phoneFilter.value);
+  applyFilters(false); // Apply immediately
+});
+
+watch(() => createdFromFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Created from filter changed:', createdFromFilter.value);
+  applyFilters(false); // Apply immediately
+});
+
+watch(() => createdToFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Created to filter changed:', createdToFilter.value);
+  applyFilters(false); // Apply immediately
+});
+
+watch(() => emailDomainFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Email domain filter changed:', emailDomainFilter.value);
+  applyFilters(true); // Use debounced for text input
+});
+
+watch(() => activeFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Active filter changed:', activeFilter.value);
   applyFilters(false); // Apply immediately
 });
 

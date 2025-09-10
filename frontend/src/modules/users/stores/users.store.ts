@@ -18,10 +18,36 @@ export const useUsersStore = defineStore('users', () => {
   const isLoading = ref(false);
   const error = ref<string | null>(null);
   const filters = ref<UserFilters>({
+    // Basic filters
     search: '',
     role: '',
     company_id: '',
     verified: '',
+    department: '',
+    
+    // Advanced filters
+    email_domain: '',
+    has_phone: '',
+    active: '',
+    last_login_from: '',
+    last_login_to: '',
+    
+    // Date range filters
+    created_from: '',
+    created_to: '',
+    hire_date_from: '',
+    hire_date_to: '',
+    
+    // Activity filters
+    recently_active: '',
+    never_logged_in: '',
+    dormant_users: '',
+    
+    // Sorting
+    sort_by: '',
+    sort_direction: 'asc',
+    
+    // Pagination
     page: 1,
     per_page: 50
   });
@@ -146,10 +172,36 @@ export const useUsersStore = defineStore('users', () => {
       } else if (customFilters && Object.keys(customFilters).length === 0) {
         // Clear filters when empty object is passed
         filters.value = {
+          // Basic filters
           search: '',
           role: '',
           company_id: '',
           verified: '',
+          department: '',
+          
+          // Advanced filters
+          email_domain: '',
+          has_phone: '',
+          active: '',
+          last_login_from: '',
+          last_login_to: '',
+          
+          // Date range filters
+          created_from: '',
+          created_to: '',
+          hire_date_from: '',
+          hire_date_to: '',
+          
+          // Activity filters
+          recently_active: '',
+          never_logged_in: '',
+          dormant_users: '',
+          
+          // Sorting
+          sort_by: '',
+          sort_direction: 'asc',
+          
+          // Pagination
           page: 1,
           per_page: 50
         };
