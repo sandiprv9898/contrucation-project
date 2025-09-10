@@ -120,7 +120,11 @@ export const useUsersStore = defineStore('users', () => {
     error.value = null;
     
     try {
-      const appliedFilters = { ...filters.value, ...customFilters };
+      // Handle clearing filters - if empty object is passed, use it directly instead of merging
+      const appliedFilters = (customFilters && Object.keys(customFilters).length === 0) 
+        ? customFilters  // Use empty object directly for clearing
+        : { ...filters.value, ...customFilters }; // Merge with existing filters normally
+        
       console.log('🏪 [USERS STORE] Calling UsersApi.getUsers with filters:', appliedFilters);
       const response: UsersListResponse = await UsersApi.getUsers(appliedFilters);
       console.log('🏪 [USERS STORE] API response received:', response);
