@@ -16,6 +16,22 @@ class AppServiceProvider extends ServiceProvider
             \App\Domain\Settings\Repositories\SettingRepositoryInterface::class,
             \App\Domain\Settings\Repositories\SettingRepository::class
         );
+
+        // Company Repository Bindings
+        $this->app->bind(
+            \App\Domain\Companies\Repositories\CompanyProfileRepositoryInterface::class,
+            \App\Domain\Companies\Repositories\CompanyProfileRepository::class
+        );
+
+        $this->app->bind(
+            \App\Domain\Companies\Repositories\CompanyBrandingRepositoryInterface::class,
+            \App\Domain\Companies\Repositories\CompanyBrandingRepository::class
+        );
+
+        $this->app->bind(
+            \App\Domain\Companies\Repositories\CompanyPortfolioRepositoryInterface::class,
+            \App\Domain\Companies\Repositories\CompanyPortfolioRepository::class
+        );
     }
 
     /**

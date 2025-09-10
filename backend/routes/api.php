@@ -3,6 +3,9 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\CompanyProfileController;
+use App\Http\Controllers\Api\CompanyBrandingController;
+use App\Http\Controllers\Api\CompanyPortfolioController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +78,35 @@ Route::prefix('v1')->group(function () {
             Route::get('/system/health', [SettingController::class, 'systemHealth']);
             Route::post('/system/maintenance', [SettingController::class, 'toggleMaintenance']);
             Route::post('/company/logo', [SettingController::class, 'uploadLogo']);
+        });
+
+        // Company Settings Routes
+        Route::prefix('company')->group(function () {
+            // Company Profile Management
+            Route::prefix('profile')->group(function () {
+                Route::get('/', [CompanyProfileController::class, 'show']);
+                Route::put('/', [CompanyProfileController::class, 'update']);
+            });
+
+            // Company Branding Management
+            Route::prefix('branding')->group(function () {
+                Route::get('/', [CompanyBrandingController::class, 'index']);
+                Route::post('/', [CompanyBrandingController::class, 'store']);
+                Route::get('/{branding}', [CompanyBrandingController::class, 'show']);
+                Route::put('/{branding}', [CompanyBrandingController::class, 'update']);
+                Route::delete('/{branding}', [CompanyBrandingController::class, 'destroy']);
+                Route::post('/upload', [CompanyBrandingController::class, 'upload']);
+            });
+
+            // Company Portfolio Management
+            Route::prefix('portfolio')->group(function () {
+                Route::get('/', [CompanyPortfolioController::class, 'index']);
+                Route::post('/', [CompanyPortfolioController::class, 'store']);
+                Route::get('/{portfolio}', [CompanyPortfolioController::class, 'show']);
+                Route::put('/{portfolio}', [CompanyPortfolioController::class, 'update']);
+                Route::delete('/{portfolio}', [CompanyPortfolioController::class, 'destroy']);
+                Route::post('/{portfolio}/reorder', [CompanyPortfolioController::class, 'reorder']);
+            });
         });
     });
 });
