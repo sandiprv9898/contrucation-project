@@ -1,0 +1,75 @@
+{
+  "title": "Configuración de Empresa",
+  "subtitle": "Gestione el perfil, marca y presentación de su empresa",
+  "tabs": {
+    "basic": "Información Básica",
+    "branding": "Marca",
+    "contact": "Contacto",
+    "portfolio": "Portafolio",
+    "legal": "Legal"
+  },
+  "basic": {
+    "title": "Información de la Empresa",
+    "fields": {
+      "name": {
+        "label": "Nombre de la Empresa",
+        "placeholder": "Ingrese el nombre de la empresa",
+        "hint": "El nombre oficial de su empresa"
+      },
+      "legal_name": {
+        "label": "Nombre Legal",
+        "placeholder": "Ingrese el nombre legal de la empresa",
+        "hint": "El nombre legal registrado de su empresa"
+      },
+      "industry_type": {
+        "label": "Tipo de Industria",
+        "placeholder": "Seleccione industria",
+        "options": {
+          "construction": "Construcción General",
+          "residential": "Construcción Residencial",
+          "commercial": "Construcción Comercial",
+          "industrial": "Construcción Industrial",
+          "infrastructure": "Infraestructura",
+          "renovation": "Renovación y Remodelación",
+          "electrical": "Contratación Eléctrica",
+          "plumbing": "Plomería",
+          "hvac": "HVAC",
+          "roofing": "Techos",
+          "architecture": "Arquitectura",
+          "engineering": "Ingeniería",
+          "other": "Otro"
+        }
+      },
+      "company_size": {
+        "label": "Tamaño de la Empresa",
+        "placeholder": "Seleccione el tamaño de la empresa",
+        "options": {
+          "startup": "Startup (1-10 empleados)",
+          "small": "Pequeña (11-50 empleados)",
+          "medium": "Mediana (51-200 empleados)",
+          "large": "Grande (201-1000 empleados)",
+          "enterprise": "Corporativa (1000+ empleados)"
+        }
+      },
+      "website": {
+        "label": "Sitio Web",
+        "placeholder": "https://empresa.com",
+        "hint": "El sitio web oficial de su empresa"
+      },
+      "description": {
+        "label": "Descripción",
+        "placeholder": "Describa su empresa, su misión y servicios...",
+        "hint": "Una breve descripción de su empresa para perfiles y propuestas"
+      }
+    }
+  },
+  "actions": {
+    "save_changes": "Guardar Cambios",
+    "saving": "Guardando...",
+    "refresh": "Actualizar"
+  },
+  "messages": {
+    "settings_saved": "¡Configuración de empresa guardada exitosamente!",
+    "settings_failed": "Error al guardar la configuración. Por favor, inténtelo de nuevo."
+  }
+}

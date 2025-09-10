@@ -1,0 +1,90 @@
+{
+  "main": {
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "tasks": "Tasks",
+    "calendar": "Calendar",
+    "documents": "Documents",
+    "reports": "Reports",
+    "settings": "Settings",
+    "help": "Help",
+    "logout": "Logout"
+  },
+  "projects": {
+    "all_projects": "All Projects",
+    "active_projects": "Active Projects",
+    "completed_projects": "Completed Projects",
+    "create_project": "Create Project",
+    "project_settings": "Project Settings",
+    "project_overview": "Project Overview",
+    "project_timeline": "Project Timeline",
+    "project_budget": "Project Budget",
+    "project_team": "Project Team",
+    "project_files": "Project Files",
+    "project_reports": "Project Reports"
+  },
+  "tasks": {
+    "all_tasks": "All Tasks",
+    "my_tasks": "My Tasks",
+    "assigned_tasks": "Assigned Tasks",
+    "completed_tasks": "Completed Tasks",
+    "overdue_tasks": "Overdue Tasks",
+    "create_task": "Create Task",
+    "task_assignment": "Task Assignment",
+    "task_templates": "Task Templates"
+  },
+  "reports": {
+    "project_reports": "Project Reports",
+    "time_reports": "Time Reports",
+    "cost_reports": "Cost Reports",
+    "performance_reports": "Performance Reports",
+    "custom_reports": "Custom Reports",
+    "export_reports": "Export Reports"
+  },
+  "admin": {
+    "administration": "Administration",
+    "user_management": "User Management",
+    "team_management": "Team Management",
+    "company_settings": "Company Settings",
+    "system_settings": "System Settings",
+    "security": "Security",
+    "integrations": "Integrations",
+    "audit_logs": "Audit Logs",
+    "backup_restore": "Backup & Restore"
+  },
+  "user": {
+    "profile": "Profile",
+    "account": "Account",
+    "preferences": "Preferences",
+    "notifications": "Notifications",
+    "security_settings": "Security Settings",
+    "privacy": "Privacy",
+    "billing": "Billing",
+    "subscription": "Subscription"
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "back_to": "Back to {page}",
+    "current_page": "Current: {page}"
+  },
+  "sidebar": {
+    "collapse": "Collapse Sidebar",
+    "expand": "Expand Sidebar",
+    "pin": "Pin Sidebar",
+    "unpin": "Unpin Sidebar"
+  },
+  "tabs": {
+    "close": "Close Tab",
+    "close_all": "Close All Tabs",
+    "close_others": "Close Other Tabs",
+    "new_tab": "New Tab",
+    "refresh_tab": "Refresh Tab"
+  },
+  "menu": {
+    "main_menu": "Main Menu",
+    "context_menu": "Context Menu",
+    "user_menu": "User Menu",
+    "more_options": "More Options",
+    "quick_actions": "Quick Actions"
+  }
+}

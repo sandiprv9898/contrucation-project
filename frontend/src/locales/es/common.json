@@ -1,0 +1,84 @@
+{
+  "app": {
+    "name": "Plataforma de Gestión de Construcción",
+    "description": "Solución profesional de gestión de proyectos de construcción"
+  },
+  "buttons": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "update": "Actualizar",
+    "submit": "Enviar",
+    "reset": "Restablecer",
+    "clear": "Limpiar",
+    "close": "Cerrar",
+    "open": "Abrir",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "confirm": "Confirmar",
+    "refresh": "Actualizar",
+    "reload": "Recargar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "download": "Descargar",
+    "upload": "Subir",
+    "print": "Imprimir",
+    "copy": "Copiar",
+    "paste": "Pegar",
+    "share": "Compartir",
+    "add": "Agregar",
+    "remove": "Eliminar",
+    "enable": "Habilitar",
+    "disable": "Deshabilitar",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "view": "Ver",
+    "preview": "Vista previa",
+    "details": "Detalles",
+    "settings": "Configuración",
+    "preferences": "Preferencias"
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "pending": "Pendiente",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "completed": "Completado",
+    "in_progress": "En progreso",
+    "on_hold": "En espera",
+    "cancelled": "Cancelado",
+    "loading": "Cargando...",
+    "saving": "Guardando...",
+    "processing": "Procesando...",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información"
+  },
+  "messages": {
+    "success": {
+      "saved": "Guardado exitosamente",
+      "updated": "Actualizado exitosamente",
+      "created": "Creado exitosamente",
+      "deleted": "Eliminado exitosamente"
+    },
+    "error": {
+      "general": "Ha ocurrido un error. Por favor, inténtelo de nuevo.",
+      "network": "Error de red. Verifique su conexión.",
+      "save_failed": "Error al guardar. Por favor, inténtelo de nuevo."
+    },
+    "validation": {
+      "required": "Este campo es requerido",
+      "email": "Por favor ingrese un email válido",
+      "phone": "Por favor ingrese un número de teléfono válido"
+    }
+  }
+}

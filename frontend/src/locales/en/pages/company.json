@@ -1,0 +1,248 @@
+{
+  "title": "Company Settings",
+  "subtitle": "Manage your company profile, branding, and showcase",
+  "tabs": {
+    "basic": "Basic Info",
+    "branding": "Branding",
+    "contact": "Contact",
+    "portfolio": "Portfolio",
+    "legal": "Legal"
+  },
+  "basic": {
+    "title": "Company Information",
+    "fields": {
+      "name": {
+        "label": "Company Name",
+        "placeholder": "Enter company name",
+        "hint": "The official name of your company"
+      },
+      "legal_name": {
+        "label": "Legal Name",
+        "placeholder": "Enter legal company name",
+        "hint": "The legal registered name of your company"
+      },
+      "industry_type": {
+        "label": "Industry Type",
+        "placeholder": "Select industry",
+        "options": {
+          "construction": "General Construction",
+          "residential": "Residential Construction", 
+          "commercial": "Commercial Construction",
+          "industrial": "Industrial Construction",
+          "infrastructure": "Infrastructure",
+          "renovation": "Renovation & Remodeling",
+          "electrical": "Electrical Contracting",
+          "plumbing": "Plumbing",
+          "hvac": "HVAC",
+          "roofing": "Roofing",
+          "architecture": "Architecture",
+          "engineering": "Engineering",
+          "other": "Other"
+        }
+      },
+      "company_size": {
+        "label": "Company Size",
+        "placeholder": "Select company size",
+        "options": {
+          "startup": "Startup (1-10 employees)",
+          "small": "Small (11-50 employees)",
+          "medium": "Medium (51-200 employees)",
+          "large": "Large (201-1000 employees)",
+          "enterprise": "Enterprise (1000+ employees)"
+        }
+      },
+      "founded_date": {
+        "label": "Founded Date",
+        "placeholder": "Select founding date",
+        "hint": "When was your company established"
+      },
+      "website": {
+        "label": "Website",
+        "placeholder": "https://company.com",
+        "hint": "Your company's official website"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Describe your company, its mission, and services...",
+        "hint": "A brief description of your company for profiles and proposals"
+      }
+    },
+    "tax_legal": {
+      "title": "Tax & Legal Information",
+      "fields": {
+        "business_registration": {
+          "label": "Business Registration Number",
+          "placeholder": "Enter registration number",
+          "hint": "Your official business registration number"
+        },
+        "tax_identification": {
+          "label": "Tax Identification Number",
+          "placeholder": "12-3456789",
+          "hint": "Your tax ID or EIN number"
+        }
+      }
+    }
+  },
+  "branding": {
+    "logo": {
+      "title": "Company Logo",
+      "upload_text": "Choose logo file",
+      "hint": "PNG, JPG, or SVG up to 5MB. Recommended: 200x200px",
+      "no_logo": "No Logo"
+    },
+    "colors": {
+      "title": "Brand Colors",
+      "fields": {
+        "primary_color": {
+          "label": "Primary Color",
+          "placeholder": "#f97316",
+          "hint": "Main brand color used throughout the interface"
+        },
+        "secondary_color": {
+          "label": "Secondary Color", 
+          "placeholder": "#475569",
+          "hint": "Secondary brand color for accents and highlights"
+        },
+        "accent_color": {
+          "label": "Accent Color",
+          "placeholder": "#22c55e",
+          "hint": "Accent color for success states and call-to-actions"
+        }
+      }
+    }
+  },
+  "contact": {
+    "primary": {
+      "title": "Primary Contact Information",
+      "fields": {
+        "email": {
+          "label": "Company Email",
+          "placeholder": "contact@company.com",
+          "hint": "Main contact email for your company"
+        },
+        "phone": {
+          "label": "Phone Number",
+          "placeholder": "+1 (555) 123-4567",
+          "hint": "Primary business phone number"
+        },
+        "fax": {
+          "label": "Fax Number",
+          "placeholder": "+1 (555) 123-4568",
+          "hint": "Company fax number (optional)"
+        }
+      }
+    },
+    "address": {
+      "title": "Business Address",
+      "fields": {
+        "address_line_1": {
+          "label": "Street Address",
+          "placeholder": "123 Main Street",
+          "hint": "Primary business address"
+        },
+        "address_line_2": {
+          "label": "Address Line 2",
+          "placeholder": "Suite 100",
+          "hint": "Apartment, suite, unit, etc. (optional)"
+        },
+        "city": {
+          "label": "City",
+          "placeholder": "New York",
+          "hint": "City where your business is located"
+        },
+        "state_province": {
+          "label": "State/Province",
+          "placeholder": "NY",
+          "hint": "State, province, or region"
+        },
+        "postal_code": {
+          "label": "Postal Code",
+          "placeholder": "10001",
+          "hint": "ZIP code or postal code"
+        },
+        "country": {
+          "label": "Country",
+          "placeholder": "Select country",
+          "hint": "Country where your business is registered"
+        }
+      }
+    }
+  },
+  "portfolio": {
+    "title": "Company Portfolio",
+    "description": "Showcase your completed projects and capabilities",
+    "coming_soon": "Portfolio management coming soon...",
+    "features": {
+      "project_showcase": "Project Showcase",
+      "client_testimonials": "Client Testimonials",
+      "certifications": "Certifications & Awards",
+      "case_studies": "Case Studies",
+      "photo_gallery": "Photo Gallery"
+    }
+  },
+  "legal": {
+    "title": "Legal & Compliance",
+    "fields": {
+      "privacy_policy_url": {
+        "label": "Privacy Policy URL",
+        "placeholder": "https://company.com/privacy",
+        "hint": "Link to your privacy policy"
+      },
+      "terms_of_service_url": {
+        "label": "Terms of Service URL", 
+        "placeholder": "https://company.com/terms",
+        "hint": "Link to your terms of service"
+      },
+      "data_retention_days": {
+        "label": "Data Retention (Days)",
+        "placeholder": "2555",
+        "hint": "Number of days to retain user data (default: 7 years)"
+      }
+    },
+    "compliance": {
+      "title": "Compliance Information",
+      "description": "Manage legal compliance and regulatory requirements",
+      "gdpr": "GDPR Compliance",
+      "ccpa": "CCPA Compliance", 
+      "hipaa": "HIPAA Compliance",
+      "sox": "SOX Compliance"
+    }
+  },
+  "status": {
+    "profile": "Profile",
+    "branding": "Branding", 
+    "portfolio": "Portfolio",
+    "complete": "Complete",
+    "incomplete": "Incomplete",
+    "basic": "Basic",
+    "configured": "Configured",
+    "items": "{count} items"
+  },
+  "actions": {
+    "save_changes": "Save Changes",
+    "saving": "Saving...",
+    "refresh": "Refresh",
+    "reset_to_defaults": "Reset to Defaults",
+    "export_settings": "Export Settings",
+    "import_settings": "Import Settings",
+    "preview": "Preview",
+    "copy_to_all": "Copy to All Days"
+  },
+  "messages": {
+    "unsaved_changes": "Unsaved Changes",
+    "auto_save_enabled": "Auto-save is enabled",
+    "settings_saved": "Company settings saved successfully!",
+    "settings_failed": "Failed to save settings. Please try again.",
+    "settings_loaded": "Settings loaded successfully",
+    "reset_confirm": "Are you sure you want to reset all settings to defaults?",
+    "export_confirm": "This will export all your company settings. Continue?",
+    "changes_will_be_lost": "Your unsaved changes will be lost. Continue?",
+    "validation_required": "Please complete all required fields before saving"
+  },
+  "progress": {
+    "total_fields": "Total Fields",
+    "completed": "Completed", 
+    "progress": "Progress",
+    "completion_percentage": "{percentage}% Complete"
+  }
+}

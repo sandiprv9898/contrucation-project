@@ -1,0 +1,19 @@
+{
+  "main": {
+    "dashboard": "Panel de Control",
+    "projects": "Proyectos", 
+    "tasks": "Tareas",
+    "calendar": "Calendario",
+    "documents": "Documentos",
+    "reports": "Reportes",
+    "settings": "Configuración",
+    "help": "Ayuda",
+    "logout": "Cerrar Sesión"
+  },
+  "admin": {
+    "administration": "Administración",
+    "user_management": "Gestión de Usuarios",
+    "company_settings": "Configuración de Empresa",
+    "system_settings": "Configuración del Sistema"
+  }
+}

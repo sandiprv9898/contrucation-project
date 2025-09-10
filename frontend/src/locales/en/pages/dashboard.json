@@ -1,0 +1,20 @@
+{
+  "title": "Dashboard",
+  "welcome": "Welcome back, {name}!",
+  "overview": "Overview",
+  "quick_stats": "Quick Stats",
+  "recent_activity": "Recent Activity",
+  "upcoming_tasks": "Upcoming Tasks",
+  "project_progress": "Project Progress",
+  "team_performance": "Team Performance",
+  "notifications": "Notifications",
+  "quick_actions": "Quick Actions",
+  "stats": {
+    "total_projects": "Total Projects",
+    "active_projects": "Active Projects", 
+    "completed_tasks": "Completed Tasks",
+    "team_members": "Team Members",
+    "pending_approvals": "Pending Approvals",
+    "overdue_tasks": "Overdue Tasks"
+  }
+}

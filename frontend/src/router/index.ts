@@ -31,6 +31,12 @@ const router = createRouter({
       name: 'components',
       component: () => import('../pages/ComponentTest.vue'),
     },
+    {
+      path: '/localization-demo',
+      name: 'localization-demo',
+      component: () => import('../pages/LocalizationDemo.vue'),
+      meta: { title: 'Construction Localization Demo' }
+    },
     // Authentication Routes
     {
       path: '/auth',

@@ -39,6 +39,9 @@
             </div>
             
             <div class="flex items-center space-x-4">
+              <!-- Language Switcher -->
+              <LanguageSwitcher @language-changed="handleLanguageChange" />
+              
               <!-- User menu -->
               <UserMenu />
             </div>
@@ -59,8 +62,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import Sidebar from '@/components/layout/Sidebar.vue'
 import UserMenu from '@/components/layout/UserMenu.vue'
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher.vue'
 
 defineOptions({ name: 'MainLayout' })
 
@@ -69,6 +74,18 @@ const sidebarOpen = ref(false)
 
 // Get current route for page title
 const route = useRoute()
+
+// i18n setup
+const { t } = useI18n()
+
+// Language change handler
+const handleLanguageChange = (newLocale: string) => {
+  console.log('Language changed to:', newLocale)
+  // You can add additional logic here like:
+  // - Updating user preferences in backend
+  // - Refreshing data with new locale
+  // - Showing success message
+}
 
 const pageTitle = computed(() => {
   const meta = route.meta
