@@ -137,8 +137,18 @@ export const useUsersStore = defineStore('users', () => {
         last_page: response.meta.last_page
       };
       
-      if (customFilters) {
+      if (customFilters && Object.keys(customFilters).length > 0) {
         filters.value = { ...filters.value, ...appliedFilters };
+      } else if (customFilters && Object.keys(customFilters).length === 0) {
+        // Clear filters when empty object is passed
+        filters.value = {
+          search: '',
+          role: '',
+          company_id: '',
+          verified: '',
+          page: 1,
+          per_page: 50
+        };
       }
     } catch (err: any) {
       error.value = err.message || 'Failed to fetch users';

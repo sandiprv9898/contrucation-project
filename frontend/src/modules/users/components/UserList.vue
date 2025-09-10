@@ -68,9 +68,10 @@
             <button
               v-if="hasFilters"
               @click="clearFilters"
-              class="px-3 py-2 text-sm text-gray-500 hover:text-gray-700"
+              :disabled="isClearing"
+              class="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50"
             >
-              Clear Filters
+              {{ isClearing ? 'Clearing...' : 'Clear Filters' }}
             </button>
           </div>
         </div>
@@ -220,13 +221,15 @@
       <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 rounded-b-lg">
         <div class="flex-1 flex justify-between sm:hidden">
           <p class="text-sm text-gray-700">
-            Showing {{ filteredUsers.length }} of {{ users.length }} team members
+            Showing {{ filteredUsers.length }} team members
+            <span v-if="hasFilters" class="text-gray-500">(filtered)</span>
           </p>
         </div>
         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
           <div>
             <p class="text-sm text-gray-700">
-              Showing <span class="font-medium">{{ filteredUsers.length }}</span> of <span class="font-medium">{{ users.length }}</span> team members
+              Showing <span class="font-medium">{{ filteredUsers.length }}</span> team members
+              <span v-if="hasFilters" class="text-gray-500">(filtered)</span>
             </p>
           </div>
         </div>
@@ -236,59 +239,55 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { debounce } from 'lodash-es';
 import { useUsers } from '../composables/useUsers';
-import type { UserListItem } from '../types/users.types';
+import type { UserListItem, UserFilters } from '../types/users.types';
 
 const router = useRouter();
-const { users, loading, loadUsers, deleteUser } = useUsers();
+const { users, loading, loadUsers, deleteUser, updateFilters, clearError } = useUsers();
 
 // Filters and search
 const searchTerm = ref('');
 const roleFilter = ref('');
 const statusFilter = ref('');
+const isClearing = ref(false); // Flag to prevent watcher conflicts during clear
 
 // Computed properties
 const hasFilters = computed(() => {
   return !!(searchTerm.value || roleFilter.value || statusFilter.value);
 });
 
+// Use server-side filtered users directly from API
 const filteredUsers = computed(() => {
-  console.log('🔍 [USER LIST] Computing filteredUsers...');
-  console.log('🔍 [USER LIST] users.value:', users.value);
+  console.log('🔍 [USER LIST] Using server-filtered users:', users.value?.length || 0);
   
   if (!Array.isArray(users.value)) {
     console.warn('⚠️ [USER LIST] users.value is not an array, returning empty array');
     return [];
   }
   
-  let filtered = [...users.value];
+  return users.value;
+});
+
+// Current filters for API calls
+const currentFilters = computed((): Partial<UserFilters> => {
+  const filters: Partial<UserFilters> = {};
   
-  // Apply search filter
-  if (searchTerm.value) {
-    const search = searchTerm.value.toLowerCase();
-    filtered = filtered.filter(user => 
-      user.name.toLowerCase().includes(search) ||
-      user.email.toLowerCase().includes(search)
-    );
+  if (searchTerm.value.trim()) {
+    filters.search = searchTerm.value.trim();
   }
   
-  // Apply role filter
   if (roleFilter.value) {
-    filtered = filtered.filter(user => user.role === roleFilter.value);
+    filters.role = roleFilter.value as any;
   }
   
-  // Apply status filter
   if (statusFilter.value) {
-    const isVerified = statusFilter.value === 'verified';
-    filtered = filtered.filter(user => 
-      isVerified ? !!user.email_verified_at : !user.email_verified_at
-    );
+    filters.verified = statusFilter.value === 'verified';
   }
   
-  console.log('🔍 [USER LIST] Filtered users:', filtered.length);
-  return filtered;
+  return filters;
 });
 
 // Helper functions
@@ -368,11 +367,56 @@ const handleDeleteUser = async (user: UserListItem): Promise<void> => {
   }
 };
 
+// Debounced search function
+const debouncedLoadUsers = debounce(async () => {
+  console.log('🔍 [USER LIST] Debounced load with filters:', currentFilters.value);
+  try {
+    await loadUsers(currentFilters.value, true);
+  } catch (error) {
+    console.error('❌ [USER LIST] Error loading filtered users:', error);
+  }
+}, 500);
+
 // Filter operations
-const clearFilters = (): void => {
-  searchTerm.value = '';
-  roleFilter.value = '';
-  statusFilter.value = '';
+const clearFilters = async (): Promise<void> => {
+  console.log('🧹 [USER LIST] Clearing all filters...');
+  isClearing.value = true;
+  
+  try {
+    // Clear any existing errors first
+    clearError();
+    
+    // Clear all filter values in the UI
+    searchTerm.value = '';
+    roleFilter.value = '';
+    statusFilter.value = '';
+    
+    // Explicitly load users without any filters - this will clear store filters too
+    await loadUsers({}, true); // Pass empty filters object and force refresh
+    console.log('✅ [USER LIST] Filters cleared and users reloaded successfully');
+    console.log('🔍 [USER LIST] Current users count after clear:', users.value?.length || 0);
+  } catch (error) {
+    console.error('❌ [USER LIST] Error clearing filters:', error);
+    alert('Failed to clear filters. Please refresh the page.');
+  } finally {
+    isClearing.value = false;
+  }
+};
+
+// Apply filters immediately for dropdowns, debounced for search
+const applyFilters = async (isSearch = false): Promise<void> => {
+  if (isSearch) {
+    // Debounce search to avoid too many API calls
+    debouncedLoadUsers();
+  } else {
+    // Apply dropdown filters immediately
+    console.log('🔍 [USER LIST] Applying filters immediately:', currentFilters.value);
+    try {
+      await loadUsers(currentFilters.value, true);
+    } catch (error) {
+      console.error('❌ [USER LIST] Error applying filters:', error);
+    }
+  }
 };
 
 // Export functionality
@@ -408,6 +452,25 @@ const exportUsers = (): void => {
   
   console.log('📄 [USER LIST] CSV exported with', dataToExport.length, 'users');
 };
+
+// Watchers for filter changes
+watch(() => searchTerm.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Search term changed:', searchTerm.value);
+  applyFilters(true); // Use debounced search
+});
+
+watch(() => roleFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Role filter changed:', roleFilter.value);
+  applyFilters(false); // Apply immediately
+});
+
+watch(() => statusFilter.value, () => {
+  if (isClearing.value) return; // Skip if clearing filters
+  console.log('🔍 [USER LIST] Status filter changed:', statusFilter.value);
+  applyFilters(false); // Apply immediately
+});
 
 // Lifecycle
 onMounted(async () => {
