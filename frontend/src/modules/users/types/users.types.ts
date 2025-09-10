@@ -73,16 +73,83 @@ export interface UsersListResponse {
     per_page: number
     total: number
     last_page: number
+    stats?: {
+      total: number
+      verified: number
+      unverified: number
+      admins: number
+      active: number
+      today: number
+      this_week: number
+      this_month: number
+      last_30_days: number
+    }
+    role_distribution?: Record<string, number>
+    applied_filters?: string[]
+    available_filters?: string[]
   }
 }
 
+export interface UserStatistics {
+  stats: {
+    total: number
+    verified: number
+    unverified: number
+    admins: number
+    active: number
+    today: number
+    this_week: number
+    this_month: number
+    last_30_days: number
+  }
+  role_distribution: Record<string, number>
+  applied_filters: string[]
+}
+
+export interface BulkActionRequest {
+  action: 'delete' | 'verify'
+  user_ids: string[]
+}
+
+export interface BulkActionResponse {
+  affected_count: number
+  action: string
+  message: string
+}
+
+export interface ExportResponse {
+  total_exported: number
+  format: string
+  applied_filters: Record<string, any>
+  download_url?: string
+}
+
 export interface UserFilters {
-  role?: UserRole | '' | undefined
-  company_id?: string | '' | undefined
+  // Basic filters
   search?: string
+  role?: UserRole | '' | undefined
+  roles?: UserRole[]
+  company_id?: string | '' | undefined
   verified?: boolean | '' | undefined
+  department?: string
+  
+  // Advanced filters
+  email_domain?: string
+  has_phone?: boolean
+  active?: boolean
+  
+  // Date range filters
+  created_from?: string
+  created_to?: string
+  
+  // Sorting
+  sort_by?: string
+  sort_direction?: 'asc' | 'desc'
+  
+  // Pagination
   page?: number
   per_page?: number
+  
 }
 
 export interface UserState {

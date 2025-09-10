@@ -2,8 +2,16 @@ import { ref, computed, watch, readonly } from 'vue';
 import { useRoute } from 'vue-router';
 import { useUsersStore } from '../stores/users.store';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
-import { userService } from '../api/user.service';
-import type { UserListItem, UserProfile, UserFilters } from '../types/users.types';
+import { UsersApi } from '../api/users.api';
+import type { 
+  UserListItem, 
+  UserProfile, 
+  UserFilters, 
+  UserStatistics,
+  BulkActionRequest,
+  BulkActionResponse,
+  ExportResponse 
+} from '../types/users.types';
 import type { UserRole } from '@/modules/auth/types/auth.types';
 
 export function useUsers(userId?: string) {
@@ -262,14 +270,57 @@ export function useUsers(userId?: string) {
   }
   
   /**
-   * Export users data
+   * Get user statistics
    */
-  async function exportUsers(format: 'csv' | 'xlsx' = 'csv', filters?: Partial<UserFilters>) {
+  async function getStatistics(filters?: Partial<UserFilters>): Promise<UserStatistics> {
     loading.value = true;
     error.value = null;
     
     try {
-      await userService.exportUsers(format, filters);
+      const stats = await UsersApi.getUserStatistics(filters as UserFilters);
+      return stats;
+    } catch (err) {
+      error.value = err as Error;
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  /**
+   * Perform bulk action on users
+   */
+  async function bulkAction(request: BulkActionRequest): Promise<BulkActionResponse> {
+    loading.value = true;
+    error.value = null;
+    
+    try {
+      const response = await UsersApi.bulkAction(request);
+      
+      // Refresh users list after bulk action to reflect changes
+      if (response.affected_count > 0) {
+        await loadUsers(undefined, true);
+      }
+      
+      return response;
+    } catch (err) {
+      error.value = err as Error;
+      throw err;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  /**
+   * Export users data
+   */
+  async function exportUsers(format: 'csv' | 'xlsx' = 'csv', filters?: Partial<UserFilters>): Promise<ExportResponse> {
+    loading.value = true;
+    error.value = null;
+    
+    try {
+      const response = await UsersApi.exportUsers(format, filters as UserFilters);
+      return response;
     } catch (err) {
       error.value = err as Error;
       throw err;
@@ -329,6 +380,8 @@ export function useUsers(userId?: string) {
     changePage,
     changePageSize,
     clearError,
+    getStatistics,
+    bulkAction,
     exportUsers,
     refreshUsers,
     refresh

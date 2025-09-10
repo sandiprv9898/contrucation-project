@@ -348,9 +348,23 @@ const formFieldProps = computed(() => ({
 }));
 
 // Event handlers
-const handleInput = async (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const value = target.value;
+const handleInput = async (event: Event | any) => {
+  let value: any;
+  
+  // Handle different types of inputs and events
+  if (event && typeof event === 'object') {
+    if ('target' in event && event.target) {
+      // Standard DOM event
+      const target = event.target as HTMLInputElement;
+      value = target.value;
+    } else {
+      // Direct value passed (e.g., from VSelect)
+      value = event;
+    }
+  } else {
+    // Primitive value passed directly
+    value = event;
+  }
   
   if (!isDirty.value) {
     isDirty.value = true;

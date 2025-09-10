@@ -81,31 +81,28 @@
 
         <!-- Menu items -->
         <div class="py-1">
-          <router-link
-            to="/profile"
-            @click="isOpen = false"
-            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          <button
+            @click="navigateToProfile"
+            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
             <User class="mr-3 w-4 h-4" />
             My Profile
-          </router-link>
-          <router-link
-            to="/settings"
-            @click="isOpen = false"
-            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          </button>
+          <button
+            @click="navigateToSettings"
+            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
             <Settings class="mr-3 w-4 h-4" />
             Settings
-          </router-link>
-          <router-link
-            to="/notifications"
-            @click="isOpen = false"
-            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          </button>
+          <button
+            @click="navigateToNotifications"
+            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
             <Bell class="mr-3 w-4 h-4" />
             Notifications
             <span class="ml-auto bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">3</span>
-          </router-link>
+          </button>
         </div>
 
         <!-- Logout -->
@@ -146,6 +143,29 @@ const handleLogout = async () => {
   } catch (error) {
     console.error('Logout failed:', error)
   }
+}
+
+const navigateToProfile = () => {
+  isOpen.value = false
+  if (currentUser.value?.id) {
+    router.push(`/app/users/${currentUser.value.id}`)
+  }
+}
+
+const navigateToSettings = () => {
+  isOpen.value = false
+  // Navigate to admin settings if user has permission, otherwise show message
+  if (authStore.hasPermission('canManageCompany')) {
+    router.push('/app/admin/settings')
+  } else {
+    console.log('Settings page not available for your role')
+  }
+}
+
+const navigateToNotifications = () => {
+  isOpen.value = false
+  // Placeholder for future notifications feature
+  console.log('Notifications feature coming soon')
 }
 
 // Click outside directive

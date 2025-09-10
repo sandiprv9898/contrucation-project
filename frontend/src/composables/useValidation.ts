@@ -1,4 +1,4 @@
-import { ref, reactive, computed, watch, toRef } from 'vue';
+import { ref, reactive, computed, watch, toRef, readonly } from 'vue';
 
 // Validation rule types
 export interface ValidationRule {
