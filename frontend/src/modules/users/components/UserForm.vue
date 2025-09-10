@@ -160,6 +160,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { VCard, VButton, VValidatedField } from '@/components/ui'
 import { UserPlus, Save, Info } from 'lucide-vue-next'
+import { useServerI18n } from '@/composables/useServerI18n'
 import type { 
   CreateUserRequest, 
   UpdateUserRequest, 

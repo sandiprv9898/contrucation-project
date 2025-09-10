@@ -562,6 +562,106 @@ class NavigationTranslationSeeder extends Seeder
                 'ar' => 'لم يتم العثور على نشاط حديث.'
             ],
             
+            // Users Management translations
+            'users.title' => [
+                'en' => 'Team Members',
+                'es' => 'Miembros del Equipo',
+                'fr' => 'Membres de l\'Équipe',
+                'de' => 'Teammitglieder',
+                'ar' => 'أعضاء الفريق'
+            ],
+            'users.subtitle' => [
+                'en' => 'Manage your construction team and user access',
+                'es' => 'Gestiona tu equipo de construcción y acceso de usuarios',
+                'fr' => 'Gérez votre équipe de construction et l\'accès des utilisateurs',
+                'de' => 'Verwalten Sie Ihr Bauteam und den Benutzerzugriff',
+                'ar' => 'إدارة فريق البناء الخاص بك ووصول المستخدمين'
+            ],
+            'users.export_csv' => [
+                'en' => 'Export CSV',
+                'es' => 'Exportar CSV',
+                'fr' => 'Exporter CSV',
+                'de' => 'CSV exportieren',
+                'ar' => 'تصدير CSV'
+            ],
+            'users.add_team_member' => [
+                'en' => 'Add Team Member',
+                'es' => 'Agregar Miembro del Equipo',
+                'fr' => 'Ajouter un Membre',
+                'de' => 'Teammitglied hinzufügen',
+                'ar' => 'إضافة عضو فريق'
+            ],
+            'users.search_placeholder' => [
+                'en' => 'Search team members...',
+                'es' => 'Buscar miembros del equipo...',
+                'fr' => 'Rechercher des membres...',
+                'de' => 'Teammitglieder suchen...',
+                'ar' => 'البحث عن أعضاء الفريق...'
+            ],
+            'users.all_roles' => [
+                'en' => 'All Roles',
+                'es' => 'Todos los Roles',
+                'fr' => 'Tous les Rôles',
+                'de' => 'Alle Rollen',
+                'ar' => 'جميع الأدوار'
+            ],
+            'users.all_status' => [
+                'en' => 'All Status',
+                'es' => 'Todos los Estados',
+                'fr' => 'Tous les Statuts',
+                'de' => 'Alle Status',
+                'ar' => 'جميع الحالات'
+            ],
+            'users.all_departments' => [
+                'en' => 'All Departments',
+                'es' => 'Todos los Departamentos',
+                'fr' => 'Tous les Départements',
+                'de' => 'Alle Abteilungen',
+                'ar' => 'جميع الأقسام'
+            ],
+            'users.administrator' => [
+                'en' => 'Administrator',
+                'es' => 'Administrador',
+                'fr' => 'Administrateur',
+                'de' => 'Administrator',
+                'ar' => 'مدير النظام'
+            ],
+            'users.project_manager' => [
+                'en' => 'Project Manager',
+                'es' => 'Gerente de Proyecto',
+                'fr' => 'Chef de Projet',
+                'de' => 'Projektmanager',
+                'ar' => 'مدير المشروع'
+            ],
+            'users.supervisor' => [
+                'en' => 'Supervisor',
+                'es' => 'Supervisor',
+                'fr' => 'Superviseur',
+                'de' => 'Supervisor',
+                'ar' => 'مشرف'
+            ],
+            'users.field_worker' => [
+                'en' => 'Field Worker',
+                'es' => 'Trabajador de Campo',
+                'fr' => 'Ouvrier de Terrain',
+                'de' => 'Feldarbeiter',
+                'ar' => 'عامل ميداني'
+            ],
+            'users.verified' => [
+                'en' => 'Verified',
+                'es' => 'Verificado',
+                'fr' => 'Vérifié',
+                'de' => 'Verifiziert',
+                'ar' => 'تم التحقق'
+            ],
+            'users.pending' => [
+                'en' => 'Pending',
+                'es' => 'Pendiente',
+                'fr' => 'En Attente',
+                'de' => 'Ausstehend',
+                'ar' => 'في الانتظار'
+            ],
+            
             // Common words
             'common.save' => [
                 'en' => 'Save',

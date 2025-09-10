@@ -4,21 +4,21 @@
     <div class="bg-white border-b border-gray-200 px-6 py-4">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900">Team Members</h1>
-          <p class="text-sm text-gray-500">Manage your construction team and user access</p>
+          <h1 class="text-2xl font-bold text-gray-900">{{ t('users.title') || 'Team Members' }}</h1>
+          <p class="text-sm text-gray-500">{{ t('users.subtitle') || 'Manage your construction team and user access' }}</p>
         </div>
         <div class="flex items-center space-x-3">
           <button
             @click="exportUsers"
             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
           >
-            Export CSV
+            {{ t('users.export_csv') || 'Export CSV' }}
           </button>
           <button
             @click="handleCreateUser"
             class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
           >
-            Add Team Member
+            {{ t('users.add_team_member') || 'Add Team Member' }}
           </button>
         </div>
       </div>
@@ -34,7 +34,7 @@
               <input
                 v-model="searchTerm"
                 type="text"
-                placeholder="Search team members..."
+                :placeholder="t('users.search_placeholder') || 'Search team members...'"
                 class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
               />
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -50,7 +50,7 @@
               v-model="roleFilter"
               class="block px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
             >
-              <option value="">All Roles</option>
+              <option value="">{{ t('users.all_roles') || 'All Roles' }}</option>
               <option value="admin">Administrator</option>
               <option value="project_manager">Project Manager</option>
               <option value="supervisor">Supervisor</option>
@@ -61,7 +61,7 @@
               v-model="statusFilter"
               class="block px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
             >
-              <option value="">All Status</option>
+              <option value="">{{ t('users.all_status') || 'All Status' }}</option>
               <option value="verified">Verified</option>
               <option value="pending">Pending</option>
             </select>
@@ -70,7 +70,7 @@
               v-model="departmentFilter"
               class="block px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
             >
-              <option value="">All Departments</option>
+              <option value="">{{ t('users.all_departments') || 'All Departments' }}</option>
               <option value="engineering">Engineering</option>
               <option value="construction">Construction</option>
               <option value="project_management">Project Management</option>
@@ -421,10 +421,12 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { debounce } from 'lodash-es';
 import { useUsers } from '../composables/useUsers';
+import { useServerI18n } from '@/composables/useServerI18n';
 import type { UserListItem, UserFilters } from '../types/users.types';
 
 const router = useRouter();
 const { users, loading, loadUsers, deleteUser, updateFilters, clearError, pagination, changePage, changePageSize } = useUsers();
+const { t } = useServerI18n();
 
 // Basic filters
 const searchTerm = ref('');
