@@ -9,8 +9,8 @@
           </div>
         </div>
         <div class="ml-3 text-white">
-          <h1 class="text-lg font-bold">Construction</h1>
-          <p class="text-xs text-orange-100">Management Platform</p>
+          <h1 class="text-lg font-bold">{{ t('navigation.construction') || 'Construction' }}</h1>
+          <p class="text-xs text-orange-100">{{ t('navigation.management_platform') || 'Management Platform' }}</p>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
       <!-- Management Section -->
       <div v-if="canViewManagementSection" class="pt-6">
         <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Management
+          {{ t('navigation.management') || 'Management' }}
         </h3>
         <div class="mt-2 space-y-1">
           <SidebarLink
@@ -51,7 +51,7 @@
       <!-- Administration Section -->
       <div v-if="canViewAdminSection" class="pt-6">
         <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Administration
+          {{ t('navigation.administration') || 'Administration' }}
         </h3>
         <div class="mt-2 space-y-1">
           <SidebarLink
@@ -69,7 +69,7 @@
       <!-- Reports Section -->
       <div v-if="canViewReports" class="pt-6">
         <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Reports & Analytics
+          {{ t('navigation.reports_analytics') || 'Reports & Analytics' }}
         </h3>
         <div class="mt-2 space-y-1">
           <SidebarLink
@@ -121,6 +121,7 @@
 import { computed } from 'vue'
 import { useAuthStore } from '@/modules/auth'
 import { useUserPermissions } from '@/modules/users'
+import { useServerI18n } from '@/composables/useServerI18n'
 import SidebarLink from './SidebarLink.vue'
 import { 
   Building2, 
@@ -147,6 +148,7 @@ defineEmits<{
 
 const authStore = useAuthStore()
 const { hasPermission } = useUserPermissions()
+const { t } = useServerI18n()
 
 const currentUser = computed(() => authStore.currentUser)
 
@@ -169,29 +171,29 @@ const canViewReports = computed(() =>
 // Navigation items
 const mainNavigation = computed(() => [
   {
-    name: 'Dashboard',
+    name: t('navigation.dashboard') || 'Dashboard',
     to: '/app/dashboard',
     icon: Home,
   },
   {
-    name: 'Projects',
+    name: t('navigation.projects') || 'Projects',
     to: '/app/projects',
     icon: ClipboardList,
     badge: '12', // This could be dynamic
   },
   {
-    name: 'Tasks',
+    name: t('navigation.tasks') || 'Tasks',
     to: '/app/tasks',
     icon: CheckSquare,
     badge: '8',
   },
   {
-    name: 'Calendar',
+    name: t('navigation.calendar') || 'Calendar',
     to: '/app/calendar',
     icon: Calendar,
   },
   {
-    name: 'Documents',
+    name: t('navigation.documents') || 'Documents',
     to: '/app/documents',
     icon: FileText,
   },
@@ -202,7 +204,7 @@ const managementNavigation = computed(() => {
   
   if (hasPermission('canViewUsers') && !hasPermission('canManageUsers')) {
     items.push({
-      name: 'Team Members',
+      name: t('navigation.team_members') || 'Team Members',
       to: '/app/users',
       icon: Users,
     })
@@ -210,7 +212,7 @@ const managementNavigation = computed(() => {
   
   if (hasPermission('canManageProjects')) {
     items.push({
-      name: 'Project Settings',
+      name: t('navigation.project_settings') || 'Project Settings',
       to: '/app/projects/settings',
       icon: Settings,
     })
@@ -218,7 +220,7 @@ const managementNavigation = computed(() => {
   
   if (hasPermission('canAssignTasks')) {
     items.push({
-      name: 'Task Assignment',
+      name: t('navigation.task_assignment') || 'Task Assignment',
       to: '/app/tasks/assign',
       icon: Edit,
     })
@@ -232,7 +234,7 @@ const adminNavigation = computed(() => {
   
   if (hasPermission('canManageUsers')) {
     items.push({
-      name: 'User Management',
+      name: t('navigation.user_management') || 'User Management',
       to: '/app/users',
       icon: UserCog,
     })
@@ -240,12 +242,12 @@ const adminNavigation = computed(() => {
   
   if (hasPermission('canManageCompany')) {
     items.push({
-      name: 'Company Settings',
+      name: t('company.title') || 'Company Settings',
       to: '/app/admin/company',
       icon: Building2,
     })
     items.push({
-      name: 'System Settings',
+      name: t('navigation.system_settings') || 'System Settings',
       to: '/app/admin/settings',
       icon: Settings,
     })
@@ -257,22 +259,22 @@ const adminNavigation = computed(() => {
 const reportsNavigation = computed(() => 
   hasPermission('canViewReports') ? [
     {
-      name: 'Project Reports',
+      name: t('navigation.project_reports') || 'Project Reports',
       to: '/app/reports/projects',
       icon: BarChart3,
     },
     {
-      name: 'Time Tracking',
+      name: t('navigation.time_tracking') || 'Time Tracking',
       to: '/app/reports/time',
       icon: Clock,
     },
     {
-      name: 'Cost Analysis',
+      name: t('navigation.cost_analysis') || 'Cost Analysis',
       to: '/app/reports/costs',
       icon: DollarSign,
     },
     {
-      name: 'Performance',
+      name: t('navigation.performance') || 'Performance',
       to: '/app/reports/performance',
       icon: TrendingUp,
     },

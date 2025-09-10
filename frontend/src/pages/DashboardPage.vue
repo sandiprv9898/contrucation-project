@@ -4,10 +4,10 @@
         <div class="bg-white overflow-hidden shadow rounded-lg mb-6">
           <div class="px-4 py-5 sm:p-6">
             <h2 class="text-lg leading-6 font-medium text-gray-900 mb-2">
-              Dashboard
+              {{ t('navigation.dashboard') || 'Dashboard' }}
             </h2>
             <p class="text-sm text-gray-600">
-              Welcome to your construction management platform dashboard.
+              {{ t('dashboard.welcome_message') || 'Welcome to your construction management platform dashboard.' }}
             </p>
           </div>
         </div>
@@ -26,7 +26,7 @@
                   </div>
                   <div class="ml-5 w-0 flex-1">
                     <dl>
-                      <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+                      <dt class="text-sm font-medium text-gray-500 truncate">{{ t('dashboard.total_users') || 'Total Users' }}</dt>
                       <dd class="text-lg font-medium text-gray-900">
                         {{ dashboardStore.isLoading ? '...' : (dashboardStore.stats?.total_users || 0) }}
                       </dd>
@@ -47,7 +47,7 @@
                   </div>
                   <div class="ml-5 w-0 flex-1">
                     <dl>
-                      <dt class="text-sm font-medium text-gray-500 truncate">Active Users</dt>
+                      <dt class="text-sm font-medium text-gray-500 truncate">{{ t('dashboard.active_users') || 'Active Users' }}</dt>
                       <dd class="text-lg font-medium text-gray-900">
                         {{ dashboardStore.isLoading ? '...' : (dashboardStore.stats?.active_users || 0) }}
                       </dd>
@@ -68,7 +68,7 @@
                   </div>
                   <div class="ml-5 w-0 flex-1">
                     <dl>
-                      <dt class="text-sm font-medium text-gray-500 truncate">Companies</dt>
+                      <dt class="text-sm font-medium text-gray-500 truncate">{{ t('dashboard.companies') || 'Companies' }}</dt>
                       <dd class="text-lg font-medium text-gray-900">
                         {{ dashboardStore.isLoading ? '...' : (dashboardStore.stats?.total_companies || 0) }}
                       </dd>
@@ -89,7 +89,7 @@
                   </div>
                   <div class="ml-5 w-0 flex-1">
                     <dl>
-                      <dt class="text-sm font-medium text-gray-500 truncate">User Roles</dt>
+                      <dt class="text-sm font-medium text-gray-500 truncate">{{ t('dashboard.user_roles') || 'User Roles' }}</dt>
                       <dd class="text-lg font-medium text-gray-900">
                         {{ dashboardStore.isLoading ? '...' : Object.keys(dashboardStore.stats?.user_roles || {}).length }}
                       </dd>
@@ -105,24 +105,24 @@
         <div class="bg-white overflow-hidden shadow rounded-lg mb-6">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Your Account Information
+              {{ t('dashboard.account_info') || 'Your Account Information' }}
             </h3>
             <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
               <div>
-                <dt class="text-sm font-medium text-gray-500">Full name</dt>
+                <dt class="text-sm font-medium text-gray-500">{{ t('dashboard.full_name') || 'Full name' }}</dt>
                 <dd class="mt-1 text-sm text-gray-900">{{ authStore.currentUser?.name }}</dd>
               </div>
               <div>
-                <dt class="text-sm font-medium text-gray-500">Email address</dt>
+                <dt class="text-sm font-medium text-gray-500">{{ t('dashboard.email_address') || 'Email address' }}</dt>
                 <dd class="mt-1 text-sm text-gray-900">{{ authStore.currentUser?.email }}</dd>
               </div>
               <div>
-                <dt class="text-sm font-medium text-gray-500">Role</dt>
+                <dt class="text-sm font-medium text-gray-500">{{ t('dashboard.role') || 'Role' }}</dt>
                 <dd class="mt-1 text-sm text-gray-900 capitalize">{{ authStore.userRole?.replace('_', ' ') }}</dd>
               </div>
               <div>
-                <dt class="text-sm font-medium text-gray-500">Account status</dt>
-                <dd class="mt-1 text-sm text-green-600">Active</dd>
+                <dt class="text-sm font-medium text-gray-500">{{ t('dashboard.account_status') || 'Account status' }}</dt>
+                <dd class="mt-1 text-sm text-green-600">{{ t('dashboard.active') || 'Active' }}</dd>
               </div>
             </dl>
           </div>
@@ -132,7 +132,7 @@
         <div class="bg-white overflow-hidden shadow rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Quick Actions
+              {{ t('dashboard.quick_actions') || 'Quick Actions' }}
             </h3>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div class="relative group bg-gray-50 p-6 rounded-lg hover:bg-gray-100 transition-colors">
@@ -143,8 +143,8 @@
                     </div>
                   </div>
                   <div class="ml-4">
-                    <h4 class="text-sm font-medium text-gray-900">Projects</h4>
-                    <p class="text-sm text-gray-600">Manage construction projects</p>
+                    <h4 class="text-sm font-medium text-gray-900">{{ t('navigation.projects') || 'Projects' }}</h4>
+                    <p class="text-sm text-gray-600">{{ t('dashboard.manage_projects') || 'Manage construction projects' }}</p>
                   </div>
                 </div>
               </div>
@@ -157,8 +157,8 @@
                     </div>
                   </div>
                   <div class="ml-4">
-                    <h4 class="text-sm font-medium text-gray-900">Team</h4>
-                    <p class="text-sm text-gray-600">Manage team members</p>
+                    <h4 class="text-sm font-medium text-gray-900">{{ t('dashboard.team') || 'Team' }}</h4>
+                    <p class="text-sm text-gray-600">{{ t('dashboard.manage_team') || 'Manage team members' }}</p>
                   </div>
                 </div>
               </div>
@@ -171,8 +171,8 @@
                     </div>
                   </div>
                   <div class="ml-4">
-                    <h4 class="text-sm font-medium text-gray-900">Reports</h4>
-                    <p class="text-sm text-gray-600">View project reports</p>
+                    <h4 class="text-sm font-medium text-gray-900">{{ t('dashboard.reports') || 'Reports' }}</h4>
+                    <p class="text-sm text-gray-600">{{ t('dashboard.view_reports') || 'View project reports' }}</p>
                   </div>
                 </div>
               </div>
@@ -184,13 +184,13 @@
         <div class="bg-white overflow-hidden shadow rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Recent Activity
+              {{ t('dashboard.recent_activity') || 'Recent Activity' }}
             </h3>
             <div v-if="dashboardStore.isLoading" class="text-sm text-gray-500">
-              Loading recent activity...
+              {{ t('dashboard.loading_activity') || 'Loading recent activity...' }}
             </div>
             <div v-else-if="dashboardStore.recentActivity.length === 0" class="text-sm text-gray-500">
-              No recent activity found.
+              {{ t('dashboard.no_activity') || 'No recent activity found.' }}
             </div>
             <div v-else class="flow-root">
               <ul class="-mb-8">
@@ -233,6 +233,7 @@
 import { onMounted } from 'vue'
 import { useAuthStore } from '@/modules/auth'
 import { useDashboardStore } from '@/modules/dashboard/stores/dashboard.store'
+import { useServerI18n } from '@/composables/useServerI18n'
 import { Users, CheckCircle, Building2, Wrench, ClipboardList, BarChart3, User } from 'lucide-vue-next'
 
 // Define component name
@@ -240,6 +241,7 @@ defineOptions({ name: 'DashboardPage' })
 
 const authStore = useAuthStore()
 const dashboardStore = useDashboardStore()
+const { t } = useServerI18n()
 
 // Load dashboard data when component mounts
 onMounted(() => {

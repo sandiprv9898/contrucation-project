@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\CompanyProfileController;
 use App\Http\Controllers\Api\CompanyBrandingController;
 use App\Http\Controllers\Api\CompanyPortfolioController;
+use App\Http\Controllers\Api\LocalizationController;
+use App\Http\Controllers\Api\Admin\TranslationManagementController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +17,16 @@ Route::get('unauthenticated', function() {
 });
 
 Route::prefix('v1')->group(function () {
+    // Localization routes (public access)
+    Route::prefix('localization')->group(function () {
+        Route::get('languages', [LocalizationController::class, 'languages']);
+        Route::get('translations/{language}', [LocalizationController::class, 'translations']);
+        Route::get('construction-terms/{language}', [LocalizationController::class, 'constructionTerms']);
+        Route::get('search', [LocalizationController::class, 'search']);
+        Route::get('translation/{language}/{key}', [LocalizationController::class, 'translation']);
+        Route::get('language-stats/{language}', [LocalizationController::class, 'languageStats']);
+    });
+
     // Temporary test route for settings (remove in production)
     Route::get('test-settings', function() {
         return response()->json([
@@ -47,6 +59,24 @@ Route::prefix('v1')->group(function () {
 
     // Protected user management routes
     Route::middleware('auth:sanctum')->group(function () {
+        // User localization routes
+        Route::prefix('localization')->group(function () {
+            Route::get('user/language', [LocalizationController::class, 'userLanguage']);
+            Route::post('user/language', [LocalizationController::class, 'updateUserLanguage']);
+        });
+
+        // Admin translation management routes
+        Route::prefix('admin/translations')->middleware('role:admin')->group(function () {
+            Route::get('keys', [TranslationManagementController::class, 'keys']);
+            Route::post('keys', [TranslationManagementController::class, 'createKey']);
+            Route::get('keys/{keyId}/translations', [TranslationManagementController::class, 'keyTranslations']);
+            Route::post('translations', [TranslationManagementController::class, 'saveTranslation']);
+            Route::post('translations/{translationId}/approve', [TranslationManagementController::class, 'approveTranslation']);
+            Route::post('translations/{translationId}/reject', [TranslationManagementController::class, 'rejectTranslation']);
+            Route::post('bulk-import', [TranslationManagementController::class, 'bulkImport']);
+            Route::get('pending', [TranslationManagementController::class, 'pendingTranslations']);
+            Route::post('clear-cache', [TranslationManagementController::class, 'clearCache']);
+        });
         // Dashboard routes
         Route::prefix('dashboard')->group(function () {
             Route::get('stats', [DashboardController::class, 'stats']);

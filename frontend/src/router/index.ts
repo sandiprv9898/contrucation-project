@@ -37,6 +37,12 @@ const router = createRouter({
       component: () => import('../pages/LocalizationDemo.vue'),
       meta: { title: 'Construction Localization Demo' }
     },
+    {
+      path: '/server-localization-demo',
+      name: 'server-localization-demo',
+      component: () => import('../views/ServerLocalizationDemo.vue'),
+      meta: { title: 'Server-Side Localization Demo' }
+    },
     // Authentication Routes
     {
       path: '/auth',

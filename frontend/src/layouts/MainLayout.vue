@@ -39,8 +39,11 @@
             </div>
             
             <div class="flex items-center space-x-4">
-              <!-- Language Switcher -->
-              <LanguageSwitcher @language-changed="handleLanguageChange" />
+              <!-- Server-Side Language Switcher -->
+              <ServerLanguageSwitcher 
+                :show-stats="false" 
+                @language-changed="handleLanguageChange" 
+              />
               
               <!-- User menu -->
               <UserMenu />
@@ -60,12 +63,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import Sidebar from '@/components/layout/Sidebar.vue'
 import UserMenu from '@/components/layout/UserMenu.vue'
-import LanguageSwitcher from '@/components/ui/LanguageSwitcher.vue'
+import ServerLanguageSwitcher from '@/components/ui/ServerLanguageSwitcher.vue'
+import { useServerI18n } from '@/composables/useServerI18n'
 
 defineOptions({ name: 'MainLayout' })
 
@@ -75,17 +78,24 @@ const sidebarOpen = ref(false)
 // Get current route for page title
 const route = useRoute()
 
-// i18n setup
-const { t } = useI18n()
+// Server-side i18n setup
+const { initialize, t } = useServerI18n()
 
 // Language change handler
 const handleLanguageChange = (newLocale: string) => {
   console.log('Language changed to:', newLocale)
-  // You can add additional logic here like:
-  // - Updating user preferences in backend
-  // - Refreshing data with new locale
-  // - Showing success message
+  // Additional logic can be added here:
+  // - Update user preferences in backend
+  // - Refresh data with new locale
+  // - Show success message
 }
+
+// Initialize server-side localization - singleton pattern
+onMounted(async () => {
+  console.log('🚀 MainLayout: Initializing server-side i18n system...')
+  await initialize()
+  console.log('✅ MainLayout: Server-side i18n system initialized')
+})
 
 const pageTitle = computed(() => {
   const meta = route.meta

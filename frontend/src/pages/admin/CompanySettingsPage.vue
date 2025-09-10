@@ -3,12 +3,12 @@
     <!-- Page Header -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-8">
-        <h1 class="text-2xl font-bold text-gray-900">Company Settings</h1>
+        <h1 class="text-2xl font-bold text-gray-900">{{ t('company.title') || 'Company Settings' }}</h1>
         <!-- Inline stats -->
         <div class="flex items-center gap-6 text-sm text-gray-600">
-          <span>Profile: <strong :class="profileStatus.color">{{ profileStatus.text }}</strong></span>
-          <span>Branding: <strong :class="brandingStatus.color">{{ brandingStatus.text }}</strong></span>
-          <span>Portfolio: <strong class="text-gray-900">{{ portfolioCount }} items</strong></span>
+          <span>{{ t('company.status.profile') || 'Profile' }}: <strong :class="profileStatus.color">{{ t(`company.status.${profileStatus.key}`) || profileStatus.text }}</strong></span>
+          <span>{{ t('company.status.branding') || 'Branding' }}: <strong :class="brandingStatus.color">{{ t(`company.status.${brandingStatus.key}`) || brandingStatus.text }}</strong></span>
+          <span>{{ t('company.status.portfolio') || 'Portfolio' }}: <strong class="text-gray-900">{{ t('company.status.items', { count: portfolioCount }) || `${portfolioCount} items` }}</strong></span>
         </div>
       </div>
       <div class="flex items-center gap-2">
@@ -22,7 +22,7 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          {{ isSaving ? 'Saving...' : 'Save Changes' }}
+          {{ isSaving ? (t('company.actions.saving') || 'Saving...') : (t('company.actions.save_changes') || 'Save Changes') }}
         </button>
         <button
           @click="refreshData"
@@ -32,7 +32,7 @@
           <svg :class="{ 'animate-spin': isLoading }" class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
           </svg>
-          Refresh
+          {{ t('company.actions.refresh') || 'Refresh' }}
         </button>
       </div>
     </div>
@@ -97,14 +97,16 @@
 import { ref, computed, onMounted } from 'vue'
 import { useSettingsStore } from '@/modules/settings/stores/settings.store'
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
+import { useServerI18n } from '@/composables/useServerI18n'
 import CompanySettings from '@/modules/settings/components/CompanySettings.vue'
 
 // Define component name
 defineOptions({ name: 'CompanySettingsPage' })
 
-// Stores
+// Stores & Composables
 const settingsStore = useSettingsStore()
 const authStore = useAuthStore()
+const { t } = useServerI18n()
 
 // State
 const isLoading = ref(true)
@@ -130,17 +132,17 @@ const hasUnsavedChanges = computed(() => {
 const profileStatus = computed(() => {
   const profile = companySettings.value
   if (!profile?.name || !profile?.email) {
-    return { text: 'Incomplete', color: 'text-amber-600' }
+    return { text: 'Incomplete', key: 'incomplete', color: 'text-amber-600' }
   }
-  return { text: 'Complete', color: 'text-green-600' }
+  return { text: 'Complete', key: 'complete', color: 'text-green-600' }
 })
 
 const brandingStatus = computed(() => {
   const settings = companySettings.value
   if (!settings?.primary_color || !settings?.logo_url) {
-    return { text: 'Basic', color: 'text-amber-600' }
+    return { text: 'Basic', key: 'basic', color: 'text-amber-600' }
   }
-  return { text: 'Configured', color: 'text-green-600' }
+  return { text: 'Configured', key: 'configured', color: 'text-green-600' }
 })
 
 const portfolioCount = computed(() => {
