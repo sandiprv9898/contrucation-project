@@ -238,6 +238,22 @@
       </div>
     </div>
 
+    <!-- Work Session Tracker -->
+    <div class="border-t border-gray-200 pt-6">
+      <WorkSessionTracker 
+        :task-id="task.id"
+        @work-started="onWorkStarted"
+        @work-stopped="onWorkStopped"
+      />
+    </div>
+
+    <!-- Work Sessions & Workers List -->
+    <div class="border-t border-gray-200 pt-6">
+      <WorkSessionList 
+        :task-id="task.id"
+      />
+    </div>
+
     <!-- File Attachments Section -->
     <div class="border-t border-gray-200 pt-6">
       <div class="mb-6">
@@ -335,6 +351,8 @@ import {
 import { useTaskStore } from '../stores/task.store'
 import TaskFileUpload from './TaskFileUpload.vue'
 import TaskAttachmentGallery from './TaskAttachmentGallery.vue'
+import WorkSessionTracker from './WorkSessionTracker.vue'
+import WorkSessionList from './WorkSessionList.vue'
 import type { Task } from '../types/task.types'
 
 interface Props {
@@ -480,5 +498,16 @@ const onAttachmentDeleted = (attachmentId: string) => {
 
 const onAttachmentsBulkDeleted = (attachmentIds: string[]) => {
   console.log(`${attachmentIds.length} attachment(s) deleted`)
+}
+
+// Work session event handlers
+const onWorkStarted = (session: any) => {
+  console.log('Work session started:', session)
+  emit('updated')
+}
+
+const onWorkStopped = (session: any) => {
+  console.log('Work session stopped:', session)
+  emit('updated')
 }
 </script>
