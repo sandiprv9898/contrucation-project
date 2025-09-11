@@ -35,12 +35,13 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Select activity type</option>
-            <option value="survey">Site Survey</option>
-            <option value="excavation">Excavation</option>
-            <option value="construction">Construction</option>
+            <option value="work">General Work</option>
             <option value="inspection">Inspection</option>
+            <option value="planning">Planning</option>
             <option value="documentation">Documentation</option>
-            <option value="maintenance">Maintenance</option>
+            <option value="meeting">Meeting</option>
+            <option value="travel">Travel</option>
+            <option value="break">Break</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -81,7 +82,7 @@
                 class="hidden"
               />
               <button
-                @click="($refs.startPhotoInput as HTMLInputElement)?.click()"
+                @click="($refs.startPhotoInput as HTMLInputElement | undefined)?.click()"
                 class="flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
               >
                 <Upload class="w-4 h-4 mr-2" />
