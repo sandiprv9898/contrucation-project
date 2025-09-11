@@ -103,6 +103,11 @@ class Task extends Model
         return $this->hasMany(TaskComment::class)->orderBy('created_at', 'desc');
     }
 
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(TaskAttachment::class)->orderBy('created_at', 'desc');
+    }
+
     // Scopes
     public function scopeActive($query)
     {

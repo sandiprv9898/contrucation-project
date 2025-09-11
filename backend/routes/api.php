@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\LocalizationController;
 use App\Http\Controllers\Api\Admin\TranslationManagementController;
 use App\Http\Controllers\Api\V1\Project\ProjectController;
 use App\Http\Controllers\Api\V1\Task\TaskController;
+use App\Http\Controllers\Api\V1\Task\TaskAttachmentController;
+use App\Http\Controllers\Api\V1\Task\TimeTrackingController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -162,6 +164,43 @@ Route::prefix('v1')->group(function () {
             Route::post('/{task}/time', [TaskController::class, 'logTime']);
             Route::get('/{task}/hierarchy', [TaskController::class, 'hierarchy']);
             Route::post('/{task}/duplicate', [TaskController::class, 'duplicate']);
+            
+            // Task Attachments Routes
+            Route::get('/{task}/attachments', [TaskAttachmentController::class, 'index']);
+            Route::post('/{task}/attachments', [TaskAttachmentController::class, 'store']);
+            Route::delete('/{task}/attachments/bulk', [TaskAttachmentController::class, 'bulkDestroy']);
+        });
+        
+        // Attachment-specific routes (not nested under tasks)
+        Route::prefix('attachments')->group(function () {
+            Route::get('/config', [TaskAttachmentController::class, 'config']);
+            Route::get('/{attachment}', [TaskAttachmentController::class, 'show']);
+            Route::get('/{attachment}/download', [TaskAttachmentController::class, 'download'])->name('api.v1.attachments.download');
+            Route::get('/{attachment}/preview', [TaskAttachmentController::class, 'preview'])->name('api.v1.attachments.preview');
+            Route::get('/{attachment}/thumbnail', [TaskAttachmentController::class, 'thumbnail'])->name('api.v1.attachments.thumbnail');
+            Route::delete('/{attachment}', [TaskAttachmentController::class, 'destroy']);
+        });
+        
+        // Time Tracking Routes
+        Route::prefix('time-tracking')->group(function () {
+            // User time logs and active tracking
+            Route::get('/active', [TimeTrackingController::class, 'activeTimeLog']);
+            Route::get('/my-logs', [TimeTrackingController::class, 'userTimeLogs']);
+            Route::post('/clock-out', [TimeTrackingController::class, 'clockOut']);
+            Route::get('/statistics', [TimeTrackingController::class, 'statistics']);
+            Route::get('/activity-types', [TimeTrackingController::class, 'activityTypes']);
+            
+            // Individual time log operations
+            Route::get('/{timeLog}', [TimeTrackingController::class, 'show']);
+            Route::put('/{timeLog}', [TimeTrackingController::class, 'update']);
+            Route::delete('/{timeLog}', [TimeTrackingController::class, 'destroy']);
+        });
+        
+        // Task-specific time tracking routes
+        Route::prefix('tasks/{task}/time-logs')->group(function () {
+            Route::get('/', [TimeTrackingController::class, 'index']);
+            Route::post('/', [TimeTrackingController::class, 'store']); // Manual time entry
+            Route::post('/clock-in', [TimeTrackingController::class, 'clockIn']);
         });
     });
 });

@@ -238,6 +238,29 @@
       </div>
     </div>
 
+    <!-- File Attachments Section -->
+    <div class="border-t border-gray-200 pt-6">
+      <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">File Attachments</h3>
+        
+        <!-- Upload Component -->
+        <div class="mb-6">
+          <TaskFileUpload
+            :task-id="task.id"
+            @uploaded="onFilesUploaded"
+            @error="onUploadError"
+          />
+        </div>
+        
+        <!-- Attachment Gallery -->
+        <TaskAttachmentGallery
+          :task-id="task.id"
+          @deleted="onAttachmentDeleted"
+          @bulk-deleted="onAttachmentsBulkDeleted"
+        />
+      </div>
+    </div>
+
     <!-- Metadata -->
     <div class="border-t border-gray-200 pt-4">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
@@ -310,6 +333,8 @@ import {
   X, Calendar, User, Folder, Layers, CheckCircle, Clock
 } from 'lucide-vue-next'
 import { useTaskStore } from '../stores/task.store'
+import TaskFileUpload from './TaskFileUpload.vue'
+import TaskAttachmentGallery from './TaskAttachmentGallery.vue'
 import type { Task } from '../types/task.types'
 
 interface Props {
@@ -437,5 +462,23 @@ const getStatusButtonClasses = (status: string): string => {
   return status === props.task.status.value 
     ? activeClasses[status] || baseClasses
     : baseClasses
+}
+
+// File attachment event handlers
+const onFilesUploaded = (attachments: any[]) => {
+  // Files uploaded successfully, the gallery will refresh automatically
+  console.log(`${attachments.length} file(s) uploaded successfully`)
+}
+
+const onUploadError = (error: string) => {
+  alert(error)
+}
+
+const onAttachmentDeleted = (attachmentId: string) => {
+  console.log(`Attachment ${attachmentId} deleted`)
+}
+
+const onAttachmentsBulkDeleted = (attachmentIds: string[]) => {
+  console.log(`${attachmentIds.length} attachment(s) deleted`)
 }
 </script>

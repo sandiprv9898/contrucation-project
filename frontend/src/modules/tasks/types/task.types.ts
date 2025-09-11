@@ -39,6 +39,38 @@ export interface ProjectPhase {
   name: string
 }
 
+export interface TaskAttachment {
+  id: string
+  task_id: string
+  original_name: string
+  file_size: number
+  formatted_file_size: string
+  mime_type: string
+  file_extension: string
+  is_image: boolean
+  is_document: boolean
+  metadata?: any
+  created_at: string
+  updated_at: string
+  uploaded_by?: {
+    id: string
+    name: string
+    avatar_url?: string
+  }
+  download_url: string
+  preview_url?: string
+  thumbnail_url?: string
+  can_delete: boolean
+  can_view: boolean
+}
+
+export interface AttachmentConfig {
+  max_file_size: number
+  max_file_size_formatted: string
+  allowed_mime_types: string[]
+  max_files_per_upload: number
+}
+
 export interface Task {
   id: string
   name: string
