@@ -3,7 +3,7 @@
     <label 
       :for="fieldId" 
       class="block text-sm font-medium text-gray-700 mb-2"
-      :class="{ 'after:content-[\"*\"] after:text-red-500 after:ml-1': config.required }"
+      :class="{ 'required-field': config.required }"
     >
       {{ config.label }}
     </label>
@@ -126,14 +126,14 @@ import type { FieldConfig } from '../config/company-settings.config'
 
 interface Props {
   config: FieldConfig
-  modelValue: any
+  modelValue: string | number | boolean | File | null
   canWrite: boolean
 }
 
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  'update:modelValue': [value: any]
+  'update:modelValue': [value: string | number | boolean | File | null]
   'file-upload': [file: File, fieldKey: string]
 }>()
 
@@ -213,3 +213,11 @@ function getFileAccept(): string {
   return '*/*'
 }
 </script>
+
+<style scoped>
+.required-field::after {
+  content: '*';
+  color: #ef4444;
+  margin-left: 0.25rem;
+}
+</style>

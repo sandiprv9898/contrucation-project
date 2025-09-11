@@ -122,6 +122,12 @@ const router = createRouter({
           meta: { requiresAuth: true, title: 'Calendar' }
         },
         {
+          path: 'notifications',
+          name: 'Notifications',
+          component: () => import('../pages/NotificationsPage.vue'),
+          meta: { requiresAuth: true, title: 'Notifications' }
+        },
+        {
           path: 'documents',
           name: 'Documents',
           component: () => import('../pages/DocumentsPage.vue'),
@@ -206,6 +212,10 @@ const router = createRouter({
     {
       path: '/users',
       redirect: '/app/users'
+    },
+    {
+      path: '/notifications',
+      redirect: '/app/notifications'
     },
     // Reports Routes (temporarily disabled due to import issues)
     // TODO: Re-enable once import issues are resolved

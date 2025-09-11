@@ -324,11 +324,13 @@ defineExpose({ cleanup })
 }
 
 [dir="rtl"] .ml-2 {
-  @apply mr-2 ml-0;
+  margin-left: 0;
+  margin-right: 0.5rem;
 }
 
 [dir="rtl"] .mr-2 {
-  @apply ml-2 mr-0;
+  margin-right: 0;
+  margin-left: 0.5rem;
 }
 
 /* Responsive adjustments */

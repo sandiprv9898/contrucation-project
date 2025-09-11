@@ -21,6 +21,7 @@
     "@fortawesome/fontawesome-svg-core": "^7.0.1",
     "@fortawesome/free-solid-svg-icons": "^7.0.1",
     "@fortawesome/vue-fontawesome": "^3.1.1",
+    "@heroicons/vue": "^2.2.0",
     "@intlify/eslint-plugin-vue-i18n": "^4.1.0",
     "@intlify/unplugin-vue-i18n": "^11.0.0",
     "@types/lodash-es": "^4.17.12",

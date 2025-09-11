@@ -2,7 +2,7 @@
   <div class="relative">
     <!-- User avatar/trigger -->
     <button
-      @click="isOpen = !isOpen"
+      @click="toggleDropdown"
       class="flex items-center space-x-3 text-sm bg-white rounded-lg p-2 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
     >
       <div class="flex items-center space-x-2">
@@ -135,6 +135,11 @@ const isOpen = ref(false)
 
 const currentUser = computed(() => authStore.currentUser)
 
+const toggleDropdown = (event: Event) => {
+  event.stopPropagation()
+  isOpen.value = !isOpen.value
+}
+
 const handleLogout = async () => {
   try {
     isOpen.value = false
@@ -164,22 +169,24 @@ const navigateToSettings = () => {
 
 const navigateToNotifications = () => {
   isOpen.value = false
-  // Placeholder for future notifications feature
-  console.log('Notifications feature coming soon')
+  router.push('/app/notifications')
 }
 
 // Click outside directive
 const vClickOutside = {
   beforeMount(el: HTMLElement, binding: any) {
     el._clickOutside = (event: Event) => {
-      if (!(el === event.target || el.contains(event.target as Node))) {
-        binding.value()
-      }
+      // Use nextTick to avoid immediate closure on the same click event
+      setTimeout(() => {
+        if (!(el === event.target || el.contains(event.target as Node))) {
+          binding.value()
+        }
+      }, 0)
     }
-    document.addEventListener('click', el._clickOutside)
+    document.addEventListener('click', el._clickOutside, true)
   },
   unmounted(el: HTMLElement) {
-    document.removeEventListener('click', el._clickOutside)
+    document.removeEventListener('click', el._clickOutside, true)
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import { api } from '@/services/api'
+import { apiClient } from '@/modules/shared/api/client'
 import type {
   Project,
   ProjectListItem,
@@ -25,60 +25,60 @@ export const projectsApi = {
       }
     })
 
-    const response = await api.get(`/projects?${params}`)
+    const response = await apiClient.get(`/projects?${params}`)
     return response.data
   },
 
   // Get single project
   async getProject(id: string): Promise<Project> {
-    const response = await api.get(`/projects/${id}`)
+    const response = await apiClient.get(`/projects/${id}`)
     return response.data.data
   },
 
   // Create project
   async createProject(data: CreateProjectRequest): Promise<Project> {
-    const response = await api.post('/projects', data)
+    const response = await apiClient.post('/projects', data)
     return response.data.data
   },
 
   // Update project
   async updateProject(id: string, data: UpdateProjectRequest): Promise<Project> {
-    const response = await api.put(`/projects/${id}`, data)
+    const response = await apiClient.put(`/projects/${id}`, data)
     return response.data.data
   },
 
   // Delete project
   async deleteProject(id: string): Promise<void> {
-    await api.delete(`/projects/${id}`)
+    await apiClient.delete(`/projects/${id}`)
   },
 
   // Update project status
   async updateProjectStatus(id: string, status: string): Promise<Project> {
-    const response = await api.patch(`/projects/${id}/status`, { status })
+    const response = await apiClient.patch(`/projects/${id}/status`, { status })
     return response.data.data
   },
 
   // Update project progress
   async updateProjectProgress(id: string): Promise<{ progress_percentage: number }> {
-    const response = await api.post(`/projects/${id}/progress`)
+    const response = await apiClient.post(`/projects/${id}/progress`)
     return response.data.data
   },
 
   // Get projects by company
   async getProjectsByCompany(companyId: string): Promise<ProjectListItem[]> {
-    const response = await api.get(`/projects/company/${companyId}`)
+    const response = await apiClient.get(`/projects/company/${companyId}`)
     return response.data.data
   },
 
   // Get projects by manager
   async getProjectsByManager(managerId: string): Promise<ProjectListItem[]> {
-    const response = await api.get(`/projects/manager/${managerId}`)
+    const response = await apiClient.get(`/projects/manager/${managerId}`)
     return response.data.data
   },
 
   // Search projects
   async searchProjects(query: string): Promise<ProjectListItem[]> {
-    const response = await api.get('/projects/search', {
+    const response = await apiClient.get('/projects/search', {
       params: { query }
     })
     return response.data.data
@@ -86,13 +86,13 @@ export const projectsApi = {
 
   // Get overdue projects
   async getOverdueProjects(): Promise<ProjectListItem[]> {
-    const response = await api.get('/projects/overdue')
+    const response = await apiClient.get('/projects/overdue')
     return response.data.data
   },
 
   // Get project statistics
   async getProjectStatistics(): Promise<ProjectStatistics> {
-    const response = await api.get('/projects/statistics')
+    const response = await apiClient.get('/projects/statistics')
     return response.data.data
   },
 

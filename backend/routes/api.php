@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Project\ProjectController;
 use App\Http\Controllers\Api\V1\Task\TaskController;
 use App\Http\Controllers\Api\V1\Task\TaskAttachmentController;
 use App\Http\Controllers\Api\V1\Task\TimeTrackingController;
+use App\Http\Controllers\Api\V1\Task\TaskNotificationController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -201,6 +202,16 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [TimeTrackingController::class, 'index']);
             Route::post('/', [TimeTrackingController::class, 'store']); // Manual time entry
             Route::post('/clock-in', [TimeTrackingController::class, 'clockIn']);
+        });
+
+        // Task Notification Routes
+        Route::prefix('notifications')->group(function () {
+            Route::get('/', [TaskNotificationController::class, 'index']);
+            Route::get('/unread-count', [TaskNotificationController::class, 'unreadCount']);
+            Route::get('/statistics', [TaskNotificationController::class, 'statistics']);
+            Route::post('/mark-all-read', [TaskNotificationController::class, 'markAllAsRead']);
+            Route::put('/{notification}/read', [TaskNotificationController::class, 'markAsRead']);
+            Route::delete('/{notification}', [TaskNotificationController::class, 'destroy']);
         });
     });
 });

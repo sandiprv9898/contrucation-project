@@ -45,6 +45,9 @@
                 @language-changed="handleLanguageChange" 
               />
               
+              <!-- Notification Bell -->
+              <NotificationBell />
+              
               <!-- User menu -->
               <UserMenu />
             </div>
@@ -68,6 +71,7 @@ import { useRoute } from 'vue-router'
 import Sidebar from '@/components/layout/Sidebar.vue'
 import UserMenu from '@/components/layout/UserMenu.vue'
 import ServerLanguageSwitcher from '@/components/ui/ServerLanguageSwitcher.vue'
+import NotificationBell from '@/components/notifications/NotificationBell.vue'
 import { useServerI18n } from '@/composables/useServerI18n'
 
 defineOptions({ name: 'MainLayout' })
