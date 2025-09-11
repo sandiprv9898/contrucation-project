@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\CompanyBrandingController;
 use App\Http\Controllers\Api\CompanyPortfolioController;
 use App\Http\Controllers\Api\LocalizationController;
 use App\Http\Controllers\Api\Admin\TranslationManagementController;
+use App\Http\Controllers\Api\V1\Project\ProjectController;
+use App\Http\Controllers\Api\V1\Task\TaskController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -137,6 +139,46 @@ Route::prefix('v1')->group(function () {
                 Route::delete('/{portfolio}', [CompanyPortfolioController::class, 'destroy']);
                 Route::post('/{portfolio}/reorder', [CompanyPortfolioController::class, 'reorder']);
             });
+        });
+
+        // Project Management Routes
+        Route::prefix('projects')->group(function () {
+            Route::get('/', [ProjectController::class, 'index']);
+            Route::post('/', [ProjectController::class, 'store']);
+            Route::get('/search', [ProjectController::class, 'search']);
+            Route::get('/overdue', [ProjectController::class, 'overdue']);
+            Route::get('/statistics', [ProjectController::class, 'statistics']);
+            Route::get('/company/{companyId}', [ProjectController::class, 'byCompany']);
+            Route::get('/manager/{managerId}', [ProjectController::class, 'byManager']);
+            
+            Route::get('/{project}', [ProjectController::class, 'show']);
+            Route::put('/{project}', [ProjectController::class, 'update']);
+            Route::delete('/{project}', [ProjectController::class, 'destroy']);
+            Route::patch('/{project}/status', [ProjectController::class, 'updateStatus']);
+            Route::post('/{project}/progress', [ProjectController::class, 'updateProgress']);
+        });
+
+        // Task Management Routes
+        Route::prefix('tasks')->group(function () {
+            Route::get('/', [TaskController::class, 'index']);
+            Route::post('/', [TaskController::class, 'store']);
+            Route::get('/search', [TaskController::class, 'search']);
+            Route::get('/overdue', [TaskController::class, 'overdue']);
+            Route::get('/due-soon', [TaskController::class, 'dueSoon']);
+            Route::get('/statistics', [TaskController::class, 'statistics']);
+            Route::get('/project/{projectId}', [TaskController::class, 'byProject']);
+            Route::get('/assignee/{userId}', [TaskController::class, 'byAssignee']);
+            Route::post('/bulk-update', [TaskController::class, 'bulkUpdate']);
+            
+            Route::get('/{task}', [TaskController::class, 'show']);
+            Route::put('/{task}', [TaskController::class, 'update']);
+            Route::delete('/{task}', [TaskController::class, 'destroy']);
+            Route::patch('/{task}/status', [TaskController::class, 'updateStatus']);
+            Route::patch('/{task}/progress', [TaskController::class, 'updateProgress']);
+            Route::patch('/{task}/assign', [TaskController::class, 'assign']);
+            Route::post('/{task}/time', [TaskController::class, 'logTime']);
+            Route::get('/{task}/hierarchy', [TaskController::class, 'hierarchy']);
+            Route::post('/{task}/duplicate', [TaskController::class, 'duplicate']);
         });
     });
 });
