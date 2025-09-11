@@ -33,64 +33,64 @@
       </div>
     </div>
 
-    <div class="px-4 py-6 space-y-6">
+    <div class="px-4 py-4 space-y-4">
       <!-- Time Tracking - Most Important Section -->
-      <div class="bg-white rounded-xl shadow-sm p-6 border-2 border-blue-200">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <Clock class="w-5 h-5 mr-2 text-blue-600" />
+      <div class="bg-white rounded-lg shadow-sm p-4 border border-blue-200">
+        <h2 class="text-base font-semibold text-gray-900 mb-3 flex items-center">
+          <Clock class="w-4 h-4 mr-2 text-blue-600" />
           Time Tracking
         </h2>
         
         <!-- Current Session Status -->
-        <div v-if="isActivelyWorking" class="bg-green-50 border-4 border-green-400 rounded-2xl p-6 mb-6 shadow-lg">
+        <div v-if="isActivelyWorking" class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
           <div class="text-center">
-            <div class="w-20 h-20 bg-green-500 rounded-full mx-auto mb-3 flex items-center justify-center animate-pulse">
-              <Clock class="w-8 h-8 text-white" />
+            <div class="w-12 h-12 bg-green-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+              <Clock class="w-5 h-5 text-white" />
             </div>
-            <div class="text-4xl font-bold text-green-800 mb-2">{{ currentDuration }}</div>
-            <div class="text-lg text-green-700 mb-6">🔧 Work in Progress</div>
+            <div class="text-2xl font-semibold text-green-800 mb-1">{{ currentDuration }}</div>
+            <div class="text-sm text-green-700 mb-4">Work in Progress</div>
             <button
               @click="showStopWorkModal = true"
-              class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-6 px-8 rounded-2xl flex items-center justify-center space-x-3 transition-all transform hover:scale-105 shadow-lg text-xl"
+              class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
             >
-              <Square class="w-6 h-6" />
-              <span>STOP WORK</span>
+              <Square class="w-4 h-4" />
+              <span>Stop Work</span>
             </button>
           </div>
         </div>
         
         <div v-else class="text-center">
-          <div class="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-            <Play class="w-8 h-8 text-blue-600" />
+          <div class="w-12 h-12 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+            <Play class="w-5 h-5 text-blue-600" />
           </div>
-          <div class="text-lg text-gray-700 mb-6">👷 Ready to start working?</div>
+          <div class="text-sm text-gray-700 mb-4">Ready to start working?</div>
           <button
             @click="startWork"
             :disabled="isStartingWork"
-            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-6 px-8 rounded-2xl flex items-center justify-center space-x-3 transition-all transform hover:scale-105 shadow-lg text-xl disabled:opacity-50"
+            class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors disabled:opacity-50"
           >
-            <Play class="w-6 h-6" />
-            <span>{{ isStartingWork ? '⏳ STARTING...' : '🚀 START WORK' }}</span>
+            <Play class="w-4 h-4" />
+            <span>{{ isStartingWork ? 'Starting...' : 'Start Work' }}</span>
           </button>
         </div>
 
         <!-- Time Summary -->
-        <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t-2 border-gray-200">
-          <div class="text-center bg-blue-50 rounded-xl p-4">
-            <div class="text-3xl font-bold text-blue-600 mb-1">{{ task.estimated_hours || 0 }}h</div>
-            <div class="text-sm font-medium text-blue-700">📋 Planned</div>
+        <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-200">
+          <div class="text-center bg-blue-50 rounded-lg p-3">
+            <div class="text-xl font-semibold text-blue-600 mb-1">{{ task.estimated_hours || 0 }}h</div>
+            <div class="text-xs font-medium text-blue-700">Planned</div>
           </div>
-          <div class="text-center bg-green-50 rounded-xl p-4">
-            <div class="text-3xl font-bold text-green-600 mb-1">{{ task.actual_hours || 0 }}h</div>
-            <div class="text-sm font-medium text-green-700">✅ Logged</div>
+          <div class="text-center bg-green-50 rounded-lg p-3">
+            <div class="text-xl font-semibold text-green-600 mb-1">{{ task.actual_hours || 0 }}h</div>
+            <div class="text-xs font-medium text-green-700">Logged</div>
           </div>
         </div>
       </div>
 
       <!-- Task Information -->
-      <div class="bg-white rounded-xl shadow-sm p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <FileText class="w-5 h-5 mr-2 text-gray-600" />
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <h2 class="text-base font-semibold text-gray-900 mb-3 flex items-center">
+          <FileText class="w-4 h-4 mr-2 text-gray-600" />
           Task Details
         </h2>
         
@@ -128,10 +128,10 @@
       </div>
 
       <!-- Progress Update -->
-      <div class="bg-white rounded-xl shadow-sm p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <TrendingUp class="w-5 h-5 mr-2 text-green-600" />
-          📊 Progress Update
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <h2 class="text-base font-semibold text-gray-900 mb-3 flex items-center">
+          <TrendingUp class="w-4 h-4 mr-2 text-green-600" />
+          Progress Update
         </h2>
         
         <div class="mb-6">
@@ -154,16 +154,16 @@
 
         <!-- Quick Progress Buttons -->
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-3">Quick Update</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Quick Update</label>
           <div class="grid grid-cols-4 gap-2">
             <button
               v-for="percentage in [25, 50, 75, 100]"
               :key="percentage"
               @click="newProgress = percentage; updateProgress()"
               :disabled="percentage === task.progress_percentage"
-              class="py-3 px-2 rounded-xl font-medium text-sm transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="py-2 px-2 rounded-lg font-medium text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               :class="{
-                'bg-green-600 text-white': percentage === 100,
+                'bg-green-500 text-white': percentage === 100,
                 'bg-yellow-500 text-white': percentage === 75,
                 'bg-blue-500 text-white': percentage === 50,
                 'bg-gray-400 text-white': percentage === 25
@@ -195,64 +195,99 @@
           <button
             @click="updateProgress"
             :disabled="newProgress === task.progress_percentage"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 shadow-lg text-lg"
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            📈 Update to {{ newProgress }}%
+            Update to {{ newProgress }}%
           </button>
         </div>
       </div>
 
       <!-- Quick Actions -->
-      <div class="bg-white rounded-xl shadow-sm p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-          <Zap class="w-5 h-5 mr-2 text-yellow-600" />
-          ⚡ Quick Actions
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <h2 class="text-base font-semibold text-gray-900 mb-4 flex items-center">
+          <Zap class="w-4 h-4 mr-2 text-yellow-600" />
+          Quick Actions
         </h2>
         
-        <div class="grid grid-cols-1 gap-4">
+        <div class="grid grid-cols-1 gap-3">
           <button
             v-if="task.status.value !== 'completed'"
             @click="markComplete"
-            class="bg-green-600 hover:bg-green-700 text-white font-bold py-5 px-6 rounded-2xl flex items-center justify-center space-x-3 transition-all transform hover:scale-105 shadow-lg text-lg"
+            class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-3 rounded-lg flex items-center justify-center space-x-2 transition-colors text-sm"
           >
-            <CheckCircle class="w-6 h-6" />
-            <span>✅ MARK COMPLETE</span>
+            <CheckCircle class="w-4 h-4" />
+            <span>Mark Complete</span>
           </button>
           
           <button
             v-if="task.status.value === 'not_started'"
             @click="markInProgress"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 px-6 rounded-2xl flex items-center justify-center space-x-3 transition-all transform hover:scale-105 shadow-lg text-lg"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-3 rounded-lg flex items-center justify-center space-x-2 transition-colors text-sm"
           >
-            <Play class="w-6 h-6" />
-            <span>🔄 START TASK</span>
-          </button>
-          
-          <button
-            @click="showNoteModal = true"
-            class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-5 px-6 rounded-2xl flex items-center justify-center space-x-3 transition-all transform hover:scale-105 shadow-lg text-lg"
-          >
-            <MessageSquare class="w-6 h-6" />
-            <span>📝 ADD NOTE</span>
-          </button>
-          
-          <button
-            @click="capturePhoto"
-            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-5 px-6 rounded-2xl flex items-center justify-center space-x-3 transition-all transform hover:scale-105 shadow-lg text-lg"
-          >
-            <Camera class="w-6 h-6" />
-            <span>📸 TAKE PHOTO</span>
+            <Play class="w-4 h-4" />
+            <span>Start Task</span>
           </button>
         </div>
       </div>
 
-      <!-- Work Sessions History - Simplified -->
-      <div class="bg-white rounded-xl shadow-sm p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-          <History class="w-5 h-5 mr-2 text-gray-600" />
-          Recent Work
+      <!-- Comments & Notes Section -->
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base font-semibold text-gray-900 flex items-center">
+            <MessageSquare class="w-4 h-4 mr-2 text-gray-600" />
+            Notes & Comments
+          </h2>
+          <button
+            @click="showNoteModal = true"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-3 rounded text-sm flex items-center space-x-1 transition-colors"
+          >
+            <Plus class="w-3 h-3" />
+            <span>Add</span>
+          </button>
+        </div>
+        
+        <!-- Notes List -->
+        <div v-if="notes.length > 0" class="space-y-2">
+          <div 
+            v-for="note in notes" 
+            :key="note.id"
+            class="bg-gray-50 rounded-lg p-3 border-l-4 border-blue-500"
+          >
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <p class="text-sm text-gray-800 mb-1">{{ note.content }}</p>
+                <div class="flex items-center text-xs text-gray-500 space-x-2">
+                  <span>{{ formatDateTime(note.created_at) }}</span>
+                  <span v-if="note.type" class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{{ note.type }}</span>
+                </div>
+              </div>
+              <button
+                @click="deleteNote(note.id)"
+                class="text-gray-400 hover:text-red-500 transition-colors ml-2"
+              >
+                <X class="w-3 h-3" />
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Empty State -->
+        <div v-else class="text-center py-6">
+          <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center">
+            <MessageSquare class="w-5 h-5 text-gray-400" />
+          </div>
+          <p class="text-sm text-gray-500">No notes yet</p>
+          <p class="text-xs text-gray-400">Add your first note or comment</p>
+        </div>
+      </div>
+
+      <!-- Work Sessions History -->
+      <div class="bg-white rounded-lg shadow-sm p-4">
+        <h2 class="text-base font-semibold text-gray-900 mb-3 flex items-center">
+          <History class="w-4 h-4 mr-2 text-gray-600" />
+          Work Sessions & Location
         </h2>
-        <WorkSessionList :task-id="task.id" />
+        <WorkSessionList :task-id="task.id" :show-location="true" />
       </div>
     </div>
 
@@ -262,72 +297,49 @@
       class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
       @click.self="showStopWorkModal = false"
     >
-      <div class="bg-white rounded-2xl p-8 w-full max-w-lg shadow-2xl">
-        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">🛑 Stop Work Session</h3>
+      <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Stop Work Session</h3>
         
-        <div class="space-y-6">
+        <div class="space-y-4">
           <div>
-            <label class="block text-lg font-medium text-gray-700 mb-3">What did you accomplish?</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">What did you accomplish?</label>
             <textarea 
               v-model="stopWorkData.description"
               placeholder="Tell us what you completed today..."
-              rows="4"
-              class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-lg"
+              rows="3"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             ></textarea>
           </div>
           
           <!-- Quick Accomplishment Options -->
           <div>
-            <label class="block text-lg font-medium text-gray-700 mb-3">Quick Options</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Quick Options</label>
             <div class="grid grid-cols-1 gap-2">
               <button
                 v-for="option in quickOptions"
                 :key="option"
                 @click="stopWorkData.description = option"
-                class="p-3 bg-gray-100 hover:bg-gray-200 rounded-lg text-left font-medium transition-colors"
+                class="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-left text-sm transition-colors"
               >
                 {{ option }}
               </button>
             </div>
           </div>
-          
-          <div class="bg-blue-50 rounded-xl p-4">
-            <label class="flex items-center justify-between">
-              <div class="flex items-center">
-                <input
-                  v-model="stopWorkData.billable"
-                  type="checkbox"
-                  class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3"
-                />
-                <span class="text-lg font-medium text-gray-700">💰 Billable time</span>
-              </div>
-              
-              <input
-                v-if="stopWorkData.billable"
-                v-model.number="stopWorkData.hourly_rate"
-                type="number"
-                min="0"
-                step="1"
-                placeholder="$/hr"
-                class="w-20 px-3 py-2 border-2 border-gray-300 rounded-lg text-lg font-medium text-center"
-              />
-            </label>
-          </div>
         </div>
         
-        <div class="flex space-x-4 mt-8">
+        <div class="flex space-x-3 mt-6">
           <button
             @click="showStopWorkModal = false"
-            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-4 px-6 rounded-xl transition-all text-lg"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors"
           >
             Cancel
           </button>
           <button
             @click="confirmStopWork"
             :disabled="isStoppingWork"
-            class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-6 rounded-xl transition-all disabled:opacity-50 text-lg transform hover:scale-105"
+            class="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
           >
-            {{ isStoppingWork ? '⏳ Stopping...' : '✅ STOP WORK' }}
+            {{ isStoppingWork ? 'Stopping...' : 'Stop Work' }}
           </button>
         </div>
       </div>
@@ -339,33 +351,73 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       @click.self="showNoteModal = false"
     >
-      <div class="bg-white rounded-xl p-6 w-full max-w-md">
-        <h3 class="text-xl font-semibold text-gray-900 mb-4">Add Note</h3>
+      <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Add Note</h3>
         
-        <textarea 
-          v-model="noteText"
-          placeholder="Add your note here..."
-          rows="4"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-        ></textarea>
+        <!-- Note Type Selection -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Note Type</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              v-for="type in [{ value: 'general', label: 'General' }, { value: 'progress', label: 'Progress' }, { value: 'issue', label: 'Issue' }]"
+              :key="type.value"
+              @click="noteType = type.value"
+              :class="[
+                'py-2 px-3 rounded-lg text-sm font-medium transition-colors',
+                noteType === type.value 
+                  ? 'bg-blue-500 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ]"
+            >
+              {{ type.label }}
+            </button>
+          </div>
+        </div>
         
-        <div class="flex space-x-3 mt-4">
+        <!-- Note Content -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Note</label>
+          <textarea 
+            v-model="noteText"
+            placeholder="Add your note here..."
+            rows="4"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          ></textarea>
+        </div>
+        
+        <!-- Quick Note Templates -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Quick Templates</label>
+          <div class="space-y-1">
+            <button
+              v-for="template in quickNoteTemplates"
+              :key="template"
+              @click="noteText = template"
+              class="w-full text-left p-2 text-sm bg-gray-50 hover:bg-gray-100 rounded transition-colors"
+            >
+              {{ template }}
+            </button>
+          </div>
+        </div>
+        
+        <div class="flex space-x-3">
           <button
             @click="showNoteModal = false"
-            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-4 rounded-xl transition-colors"
+            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-3 rounded-lg transition-colors"
           >
             Cancel
           </button>
           <button
             @click="saveNote"
             :disabled="!noteText.trim()"
-            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors disabled:opacity-50"
+            class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-3 rounded-lg transition-colors disabled:opacity-50"
           >
             Save Note
           </button>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -373,10 +425,11 @@
 import { ref, computed, onMounted } from 'vue'
 import { 
   ArrowLeft, Clock, Play, Square, FileText, TrendingUp, Zap, 
-  CheckCircle, MessageSquare, History, Camera
+  CheckCircle, MessageSquare, Plus, X, History
 } from 'lucide-vue-next'
 import { useTimeTracking } from '../composables/useTimeTracking'
 import { useTaskStore } from '../stores/task.store'
+import { useNotifications } from '@/composables/useNotifications'
 import WorkSessionList from './WorkSessionList.vue'
 import type { Task } from '../types/task.types'
 
@@ -393,6 +446,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const taskStore = useTaskStore()
+const { showSuccess, showError, showWarning, showInfo } = useNotifications()
 
 // Time tracking composable
 const {
@@ -411,11 +465,28 @@ const isStoppingWork = ref(false)
 const showStopWorkModal = ref(false)
 const showNoteModal = ref(false)
 const noteText = ref('')
+const noteType = ref('general')
+
+// Removed local notification state - now using global notifications
+const notes = ref([
+  {
+    id: '1',
+    content: 'Started foundation work. Ground conditions are good.',
+    type: 'progress',
+    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    user: 'John Worker'
+  },
+  {
+    id: '2', 
+    content: 'Materials delivered on schedule. Ready to proceed with next phase.',
+    type: 'general',
+    created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    user: 'John Worker'
+  }
+])
 
 const stopWorkData = ref({
-  description: '',
-  billable: true,
-  hourly_rate: 25
+  description: ''
 })
 
 const quickOptions = [
@@ -425,6 +496,15 @@ const quickOptions = [
   'Completed plumbing work',
   'Finished framing work',
   'Completed painting work'
+]
+
+const quickNoteTemplates = [
+  'Work completed as expected',
+  'Encountered minor delays due to weather',
+  'Materials delivered on time',
+  'Quality check passed',
+  'Need additional resources',
+  'Safety protocols followed'
 ]
 
 // Computed
@@ -449,10 +529,45 @@ const startWork = async () => {
     }
     
     await clockIn(props.task.id, clockInData)
+    showSuccess('Work Started', 'Successfully clocked in to work on this task')
     emit('updated')
     
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to start work:', err)
+    
+    // Extract error message
+    const errorMessage = extractErrorMessage(err)
+    
+    // Handle specific error cases
+    if (errorMessage.toLowerCase().includes('clock out from your current task') || 
+        errorMessage.toLowerCase().includes('must clock out') ||
+        err.response?.status === 409) {
+      showError(
+        'Cannot Start Work', 
+        'You must clock out from your current task before starting a new one. Please stop your current work session first.'
+      )
+    } else if (errorMessage.toLowerCase().includes('location') || 
+               errorMessage.toLowerCase().includes('geolocation')) {
+      showError(
+        'Location Required', 
+        'Location access is required to start work. Please enable location services.'
+      )
+    } else if (err.response?.status === 403) {
+      showError(
+        'Permission Denied', 
+        'You do not have permission to start work on this task.'
+      )
+    } else if (err.response?.status === 404) {
+      showError(
+        'Task Not Found', 
+        'This task could not be found. Please refresh the page and try again.'
+      )
+    } else {
+      showError(
+        'Failed to Start Work', 
+        errorMessage || 'An unexpected error occurred while trying to start work.'
+      )
+    }
   } finally {
     isStartingWork.value = false
   }
@@ -469,58 +584,102 @@ const confirmStopWork = async () => {
       longitude: location.lng,
       address: location.address,
       description: stopWorkData.value.description || `Completed work on ${props.task.name}`,
-      billable: stopWorkData.value.billable,
-      hourly_rate: stopWorkData.value.billable ? stopWorkData.value.hourly_rate : undefined,
       photos: []
     }
     
     await clockOut(clockOutData)
+    showSuccess('Work Completed', 'Successfully clocked out and saved your work session')
     showStopWorkModal.value = false
-    stopWorkData.value = { description: '', billable: true, hourly_rate: 25 }
+    stopWorkData.value = { description: '' }
     emit('updated')
     
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to stop work:', err)
+    const errorMessage = extractErrorMessage(err)
+    showError('Failed to Stop Work', errorMessage)
   } finally {
     isStoppingWork.value = false
   }
 }
 
 const updateProgress = async () => {
-  const success = await taskStore.updateTaskProgress(props.task.id, newProgress.value)
-  if (success) {
-    emit('updated')
+  try {
+    const success = await taskStore.updateTaskProgress(props.task.id, newProgress.value)
+    if (success) {
+      showSuccess('Progress Updated', `Task progress updated to ${newProgress.value}%`)
+      emit('updated')
+    } else {
+      showError('Update Failed', 'Failed to update task progress. Please try again.')
+    }
+  } catch (err: any) {
+    const errorMessage = extractErrorMessage(err) || 'Failed to update progress'
+    showError('Update Failed', errorMessage)
   }
 }
 
 const markComplete = async () => {
-  const success = await taskStore.updateTaskStatus(props.task.id, 'completed')
-  if (success) {
-    newProgress.value = 100
-    await updateProgress()
-    emit('updated')
+  try {
+    const success = await taskStore.updateTaskStatus(props.task.id, 'completed')
+    if (success) {
+      newProgress.value = 100
+      await updateProgress()
+      showSuccess('Task Completed', 'Task has been marked as completed successfully!')
+      emit('updated')
+    } else {
+      showError('Update Failed', 'Failed to mark task as complete. Please try again.')
+    }
+  } catch (err: any) {
+    const errorMessage = extractErrorMessage(err) || 'Failed to complete task'
+    showError('Update Failed', errorMessage)
   }
 }
 
 const markInProgress = async () => {
-  const success = await taskStore.updateTaskStatus(props.task.id, 'in_progress')
-  if (success) {
-    emit('updated')
+  try {
+    const success = await taskStore.updateTaskStatus(props.task.id, 'in_progress')
+    if (success) {
+      showSuccess('Task Started', 'Task has been marked as in progress')
+      emit('updated')
+    } else {
+      showError('Update Failed', 'Failed to start task. Please try again.')
+    }
+  } catch (err: any) {
+    const errorMessage = extractErrorMessage(err) || 'Failed to start task'
+    showError('Update Failed', errorMessage)
   }
 }
 
 const saveNote = async () => {
-  // In a real app, this would save the note to the task
-  console.log('Saving note:', noteText.value)
-  noteText.value = ''
-  showNoteModal.value = false
-  // emit('updated')
+  if (!noteText.value.trim()) return
+  
+  try {
+    const newNote = {
+      id: Date.now().toString(),
+      content: noteText.value.trim(),
+      type: noteType.value,
+      created_at: new Date().toISOString(),
+      user: 'Current User'
+    }
+    
+    notes.value.unshift(newNote)
+    noteText.value = ''
+    noteType.value = 'general'
+    showNoteModal.value = false
+    
+    showSuccess('Note Added', 'Your note has been saved successfully')
+    
+    // In a real app, this would save to the backend
+    console.log('Note saved:', newNote)
+    // emit('updated')
+  } catch (err: any) {
+    showError('Failed to Save Note', err.message || 'Could not save your note')
+  }
 }
 
-const capturePhoto = () => {
-  // In a real app, this would open camera to capture work photos
-  console.log('Opening camera for work photo')
-  // Would use navigator.mediaDevices.getUserMedia for camera access
+const deleteNote = (noteId: string) => {
+  notes.value = notes.value.filter(note => note.id !== noteId)
+  // In a real app, this would delete from the backend
+  console.log('Note deleted:', noteId)
 }
 
 const getCurrentLocation = (): Promise<{ lat: number; lng: number; address?: string }> => {
@@ -551,6 +710,34 @@ const formatDate = (date: string): string => {
     day: 'numeric'
   })
 }
+
+const formatDateTime = (date: string): string => {
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+// Error handling helper
+const extractErrorMessage = (err: any): string => {
+  if (err.response?.data?.message) {
+    return err.response.data.message
+  } else if (err.response?.data?.error) {
+    return err.response.data.error
+  } else if (err.response?.data) {
+    // Handle string responses
+    if (typeof err.response.data === 'string') {
+      return err.response.data
+    }
+  } else if (err.message) {
+    return err.message
+  }
+  return 'An unexpected error occurred'
+}
+
+// Notification functions moved to global composable
 
 const getStatusClasses = (status: string): string => {
   const classes = {

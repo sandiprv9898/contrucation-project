@@ -204,12 +204,17 @@
             </div>
 
             <!-- Location -->
-            <div v-if="timeLog.clock_in_address || timeLog.clock_in_location_lat" class="mt-2">
+            <div v-if="showLocation && (timeLog.clock_in_address || timeLog.clock_in_location_lat)" class="mt-2">
               <div class="flex items-center text-sm text-gray-600">
                 <MapPin class="w-4 h-4 mr-1" />
                 <span>
                   {{ timeLog.clock_in_address || `${timeLog.clock_in_location_lat?.toFixed(6)}, ${timeLog.clock_in_location_lng?.toFixed(6)}` }}
                 </span>
+              </div>
+              <!-- Clock out location if different -->
+              <div v-if="timeLog.clock_out_address && timeLog.clock_out_address !== timeLog.clock_in_address" class="flex items-center text-sm text-gray-600 mt-1">
+                <MapPin class="w-4 h-4 mr-1 text-red-500" />
+                <span class="text-gray-500">End: {{ timeLog.clock_out_address }}</span>
               </div>
             </div>
 
@@ -284,7 +289,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, withDefaults } from 'vue'
 import { RefreshCw, Users, BarChart3, Clock, MapPin, X } from 'lucide-vue-next'
 import { useTimeTracking } from '../composables/useTimeTracking'
 
@@ -326,6 +331,7 @@ interface TimeLog {
 
 interface Props {
   taskId: string
+  showLocation?: boolean
 }
 
 interface WorkerStats {
@@ -340,7 +346,9 @@ interface ActiveWorker extends TimeLog {
   duration: string
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  showLocation: false
+})
 
 // Time tracking composable
 const { getTaskTimeLogs, loading } = useTimeTracking()

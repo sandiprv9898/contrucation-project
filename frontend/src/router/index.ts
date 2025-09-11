@@ -141,6 +141,12 @@ const router = createRouter({
           meta: { requiresAuth: true, title: 'Calendar' }
         },
         {
+          path: 'gantt',
+          name: 'GanttChart',
+          component: () => import('../pages/GanttChartPage.vue'),
+          meta: { requiresAuth: true, title: 'Timeline & Dependencies' }
+        },
+        {
           path: 'notifications',
           name: 'Notifications',
           component: () => import('../pages/NotificationsPage.vue'),

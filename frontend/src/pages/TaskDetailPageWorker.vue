@@ -18,7 +18,7 @@
           @click="loadTask"
           class="worker-btn worker-btn-primary w-full"
         >
-          🔄 Try Again
+          Try Again
         </button>
       </div>
     </div>
@@ -34,7 +34,7 @@
           @click="$router.push('/app/worker/tasks')"
           class="worker-btn worker-btn-primary w-full"
         >
-          🏠 Back to My Tasks
+          Back to My Tasks
         </button>
       </div>
     </div>

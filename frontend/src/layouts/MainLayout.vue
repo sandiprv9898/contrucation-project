@@ -62,6 +62,9 @@
         </div>
       </main>
     </div>
+    
+    <!-- Global Notifications -->
+    <GlobalNotifications />
   </div>
 </template>
 
@@ -72,6 +75,7 @@ import Sidebar from '@/components/layout/Sidebar.vue'
 import UserMenu from '@/components/layout/UserMenu.vue'
 import ServerLanguageSwitcher from '@/components/ui/ServerLanguageSwitcher.vue'
 import NotificationBell from '@/components/notifications/NotificationBell.vue'
+import GlobalNotifications from '@/components/ui/GlobalNotifications.vue'
 import { useServerI18n } from '@/composables/useServerI18n'
 
 defineOptions({ name: 'MainLayout' })
@@ -96,9 +100,9 @@ const handleLanguageChange = (newLocale: string) => {
 
 // Initialize server-side localization - singleton pattern
 onMounted(async () => {
-  console.log('🚀 MainLayout: Initializing server-side i18n system...')
+  console.log('MainLayout: Initializing server-side i18n system...')
   await initialize()
-  console.log('✅ MainLayout: Server-side i18n system initialized')
+  console.log('MainLayout: Server-side i18n system initialized')
 })
 
 const pageTitle = computed(() => {
