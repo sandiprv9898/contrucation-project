@@ -4,7 +4,9 @@ namespace App\Domain\Task\Services;
 
 use App\Domain\Task\Models\Task;
 use App\Domain\Task\Models\TimeLog;
-use App\Models\User;
+use App\Domain\User\Models\User;
+use App\Events\TimeLogStarted;
+use App\Events\TimeLogStopped;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -58,7 +60,12 @@ class TimeTrackingService
             'duration_minutes' => 0,
         ]);
 
-        return $timeLog->load(['task', 'user']);
+        $timeLog = $timeLog->load(['task', 'user']);
+        
+        // Broadcast event
+        broadcast(new TimeLogStarted($timeLog))->toOthers();
+        
+        return $timeLog;
     }
 
     /**
@@ -111,7 +118,12 @@ class TimeTrackingService
         // Update task actual hours
         $this->updateTaskActualHours($activeTimeLog->task);
 
-        return $activeTimeLog->fresh()->load(['task', 'user']);
+        $timeLog = $activeTimeLog->fresh()->load(['task', 'user']);
+        
+        // Broadcast event
+        broadcast(new TimeLogStopped($timeLog))->toOthers();
+        
+        return $timeLog;
     }
 
     /**

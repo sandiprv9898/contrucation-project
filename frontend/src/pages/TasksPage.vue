@@ -374,7 +374,7 @@ defineOptions({ name: 'TasksPage' })
 const taskStore = useTaskStore()
 
 // Time tracking composable
-const { activeTimeLog, isActivelyTracking } = useTimeTracking()
+const { activeTimeLog, isActivelyTracking, getActiveTimeLog } = useTimeTracking()
 
 // Direct access to store properties
 const tasks = computed(() => taskStore.tasks)
@@ -403,7 +403,8 @@ const filters = ref<TaskFilters>({
 const loadTasks = async () => {
   await Promise.all([
     taskStore.loadTasks(filters.value),
-    taskStore.loadStatistics()
+    taskStore.loadStatistics(),
+    getActiveTimeLog() // Load active time log once at page level
   ])
 }
 

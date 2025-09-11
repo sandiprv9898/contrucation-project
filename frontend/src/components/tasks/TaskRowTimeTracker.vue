@@ -132,7 +132,7 @@ const {
   clockIn,
   clockOut,
   getActiveTimeLog,
-  getTimeLogsByTask
+  getTaskTimeLogs
 } = useTimeTracking()
 
 // Local state
@@ -252,7 +252,7 @@ const cancelQuickStop = () => {
 
 const loadWorkHistory = async () => {
   try {
-    workHistory.value = await getTimeLogsByTask(props.task.id)
+    workHistory.value = await getTaskTimeLogs(props.task.id)
   } catch (err) {
     console.error('Failed to load work history:', err)
   }
@@ -260,7 +260,7 @@ const loadWorkHistory = async () => {
 
 // Lifecycle
 onMounted(async () => {
-  await getActiveTimeLog()
+  // Only load work history - active time log is loaded at page level
   await loadWorkHistory()
 })
 </script>

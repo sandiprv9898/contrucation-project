@@ -1,5 +1,6 @@
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { apiClient } from '@/modules/shared/api/client'
+import echo from '@/plugins/echo'
 
 interface TimeLog {
   id: string
@@ -65,28 +66,123 @@ interface TimeTrackingStats {
   daily_hours: Record<string, number>
 }
 
+// Singleton state for active time log to prevent duplicate API calls
+const globalActiveTimeLog = ref<TimeLog | null>(null)
+const globalLoading = ref(false)
+const globalError = ref<string | null>(null)
+let activeTimeLogPromise: Promise<TimeLog | null> | null = null
+let lastFetchTime = 0
+const CACHE_DURATION = 30000 // 30 seconds
+
+// Cache for task time logs to prevent duplicate API calls
+const taskTimeLogsCache = new Map<string, { data: TimeLog[], timestamp: number, promise?: Promise<TimeLog[]> }>()
+const TASK_LOGS_CACHE_DURATION = 60000 // 60 seconds for task logs
+
 export function useTimeTracking() {
   const loading = ref(false)
   const error = ref<string | null>(null)
-  const activeTimeLog = ref<TimeLog | null>(null)
   const timeLogs = ref<TimeLog[]>([])
   const stats = ref<TimeTrackingStats | null>(null)
 
-  // Get active time log for current user
-  const getActiveTimeLog = async (): Promise<TimeLog | null> => {
-    loading.value = true
-    error.value = null
+  // WebSocket setup for real-time updates
+  let timeTrackingChannel: any = null
 
-    try {
-      const response = await apiClient.get<{ data: TimeLog | null }>('/time-tracking/active')
-      activeTimeLog.value = response.data
-      return response.data
-    } catch (err: any) {
-      error.value = err.message || 'Failed to get active time log'
-      throw err
-    } finally {
-      loading.value = false
+  const setupWebSocketListeners = () => {
+    if (!timeTrackingChannel) {
+      timeTrackingChannel = echo.channel('time-tracking')
+        .listen('time-log.started', (event: any) => {
+          console.log('Time tracking started:', event)
+          globalActiveTimeLog.value = event.time_log
+          lastFetchTime = Date.now()
+        })
+        .listen('time-log.stopped', (event: any) => {
+          console.log('Time tracking stopped:', event)
+          globalActiveTimeLog.value = null
+          lastFetchTime = Date.now()
+          
+          // Invalidate task time logs cache for the affected task
+          if (event.time_log?.task_id) {
+            invalidateTaskTimeLogsCache(event.time_log.task_id)
+          }
+          
+          // Add to time logs if we have a local list
+          if (timeLogs.value.length > 0) {
+            const existingIndex = timeLogs.value.findIndex(log => log.id === event.time_log.id)
+            if (existingIndex >= 0) {
+              timeLogs.value[existingIndex] = event.time_log
+            } else {
+              timeLogs.value.unshift(event.time_log)
+            }
+          }
+        })
     }
+  }
+
+  const cleanupWebSocketListeners = () => {
+    if (timeTrackingChannel) {
+      echo.leaveChannel('time-tracking')
+      timeTrackingChannel = null
+    }
+  }
+
+  // Setup listeners when composable is used
+  onMounted(() => {
+    setupWebSocketListeners()
+  })
+
+  // Cleanup when component is unmounted
+  onUnmounted(() => {
+    cleanupWebSocketListeners()
+  })
+
+  // Helper function to invalidate task time logs cache
+  const invalidateTaskTimeLogsCache = (taskId: string) => {
+    for (const [key] of taskTimeLogsCache.entries()) {
+      if (key.startsWith(`${taskId}-`)) {
+        taskTimeLogsCache.delete(key)
+      }
+    }
+  }
+
+  // Get active time log for current user with caching
+  const getActiveTimeLog = async (): Promise<TimeLog | null> => {
+    const now = Date.now()
+    
+    // Return cached result if still valid
+    if (globalActiveTimeLog.value && now - lastFetchTime < CACHE_DURATION) {
+      return globalActiveTimeLog.value
+    }
+
+    // Return ongoing promise if already fetching
+    if (activeTimeLogPromise) {
+      return activeTimeLogPromise
+    }
+
+    // Start new fetch
+    activeTimeLogPromise = (async () => {
+      globalLoading.value = true
+      loading.value = true
+      globalError.value = null
+      error.value = null
+
+      try {
+        const response = await apiClient.get<{ data: TimeLog | null }>('/time-tracking/active')
+        globalActiveTimeLog.value = response.data
+        lastFetchTime = now
+        return response.data
+      } catch (err: any) {
+        const errorMessage = err.message || 'Failed to get active time log'
+        globalError.value = errorMessage
+        error.value = errorMessage
+        throw err
+      } finally {
+        globalLoading.value = false
+        loading.value = false
+        activeTimeLogPromise = null
+      }
+    })()
+
+    return activeTimeLogPromise
   }
 
   // Clock in to a task
@@ -119,7 +215,8 @@ export function useTimeTracking() {
         }
       )
       
-      activeTimeLog.value = response.data
+      globalActiveTimeLog.value = response.data
+      lastFetchTime = Date.now()
       return response.data
     } catch (err: any) {
       error.value = err.message || 'Failed to clock in'
@@ -160,7 +257,8 @@ export function useTimeTracking() {
         }
       )
       
-      activeTimeLog.value = null
+      globalActiveTimeLog.value = null
+      lastFetchTime = Date.now()
       return response.data
     } catch (err: any) {
       error.value = err.message || 'Failed to clock out'
@@ -187,20 +285,55 @@ export function useTimeTracking() {
     }
   }
 
-  // Get task time logs
+  // Get task time logs with caching
   const getTaskTimeLogs = async (taskId: string, filters: Record<string, any> = {}): Promise<TimeLog[]> => {
-    loading.value = true
-    error.value = null
-
-    try {
-      const response = await apiClient.get<{ data: TimeLog[] }>(`/tasks/${taskId}/time-logs`, filters)
-      return response.data
-    } catch (err: any) {
-      error.value = err.message || 'Failed to get task time logs'
-      throw err
-    } finally {
-      loading.value = false
+    const now = Date.now()
+    const cacheKey = `${taskId}-${JSON.stringify(filters)}`
+    const cached = taskTimeLogsCache.get(cacheKey)
+    
+    // Return cached result if still valid
+    if (cached && now - cached.timestamp < TASK_LOGS_CACHE_DURATION) {
+      return cached.data
     }
+    
+    // Return ongoing promise if already fetching
+    if (cached?.promise) {
+      return cached.promise
+    }
+    
+    // Start new fetch
+    const fetchPromise = (async () => {
+      loading.value = true
+      error.value = null
+
+      try {
+        const response = await apiClient.get<{ data: TimeLog[] }>(`/tasks/${taskId}/time-logs`, filters)
+        
+        // Cache the result
+        taskTimeLogsCache.set(cacheKey, {
+          data: response.data,
+          timestamp: now
+        })
+        
+        return response.data
+      } catch (err: any) {
+        error.value = err.message || 'Failed to get task time logs'
+        // Remove failed promise from cache
+        taskTimeLogsCache.delete(cacheKey)
+        throw err
+      } finally {
+        loading.value = false
+      }
+    })()
+    
+    // Store the promise in cache to prevent duplicate requests
+    taskTimeLogsCache.set(cacheKey, {
+      data: cached?.data || [],
+      timestamp: cached?.timestamp || 0,
+      promise: fetchPromise
+    })
+    
+    return fetchPromise
   }
 
   // Create manual time entry
@@ -223,6 +356,9 @@ export function useTimeTracking() {
         `/tasks/${taskId}/time-logs`, 
         data
       )
+      
+      // Invalidate cache for this task
+      invalidateTaskTimeLogsCache(taskId)
       
       return response.data
     } catch (err: any) {
@@ -268,6 +404,12 @@ export function useTimeTracking() {
 
     try {
       const response = await apiClient.put<{ data: TimeLog, message: string }>(`/time-tracking/${timeLogId}`, data)
+      
+      // Invalidate cache for the task associated with this time log
+      if (response.data.task_id) {
+        invalidateTaskTimeLogsCache(response.data.task_id)
+      }
+      
       return response.data
     } catch (err: any) {
       error.value = err.message || 'Failed to update time log'
@@ -283,7 +425,15 @@ export function useTimeTracking() {
     error.value = null
 
     try {
+      // First get the time log to know which task cache to invalidate
+      const timeLogResponse = await apiClient.get<{ data: TimeLog }>(`/time-tracking/${timeLogId}`)
+      const taskId = timeLogResponse.data.task_id
+      
       await apiClient.delete(`/time-tracking/${timeLogId}`)
+      
+      // Invalidate cache for this task
+      invalidateTaskTimeLogsCache(taskId)
+      
     } catch (err: any) {
       error.value = err.message || 'Failed to delete time log'
       throw err
@@ -293,12 +443,12 @@ export function useTimeTracking() {
   }
 
   // Computed properties
-  const isActivelyTracking = computed(() => activeTimeLog.value !== null)
-  const currentTaskName = computed(() => activeTimeLog.value?.task?.name || 'Unknown Task')
+  const isActivelyTracking = computed(() => globalActiveTimeLog.value !== null)
+  const currentTaskName = computed(() => globalActiveTimeLog.value?.task?.name || 'Unknown Task')
   const currentDuration = computed(() => {
-    if (!activeTimeLog.value?.start_time) return '00:00'
+    if (!globalActiveTimeLog.value?.start_time) return '00:00'
     
-    const start = new Date(activeTimeLog.value.start_time)
+    const start = new Date(globalActiveTimeLog.value.start_time)
     const now = new Date()
     const diffInMinutes = Math.floor((now.getTime() - start.getTime()) / (1000 * 60))
     
@@ -312,7 +462,7 @@ export function useTimeTracking() {
     // State
     loading,
     error,
-    activeTimeLog,
+    activeTimeLog: globalActiveTimeLog,
     timeLogs,
     stats,
     
