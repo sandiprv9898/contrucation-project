@@ -208,11 +208,11 @@
         <div
           v-for="task in tasks"
           :key="task.id"
-          class="p-6 hover:bg-gray-50 cursor-pointer transition-colors"
-          @click="selectTask(task)"
+          class="p-6 hover:bg-gray-50 transition-colors border-l-4 border-transparent hover:border-blue-200"
+          :class="{ 'bg-green-50 border-green-300': isTaskActivelyTracked(task.id) }"
         >
           <div class="flex items-start justify-between">
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-0 cursor-pointer" @click="selectTask(task)">
               <div class="flex items-center space-x-3 mb-2">
                 <h3 class="text-lg font-medium text-gray-900 truncate">{{ task.name }}</h3>
                 
@@ -262,30 +262,41 @@
               </div>
             </div>
             
-            <div class="flex items-center space-x-2 ml-4">
-              <button
-                @click.stop="updateTaskStatus(task.id, getNextStatus(task.status.value))"
-                class="text-gray-400 hover:text-blue-600 transition-colors"
-                :title="getNextStatusLabel(task.status.value)"
-              >
-                <ArrowRight class="w-4 h-4" />
-              </button>
+            <!-- Time Tracking Section -->
+            <div class="flex items-center space-x-4 ml-4">
+              <!-- Inline Time Tracker -->
+              <TaskRowTimeTracker 
+                :task="task"
+                @work-started="handleWorkStarted"
+                @work-stopped="handleWorkStopped"
+              />
               
-              <button
-                @click.stop="editTask(task)"
-                class="text-gray-400 hover:text-green-600 transition-colors"
-                title="Edit task"
-              >
-                <Edit class="w-4 h-4" />
-              </button>
-              
-              <button
-                @click.stop="deleteTaskConfirm(task)"
-                class="text-gray-400 hover:text-red-600 transition-colors"
-                title="Delete task"
-              >
-                <Trash2 class="w-4 h-4" />
-              </button>
+              <!-- Action Buttons -->
+              <div class="flex items-center space-x-2 border-l border-gray-200 pl-2">
+                <button
+                  @click.stop="updateTaskStatus(task.id, getNextStatus(task.status.value))"
+                  class="text-gray-400 hover:text-blue-600 transition-colors"
+                  :title="getNextStatusLabel(task.status.value)"
+                >
+                  <ArrowRight class="w-4 h-4" />
+                </button>
+                
+                <button
+                  @click.stop="editTask(task)"
+                  class="text-gray-400 hover:text-green-600 transition-colors"
+                  title="Edit task"
+                >
+                  <Edit class="w-4 h-4" />
+                </button>
+                
+                <button
+                  @click.stop="deleteTaskConfirm(task)"
+                  class="text-gray-400 hover:text-red-600 transition-colors"
+                  title="Delete task"
+                >
+                  <Trash2 class="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
           
@@ -350,15 +361,20 @@ import {
   List, Calendar, User, Folder, BarChart, ArrowRight, Edit, Trash2, Kanban
 } from 'lucide-vue-next'
 import { useTaskStore } from '@/modules/tasks/stores/task.store'
+import { useTimeTracking } from '@/modules/tasks/composables/useTimeTracking'
 import type { Task, TaskFilters } from '@/modules/tasks/types/task.types'
 import TaskForm from '@/modules/tasks/components/TaskForm.vue'
 import TaskDetail from '@/modules/tasks/components/TaskDetail.vue'
 import TaskKanbanBoard from '@/modules/tasks/components/TaskKanbanBoard.vue'
+import TaskRowTimeTracker from '../components/tasks/TaskRowTimeTracker.vue'
 
 defineOptions({ name: 'TasksPage' })
 
 // Store
 const taskStore = useTaskStore()
+
+// Time tracking composable
+const { activeTimeLog, isActivelyTracking } = useTimeTracking()
 
 // Direct access to store properties
 const tasks = computed(() => taskStore.tasks)
@@ -507,6 +523,23 @@ const getPriorityClasses = (priority: string): string => {
 
 const formatDate = (date: string): string => {
   return new Date(date).toLocaleDateString()
+}
+
+// Time tracking methods
+const isTaskActivelyTracked = (taskId: string): boolean => {
+  return isActivelyTracking.value && activeTimeLog.value?.task_id === taskId
+}
+
+const handleWorkStarted = (taskId: string) => {
+  console.log('Work started for task:', taskId)
+  // Refresh tasks to update UI
+  refreshTasks()
+}
+
+const handleWorkStopped = (taskId: string) => {
+  console.log('Work stopped for task:', taskId)
+  // Refresh tasks to update UI
+  refreshTasks()
 }
 
 // Lifecycle

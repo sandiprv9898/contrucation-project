@@ -5,6 +5,7 @@ namespace App\Domain\Project\Enums;
 enum ProjectStatus: string
 {
     case DRAFT = 'draft';
+    case PLANNING = 'planning';
     case ACTIVE = 'active';
     case ON_HOLD = 'on_hold';
     case COMPLETED = 'completed';
@@ -14,6 +15,7 @@ enum ProjectStatus: string
     {
         return match($this) {
             self::DRAFT => 'Draft',
+            self::PLANNING => 'Planning',
             self::ACTIVE => 'Active',
             self::ON_HOLD => 'On Hold',
             self::COMPLETED => 'Completed',
@@ -25,6 +27,7 @@ enum ProjectStatus: string
     {
         return match($this) {
             self::DRAFT => 'gray',
+            self::PLANNING => 'purple',
             self::ACTIVE => 'blue',
             self::ON_HOLD => 'yellow',
             self::COMPLETED => 'green',

@@ -8,6 +8,7 @@ enum ProjectPriority: string
     case MEDIUM = 'medium';
     case HIGH = 'high';
     case URGENT = 'urgent';
+    case CRITICAL = 'critical';
 
     public function label(): string
     {
@@ -16,6 +17,7 @@ enum ProjectPriority: string
             self::MEDIUM => 'Medium',
             self::HIGH => 'High',
             self::URGENT => 'Urgent',
+            self::CRITICAL => 'Critical',
         };
     }
 
@@ -26,6 +28,7 @@ enum ProjectPriority: string
             self::MEDIUM => 'blue',
             self::HIGH => 'yellow',
             self::URGENT => 'red',
+            self::CRITICAL => 'purple',
         };
     }
 
@@ -36,6 +39,7 @@ enum ProjectPriority: string
             self::MEDIUM => 2,
             self::HIGH => 3,
             self::URGENT => 4,
+            self::CRITICAL => 5,
         };
     }
 

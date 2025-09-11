@@ -245,21 +245,15 @@ class ProjectSeeder extends Seeder
             $project = Project::create([
                 'name' => $projectData['name'],
                 'description' => $projectData['description'],
-                'type' => $projectData['type'],
+                'project_type' => $projectData['type'],
                 'status' => $projectData['status'],
                 'priority' => $projectData['priority'],
                 'client_company_id' => $clientCompany['id'],
-                'contractor_company_id' => $contractorCompany['id'],
                 'project_manager_id' => $projectManager['id'],
-                'client_name' => $projectData['client_name'],
-                'client_email' => strtolower(str_replace([' ', '.'], ['', ''], explode(',', $projectData['client_contact'])[0])) . '@client.com',
-                'client_phone' => '+1-555-0' . (200 + $index),
                 'planned_budget' => $projectData['planned_budget'],
                 'actual_budget' => $projectData['actual_budget'],
-                'planned_start_date' => $projectData['planned_start_date'],
-                'planned_end_date' => $projectData['planned_end_date'],
-                'actual_start_date' => $projectData['actual_start_date'],
-                'actual_end_date' => $projectData['actual_end_date'] ?? null,
+                'start_date' => $projectData['planned_start_date'],
+                'end_date' => $projectData['planned_end_date'],
                 'progress_percentage' => $projectData['progress_percentage'],
                 'address' => $projectData['location'],
                 'coordinates' => null,
@@ -325,8 +319,8 @@ class ProjectSeeder extends Seeder
         
         foreach ($projects as $project) {
             foreach ($phaseTemplates as $phase) {
-                $startDate = $project->planned_start_date
-                    ? Carbon::parse($project->planned_start_date)->addDays(($phase['order'] - 1) * 30)
+                $startDate = $project->start_date
+                    ? Carbon::parse($project->start_date)->addDays(($phase['order'] - 1) * 30)
                     : Carbon::now()->addDays(($phase['order'] - 1) * 30);
                 
                 $endDate = $startDate->copy()->addDays($phase['estimated_duration_days']);
@@ -337,13 +331,10 @@ class ProjectSeeder extends Seeder
                     'description' => $phase['description'],
                     'phase_order' => $phase['order'],
                     'status' => $this->getPhaseStatus($phase['order'], $project->status),
-                    'planned_start_date' => $startDate,
-                    'planned_end_date' => $endDate,
-                    'actual_start_date' => $this->shouldHaveStarted($phase['order'], $project->status) ? $startDate : null,
-                    'actual_end_date' => $this->shouldHaveCompleted($phase['order'], $project->status) ? $endDate : null,
-                    'estimated_budget' => $this->calculatePhaseEstimatedBudget($project->planned_budget, $phase['order']),
-                    'actual_budget' => $this->calculatePhaseActualBudget($project->actual_budget, $phase['order'], $project->status),
-                    'progress_percentage' => $this->calculatePhaseProgress($phase['order'], $project->status, $project->progress_percentage),
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'budget_allocation' => $this->calculatePhaseEstimatedBudget($project->planned_budget, $phase['order']),
+                    'actual_cost' => $this->calculatePhaseActualBudget($project->actual_budget, $phase['order'], $project->status),
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
@@ -365,11 +356,8 @@ class ProjectSeeder extends Seeder
                     'description' => $milestoneData['description'],
                     'milestone_type' => $milestoneData['type'],
                     'target_date' => $milestoneData['target_date'],
-                    'actual_date' => $milestoneData['actual_date'] ?? null,
+                    'completed_date' => $milestoneData['actual_date'] ?? null,
                     'status' => $milestoneData['status'],
-                    'milestone_order' => $index + 1,
-                    'is_critical' => $milestoneData['is_critical'],
-                    'metadata' => $milestoneData['metadata'] ?? [],
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
@@ -471,8 +459,8 @@ class ProjectSeeder extends Seeder
     
     private function getMilestonesForProject(Project $project): array
     {
-        $baseDate = Carbon::parse($project->planned_start_date ?? now());
-        $endDate = Carbon::parse($project->planned_end_date ?? now()->addYear());
+        $baseDate = Carbon::parse($project->start_date ?? now());
+        $endDate = Carbon::parse($project->end_date ?? now()->addYear());
         $isCompleted = $project->status === ProjectStatus::COMPLETED;
         $isActive = $project->status === ProjectStatus::ACTIVE;
         
@@ -485,7 +473,7 @@ class ProjectSeeder extends Seeder
                 'actual_date' => $isActive || $isCompleted ? $baseDate->copy()->addDays(25) : null,
                 'status' => $isActive || $isCompleted ? 'completed' : 'pending',
                 'is_critical' => true,
-                'metadata' => ['permit_count' => count($this->getRequiredPermits($project->type))]
+                'metadata' => ['permit_count' => count($this->getRequiredPermits($project->project_type ?? ProjectType::CONSTRUCTION))]
             ],
             [
                 'name' => 'Foundation Complete',

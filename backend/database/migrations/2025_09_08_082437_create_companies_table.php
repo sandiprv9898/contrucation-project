@@ -14,9 +14,15 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('type', 100)->default('general_contractor');
+            $table->text('description')->nullable();
+            $table->text('address')->nullable();
+            $table->string('phone', 20)->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
+            $table->string('status', 50)->default('active');
             $table->string('industry', 100)->default('construction');
             $table->string('size', 50)->nullable();
-            $table->text('address')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
