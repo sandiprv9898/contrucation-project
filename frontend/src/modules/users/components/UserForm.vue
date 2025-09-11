@@ -186,6 +186,9 @@ const emit = defineEmits<{
   cancel: []
 }>()
 
+// i18n - TODO: Add proper translations to backend system
+// const { t } = useServerI18n()
+
 // Form state
 const isEditMode = computed(() => !!props.user)
 

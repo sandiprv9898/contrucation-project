@@ -1,1 +1,23 @@
-{"title": "Usuarios"}
+{
+  "title": "Usuarios",
+  "add_user": "Agregar usuario",
+  "user_profile": "Perfil de usuario",
+  "create_user": "Crear usuario",
+  "edit_user": "Editar usuario",
+  "create_user_subtitle": "Agregar un nuevo usuario al sistema",
+  "edit_user_subtitle": "Actualizar información y permisos del usuario",
+  "basic_information": "Información básica",
+  "role_access": "Rol y acceso",
+  "contact_information": "Información de contacto",
+  "security": "Seguridad",
+  "full_name": "Nombre completo",
+  "email_address": "Dirección de correo electrónico",
+  "role": "Rol",
+  "department": "Departamento",
+  "phone_number": "Número de teléfono",
+  "password": "Contraseña",
+  "confirm_password": "Confirmar contraseña",
+  "cancel": "Cancelar",
+  "create": "Crear usuario",
+  "update": "Actualizar"
+}

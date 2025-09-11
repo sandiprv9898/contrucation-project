@@ -17,21 +17,21 @@ const importTranslations = async () => {
   for (const locale of enabledLocales) {
     try {
       // Import common translations
-      const common = await import(`../locales/${locale.code}/common.json`)
-      const navigation = await import(`../locales/${locale.code}/navigation.json`)
-      const forms = await import(`../locales/${locale.code}/forms.json`)
-      const construction = await import(`../locales/${locale.code}/construction.json`)
+      const common = await import(`../${locale.code}/common.json`)
+      const navigation = await import(`../${locale.code}/navigation.json`)
+      const forms = await import(`../${locale.code}/forms.json`)
+      const construction = await import(`../${locale.code}/construction.json`)
       
       // Import page translations
-      const dashboard = await import(`../locales/${locale.code}/pages/dashboard.json`)
-      const projects = await import(`../locales/${locale.code}/pages/projects.json`)
-      const settings = await import(`../locales/${locale.code}/pages/settings.json`)
-      const company = await import(`../locales/${locale.code}/pages/company.json`)
+      const dashboard = await import(`../${locale.code}/pages/dashboard.json`)
+      const projects = await import(`../${locale.code}/pages/projects.json`)
+      const settings = await import(`../${locale.code}/pages/settings.json`)
+      const company = await import(`../${locale.code}/pages/company.json`)
       
       // Import module translations
-      const auth = await import(`../locales/${locale.code}/modules/auth.json`)
-      const users = await import(`../locales/${locale.code}/modules/users.json`)
-      const settingsModule = await import(`../locales/${locale.code}/modules/settings.json`)
+      const auth = await import(`../${locale.code}/modules/auth.json`)
+      const users = await import(`../${locale.code}/modules/users.json`)
+      const settingsModule = await import(`../${locale.code}/modules/settings.json`)
       
       translations[locale.code] = {
         common: common.default || common,
