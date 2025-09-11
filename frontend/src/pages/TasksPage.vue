@@ -36,7 +36,7 @@
           </div>
           <div class="ml-4">
             <p class="text-sm font-medium text-gray-600">Total Tasks</p>
-            <p class="text-2xl font-bold text-gray-900">{{ statistics.total_tasks }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ statistics?.total_tasks || 0 }}</p>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@
           </div>
           <div class="ml-4">
             <p class="text-sm font-medium text-gray-600">Completed</p>
-            <p class="text-2xl font-bold text-gray-900">{{ statistics.by_status.completed || 0 }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ statistics?.by_status?.completed || 0 }}</p>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@
           </div>
           <div class="ml-4">
             <p class="text-sm font-medium text-gray-600">Overdue</p>
-            <p class="text-2xl font-bold text-gray-900">{{ statistics.overdue_tasks }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ statistics?.overdue_tasks || 0 }}</p>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
           </div>
           <div class="ml-4">
             <p class="text-sm font-medium text-gray-600">Due Soon</p>
-            <p class="text-2xl font-bold text-gray-900">{{ statistics.due_soon_tasks }}</p>
+            <p class="text-2xl font-bold text-gray-900">{{ statistics?.due_soon_tasks || 0 }}</p>
           </div>
         </div>
       </div>
@@ -365,18 +365,11 @@
           {{ editingTask ? 'Edit Task' : 'Create New Task' }}
         </h2>
         
-        <!-- Task form content will be added here -->
-        <div class="text-center py-8">
-          <p class="text-gray-600">Task form component coming soon...</p>
-          <button @click="closeModal" class="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
-            Close
-          </button>
-        </div>
-        <!-- <TaskForm
+        <TaskForm
           :task="editingTask"
           @saved="handleTaskSaved"
           @cancelled="closeModal"
-        /> -->
+        />
       </div>
     </div>
 
@@ -387,48 +380,39 @@
       @click.self="selectedTask = null"
     >
       <div class="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
-        <div class="text-center py-8">
-          <h3 class="text-lg font-medium text-gray-900 mb-4">{{ selectedTask?.name }}</h3>
-          <p class="text-gray-600 mb-4">Task detail component coming soon...</p>
-          <button @click="selectedTask = null" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
-            Close
-          </button>
-        </div>
-        <!-- <TaskDetail
+        <TaskDetail
           :task="selectedTask"
           @updated="handleTaskUpdated"
           @closed="selectedTask = null"
-        /> -->
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, storeToRefs } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { 
   CheckSquare, CheckCircle, AlertCircle, Clock, Plus, RefreshCw, Search,
   List, Calendar, User, Folder, BarChart, ArrowRight, Edit, Trash2, Kanban
 } from 'lucide-vue-next'
 import { useTaskStore } from '@/modules/tasks/stores/task.store'
 import type { Task, TaskFilters } from '@/modules/tasks/types/task.types'
-// import TaskForm from '@/modules/tasks/components/TaskForm.vue'
-// import TaskDetail from '@/modules/tasks/components/TaskDetail.vue'
+import TaskForm from '@/modules/tasks/components/TaskForm.vue'
+import TaskDetail from '@/modules/tasks/components/TaskDetail.vue'
 
 defineOptions({ name: 'TasksPage' })
 
 // Store
 const taskStore = useTaskStore()
 
-// Reactive references
-const {
-  tasks,
-  statistics,
-  isLoading,
-  error,
-  pagination,
-  tasksByStatus
-} = storeToRefs(taskStore)
+// Direct access to store properties
+const tasks = computed(() => taskStore.tasks)
+const statistics = computed(() => taskStore.statistics)
+const isLoading = computed(() => taskStore.isLoading)
+const error = computed(() => taskStore.error)
+const pagination = computed(() => taskStore.pagination)
+const tasksByStatus = computed(() => taskStore.tasksByStatus)
 
 // Local state
 const viewMode = ref<'list' | 'kanban'>('list')
@@ -526,7 +510,7 @@ const updateTaskStatus = async (taskId: string, status: string) => {
 }
 
 const getNextStatus = (currentStatus: string): string => {
-  const statusFlow = {
+  const statusFlow: Record<string, string> = {
     'not_started': 'in_progress',
     'in_progress': 'review',
     'review': 'completed',
@@ -538,7 +522,7 @@ const getNextStatus = (currentStatus: string): string => {
 }
 
 const getNextStatusLabel = (currentStatus: string): string => {
-  const labels = {
+  const labels: Record<string, string> = {
     'not_started': 'Start Task',
     'in_progress': 'Send for Review',
     'review': 'Complete Task',
@@ -550,7 +534,7 @@ const getNextStatusLabel = (currentStatus: string): string => {
 }
 
 const getStatusClasses = (status: string): string => {
-  const classes = {
+  const classes: Record<string, string> = {
     'not_started': 'bg-gray-100 text-gray-800',
     'in_progress': 'bg-blue-100 text-blue-800',
     'review': 'bg-yellow-100 text-yellow-800',
@@ -562,7 +546,7 @@ const getStatusClasses = (status: string): string => {
 }
 
 const getPriorityClasses = (priority: string): string => {
-  const classes = {
+  const classes: Record<string, string> = {
     'low': 'bg-green-100 text-green-800',
     'medium': 'bg-yellow-100 text-yellow-800',
     'high': 'bg-orange-100 text-orange-800',

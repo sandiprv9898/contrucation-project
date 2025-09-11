@@ -9,10 +9,10 @@ export { taskService } from './services/task.service'
 // Stores
 export { useTaskStore } from './stores/task.store'
 
-// Components (will be added as they're created)
-// export { default as TaskForm } from './components/TaskForm.vue'
-// export { default as TaskDetail } from './components/TaskDetail.vue'
-// export { default as TaskCard } from './components/TaskCard.vue'
+// Components
+export { default as TaskForm } from './components/TaskForm.vue'
+export { default as TaskDetail } from './components/TaskDetail.vue'
+export { default as TaskCard } from './components/TaskCard.vue'
 // export { default as TaskKanban } from './components/TaskKanban.vue'
 
 export default {

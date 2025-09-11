@@ -106,7 +106,7 @@ const router = createRouter({
         {
           path: 'tasks/assign',
           name: 'TaskAssign',
-          component: () => import('../pages/tasks/TaskAssignPage.vue'),
+          component: () => import('../pages/TaskAssignmentPage.vue'),
           meta: { requiresAuth: true, requiresPermission: 'canAssignTasks', title: 'Task Assignment' }
         },
         {
