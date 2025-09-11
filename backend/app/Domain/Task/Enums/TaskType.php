@@ -17,6 +17,7 @@ enum TaskType: string
     case FLOORING = 'flooring';
     case PAINTING = 'painting';
     case FINISHING = 'finishing';
+    case DOCUMENTATION = 'documentation';
     case INSPECTION = 'inspection';
     case CLEANUP = 'cleanup';
 
@@ -36,6 +37,7 @@ enum TaskType: string
             self::FLOORING => 'Flooring',
             self::PAINTING => 'Painting',
             self::FINISHING => 'Finishing',
+            self::DOCUMENTATION => 'Documentation',
             self::INSPECTION => 'Inspection',
             self::CLEANUP => 'Cleanup',
         };
@@ -57,6 +59,7 @@ enum TaskType: string
             self::FLOORING => 'teal',
             self::PAINTING => 'lime',
             self::FINISHING => 'emerald',
+            self::DOCUMENTATION => 'blue',
             self::INSPECTION => 'amber',
             self::CLEANUP => 'slate',
         };
@@ -70,7 +73,7 @@ enum TaskType: string
             self::ELECTRICAL, self::PLUMBING, self::HVAC => 'Systems',
             self::ROOFING, self::INSULATION => 'Envelope',
             self::DRYWALL, self::FLOORING, self::PAINTING, self::FINISHING => 'Interior',
-            self::INSPECTION, self::CLEANUP => 'Quality',
+            self::DOCUMENTATION, self::INSPECTION, self::CLEANUP => 'Quality',
         };
     }
 

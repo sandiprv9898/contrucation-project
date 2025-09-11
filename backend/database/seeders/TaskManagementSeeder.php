@@ -607,7 +607,7 @@ class TaskManagementSeeder extends Seeder
                     DB::table('task_dependencies')->insert([
                         'id' => Str::uuid(),
                         'task_id' => $task->id,
-                        'prerequisite_task_id' => $foundationTask->id,
+                        'depends_on_task_id' => $foundationTask->id,
                         'dependency_type' => 'finish_to_start',
                         'lag_days' => 3,
                         'created_at' => now(),
@@ -626,7 +626,7 @@ class TaskManagementSeeder extends Seeder
                     DB::table('task_dependencies')->insert([
                         'id' => Str::uuid(),
                         'task_id' => $task->id,
-                        'prerequisite_task_id' => $constructionTask->id,
+                        'depends_on_task_id' => $constructionTask->id,
                         'dependency_type' => 'finish_to_start',
                         'lag_days' => 1,
                         'created_at' => now(),
