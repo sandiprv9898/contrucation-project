@@ -99,16 +99,57 @@
       </div>
     </div>
 
-    <!-- Demo Login -->
-    <div class="text-center">
-      <button
-        type="button"
-        @click="handleDemoLogin"
-        :disabled="authStore.isLoading"
-        class="inline-flex items-center justify-center w-full h-12 px-4 text-sm font-semibold text-white bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/20 disabled:opacity-50 shadow-lg shadow-purple-500/25"
-      >
-        {{ authStore.isLoading ? 'Signing in...' : '🚀 Demo Login (Admin)' }}
-      </button>
+    <!-- Quick Test Login Buttons -->
+    <div class="space-y-3">
+      <p class="text-center text-sm font-medium text-gray-600">Quick Test Login</p>
+      
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Admin Login -->
+        <button
+          type="button"
+          @click="quickLogin('admin@construction.com', '👑 Admin')"
+          :disabled="authStore.isLoading"
+          class="flex items-center justify-center h-12 px-3 text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500/20 disabled:opacity-50 shadow-lg"
+        >
+          👑 Admin
+        </button>
+        
+        <!-- Project Manager Login -->
+        <button
+          type="button"
+          @click="quickLogin('michael.pm@construction.com', '🏗️ PM')"
+          :disabled="authStore.isLoading"
+          class="flex items-center justify-center h-12 px-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 shadow-lg"
+        >
+          🏗️ PM
+        </button>
+        
+        <!-- Supervisor Login -->
+        <button
+          type="button"
+          @click="quickLogin('david.supervisor@construction.com', '👷‍♂️ Supervisor')"
+          :disabled="authStore.isLoading"
+          class="flex items-center justify-center h-12 px-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 disabled:opacity-50 shadow-lg"
+        >
+          👷‍♂️ Supervisor
+        </button>
+        
+        <!-- Field Worker Login -->
+        <button
+          type="button"
+          @click="quickLogin('tom.worker@construction.com', '🔨 Field Worker')"
+          :disabled="authStore.isLoading"
+          class="flex items-center justify-center h-12 px-3 text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/20 disabled:opacity-50 shadow-lg"
+        >
+          🔨 Worker
+        </button>
+      </div>
+      
+      <div class="text-center">
+        <p class="text-xs text-gray-500">
+          Password for all test accounts: <span class="font-medium text-gray-700">password123</span>
+        </p>
+      </div>
     </div>
 
     <!-- Register Link -->
@@ -191,34 +232,45 @@ const handleSubmit = async () => {
   }
 }
 
-const handleDemoLogin = async () => {
+const quickLogin = async (email: string, roleName: string) => {
   authStore.clearError()
   
   try {
-    // Create demo user session
-    const demoUser = {
-      id: 'demo-1',
-      name: 'John Administrator',
-      email: 'admin@demo.construction.com',
-      role: 'admin' as const,
-      avatar_url: null,
-      company: {
-        id: 'demo-company-1',
-        name: 'Demo Construction Corp',
-        industry: 'Construction'
-      },
-      email_verified_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+    // Auto-fill the form with the selected user credentials
+    form.email = email
+    form.password = 'password123'
+    form.remember = false
+    
+    // Clear any existing errors
+    errors.value = {}
+    
+    // Attempt login with real credentials
+    await authStore.login({
+      email: form.email,
+      password: form.password,
+      remember: form.remember
+    })
+    
+    console.log(`Logged in as ${roleName} (${email})`)
+    
+    // Get user role from the response to redirect appropriately
+    const user = authStore.user
+    if (user?.role === 'field_worker') {
+      // Redirect field workers to their specialized interface
+      router.push('/app/worker/tasks')
+    } else {
+      // Other roles go to main dashboard
+      router.push('/app/dashboard')
     }
     
-    // Set demo authentication
-    authStore.setDemoAuth(demoUser, 'demo-token-123')
-    
-    // Redirect to dashboard
-    router.push('/app/dashboard')
   } catch (err) {
-    console.error('Demo login error:', err)
+    console.error(`Quick login error for ${roleName}:`, err)
+    // Error will be shown by the store
   }
+}
+
+const handleDemoLogin = async () => {
+  // Use the quick login for admin
+  await quickLogin('admin@construction.com', 'Admin Demo')
 }
 </script>

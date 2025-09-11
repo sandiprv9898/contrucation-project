@@ -1,4 +1,5 @@
 import './assets/main.css'
+import './assets/worker-mobile.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -20,6 +21,7 @@ import {
 import App from './App.vue'
 import router from './router'
 import './plugins/echo'
+import { optimizeForWorkers } from './utils/device'
 
 // Add icons to FontAwesome library
 library.add(
@@ -34,6 +36,10 @@ library.add(
 
 // Initialize the app with async i18n setup
 async function initializeApp() {
+  // Optimize for construction workers before app creation
+  const deviceInfo = optimizeForWorkers()
+  console.log('Device optimization applied:', deviceInfo)
+  
   const app = createApp(App)
   
   // Initialize i18n

@@ -115,6 +115,19 @@ const router = createRouter({
           component: () => import('../pages/TaskDetailPage.vue'),
           meta: { requiresAuth: true, title: 'Task Details' }
         },
+        // Worker-optimized task routes
+        {
+          path: 'worker/tasks',
+          name: 'WorkerTasks',
+          component: () => import('../pages/TasksPageWorker.vue'),
+          meta: { requiresAuth: true, title: 'My Tasks', workerMode: true }
+        },
+        {
+          path: 'worker/tasks/:id',
+          name: 'WorkerTaskDetail',
+          component: () => import('../pages/TaskDetailPageWorker.vue'),
+          meta: { requiresAuth: true, title: 'Task Details', workerMode: true }
+        },
         {
           path: 'tasks/assign',
           name: 'TaskAssign',

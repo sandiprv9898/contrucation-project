@@ -170,35 +170,10 @@
             </div>
           </div>
           
-          <!-- Time Tracking -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Time Tracking</label>
-            <div class="bg-gray-50 rounded-md p-3 space-y-2">
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-600">Estimated:</span>
-                <span class="font-medium">{{ task.estimated_hours || 0 }}h</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-600">Actual:</span>
-                <span class="font-medium">{{ task.actual_hours || 0 }}h</span>
-              </div>
-              <div v-if="task.estimated_hours" class="flex justify-between text-sm">
-                <span class="text-gray-600">Variance:</span>
-                <span 
-                  class="font-medium"
-                  :class="{
-                    'text-green-600': (task.actual_hours || 0) <= task.estimated_hours,
-                    'text-red-600': (task.actual_hours || 0) > task.estimated_hours
-                  }"
-                >
-                  {{ getTimeVariance() }}h
-                </span>
-              </div>
-            </div>
-            
-            <!-- Log Time -->
-            <div class="flex items-center space-x-2 mt-2">
-              <label class="text-sm font-medium text-gray-700">Log Time:</label>
+          <!-- Quick Manual Time Log (Legacy) -->
+          <div class="mb-4 p-3 bg-gray-50 rounded-md">
+            <h4 class="text-sm font-medium text-gray-700 mb-2">Quick Time Log</h4>
+            <div class="flex items-center space-x-2">
               <input
                 v-model="timeToLog"
                 type="number"
@@ -215,6 +190,7 @@
               >
                 Log
               </button>
+              <span class="text-xs text-gray-500">For simple manual entries</span>
             </div>
           </div>
         </div>
@@ -238,20 +214,74 @@
       </div>
     </div>
 
-    <!-- Work Session Tracker -->
+    <!-- Enhanced Time Tracking Section -->
     <div class="border-t border-gray-200 pt-6">
-      <WorkSessionTracker 
-        :task-id="task.id"
-        @work-started="onWorkStarted"
-        @work-stopped="onWorkStopped"
-      />
-    </div>
-
-    <!-- Work Sessions & Workers List -->
-    <div class="border-t border-gray-200 pt-6">
-      <WorkSessionList 
-        :task-id="task.id"
-      />
+      <div class="bg-white rounded-lg border border-gray-200 p-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+          <Clock class="w-6 h-6 mr-2 text-blue-600" />
+          Time Tracking & Work Sessions
+        </h3>
+        
+        <!-- Current Session Status -->
+        <div class="mb-6">
+          <WorkSessionTracker 
+            :task-id="task.id"
+            @work-started="onWorkStarted"
+            @work-stopped="onWorkStopped"
+          />
+        </div>
+        
+        <!-- Time Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <div class="flex items-center">
+              <Clock class="w-5 h-5 text-blue-600 mr-2" />
+              <div>
+                <p class="text-sm font-medium text-blue-900">Estimated Time</p>
+                <p class="text-xl font-bold text-blue-700">{{ task.estimated_hours || 0 }}h</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+            <div class="flex items-center">
+              <CheckCircle class="w-5 h-5 text-green-600 mr-2" />
+              <div>
+                <p class="text-sm font-medium text-green-900">Actual Time</p>
+                <p class="text-xl font-bold text-green-700">{{ task.actual_hours || 0 }}h</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div class="flex items-center">
+              <div class="w-5 h-5 mr-2 flex items-center justify-center">
+                <span class="text-lg">⚖️</span>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-900">Variance</p>
+                <p 
+                  class="text-xl font-bold"
+                  :class="{
+                    'text-green-700': (task.actual_hours || 0) <= (task.estimated_hours || 0),
+                    'text-red-700': (task.actual_hours || 0) > (task.estimated_hours || 0)
+                  }"
+                >
+                  {{ getTimeVariance() }}h
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Work Sessions History -->
+        <div>
+          <h4 class="text-lg font-medium text-gray-900 mb-4">Work Sessions History</h4>
+          <WorkSessionList 
+            :task-id="task.id"
+          />
+        </div>
+      </div>
     </div>
 
     <!-- File Attachments Section -->
@@ -423,6 +453,7 @@ const getTimeVariance = (): string => {
   const variance = (props.task.actual_hours || 0) - props.task.estimated_hours
   return variance >= 0 ? `+${variance}` : variance.toString()
 }
+
 
 const formatDate = (date: string): string => {
   return new Date(date).toLocaleDateString()
