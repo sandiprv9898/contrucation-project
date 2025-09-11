@@ -18,6 +18,22 @@ class TimeTrackingController extends Controller
     ) {}
 
     /**
+     * Convert string/mixed values to boolean
+     */
+    private function convertToBoolean($value): bool
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+        
+        if (is_string($value)) {
+            return in_array(strtolower($value), ['true', '1', 'yes', 'on'], true);
+        }
+        
+        return (bool) $value;
+    }
+
+    /**
      * Get time logs for a task
      */
     public function index(Request $request, string $taskId): JsonResponse
@@ -129,7 +145,7 @@ class TimeTrackingController extends Controller
             'photos' => 'nullable|array|max:5',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
             'description' => 'nullable|string|max:1000',
-            'billable' => 'nullable|boolean',
+            'billable' => 'nullable|in:true,false,1,0,yes,no,on,off',
             'hourly_rate' => 'nullable|numeric|min:0|max:9999.99',
         ]);
 
@@ -148,7 +164,7 @@ class TimeTrackingController extends Controller
                 address: $request->input('address'),
                 photos: $request->file('photos', []),
                 description: $request->input('description'),
-                billable: $request->input('billable', true),
+                billable: $this->convertToBoolean($request->input('billable', true)),
                 hourlyRate: $request->input('hourly_rate')
             );
 
@@ -190,7 +206,7 @@ class TimeTrackingController extends Controller
             'end_time' => 'required|date|after:start_time',
             'description' => 'required|string|max:1000',
             'activity_type' => 'nullable|string|in:work,break,travel,meeting,inspection,planning,documentation,other',
-            'billable' => 'nullable|boolean',
+            'billable' => 'nullable|in:true,false,1,0,yes,no,on,off',
             'hourly_rate' => 'nullable|numeric|min:0|max:9999.99',
         ]);
 
@@ -209,7 +225,7 @@ class TimeTrackingController extends Controller
                 endTime: Carbon::parse($request->input('end_time')),
                 description: $request->input('description'),
                 activityType: $request->input('activity_type', 'work'),
-                billable: $request->input('billable', true),
+                billable: $this->convertToBoolean($request->input('billable', true)),
                 hourlyRate: $request->input('hourly_rate')
             );
 
@@ -250,7 +266,7 @@ class TimeTrackingController extends Controller
             'end_time' => 'nullable|date|after:start_time',
             'description' => 'nullable|string|max:1000',
             'activity_type' => 'nullable|string|in:work,break,travel,meeting,inspection,planning,documentation,other',
-            'billable' => 'nullable|boolean',
+            'billable' => 'nullable|in:true,false,1,0,yes,no,on,off',
             'hourly_rate' => 'nullable|numeric|min:0|max:9999.99',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
@@ -273,6 +289,11 @@ class TimeTrackingController extends Controller
                 'start_time', 'end_time', 'description', 'activity_type',
                 'billable', 'hourly_rate', 'clock_in_address', 'clock_out_address'
             ]);
+
+            // Convert billable to boolean if present
+            if (isset($data['billable'])) {
+                $data['billable'] = $this->convertToBoolean($data['billable']);
+            }
 
             // Handle location updates
             if ($request->has('latitude') && $request->has('longitude')) {
