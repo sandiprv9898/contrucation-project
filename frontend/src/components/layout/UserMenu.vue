@@ -174,7 +174,7 @@ const navigateToNotifications = () => {
 
 // Click outside directive
 const vClickOutside = {
-  beforeMount(el: HTMLElement, binding: any) {
+  beforeMount(el: any, binding: any) {
     el._clickOutside = (event: Event) => {
       // Use nextTick to avoid immediate closure on the same click event
       setTimeout(() => {
@@ -185,7 +185,7 @@ const vClickOutside = {
     }
     document.addEventListener('click', el._clickOutside, true)
   },
-  unmounted(el: HTMLElement) {
+  unmounted(el: any) {
     document.removeEventListener('click', el._clickOutside, true)
   }
 }

@@ -110,6 +110,12 @@ const router = createRouter({
           meta: { requiresAuth: true, title: 'Tasks' }
         },
         {
+          path: 'tasks/:id',
+          name: 'TaskDetail',
+          component: () => import('../pages/TaskDetailPage.vue'),
+          meta: { requiresAuth: true, title: 'Task Details' }
+        },
+        {
           path: 'tasks/assign',
           name: 'TaskAssign',
           component: () => import('../pages/TaskAssignmentPage.vue'),

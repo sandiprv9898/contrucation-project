@@ -147,11 +147,11 @@ export function useTaskAttachmentsApi() {
   }
 
   const getPreviewUrl = (attachmentId: string): string => {
-    return `/api/v1/attachments/${attachmentId}/preview`
+    return `${window.location.origin}/api/v1/attachments/${attachmentId}/preview`
   }
 
   const getThumbnailUrl = (attachmentId: string): string => {
-    return `/api/v1/attachments/${attachmentId}/thumbnail`
+    return `${window.location.origin}/api/v1/attachments/${attachmentId}/thumbnail`
   }
 
   const getConfig = async (): Promise<AttachmentConfig> => {

@@ -146,7 +146,7 @@ import {
   File,
   Archive
 } from 'lucide-vue-next'
-import { useTaskAttachmentsApi } from '../composables/useTaskAttachments'
+import { useTaskAttachments } from '../composables/useTaskAttachments'
 
 interface Props {
   taskId: string
@@ -160,7 +160,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const { uploadAttachments, getConfig } = useTaskAttachmentsApi()
+const { uploadAttachments, getConfig } = useTaskAttachments()
 
 // State
 const dropZone = ref<HTMLElement>()

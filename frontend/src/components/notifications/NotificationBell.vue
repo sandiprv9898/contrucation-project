@@ -183,7 +183,7 @@ const handleNotificationClick = async (notification: any) => {
 
   // Navigate to related task
   if (notification.task_id) {
-    router.push(`/tasks/${notification.task_id}`)
+    router.push(`/app/tasks/${notification.task_id}`)
     closeDropdown()
   }
 }
