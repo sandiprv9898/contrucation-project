@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             LanguageSeeder::class,
             TranslationSeeder::class,
             NavigationTranslationSeeder::class,
+            ProjectSeeder::class,
+            TaskManagementSeeder::class,
         ]);
     }
 }

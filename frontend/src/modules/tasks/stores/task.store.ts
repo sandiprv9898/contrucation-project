@@ -192,7 +192,9 @@ export const useTaskStore = defineStore('tasks', () => {
 
   const updateTaskStatus = async (id: string, status: string): Promise<boolean> => {
     try {
+      console.log('🔄 [TASK STORE] updateTaskStatus called:', { id, status })
       const updatedTask = await taskService.updateTaskStatus(id, status)
+      console.log('✅ [TASK STORE] updateTaskStatus success:', updatedTask)
       
       // Update in tasks list
       const index = tasks.value.findIndex(task => task.id === id)
@@ -208,7 +210,7 @@ export const useTaskStore = defineStore('tasks', () => {
       return true
     } catch (err: any) {
       error.value = err.message || 'Failed to update task status'
-      console.error('Update task status error:', err)
+      console.error('❌ [TASK STORE] Update task status error:', err)
       return false
     }
   }
@@ -243,7 +245,10 @@ export const useTaskStore = defineStore('tasks', () => {
 
   const assignTask = async (id: string, userId: string | null): Promise<boolean> => {
     try {
+      console.log('👤 [TASK STORE] assignTask called:', { id, userId })
+      console.trace('👤 [TASK STORE] assignTask call stack:')
       const updatedTask = await taskService.assignTask(id, userId)
+      console.log('✅ [TASK STORE] assignTask success:', updatedTask)
       
       // Update in tasks list
       const index = tasks.value.findIndex(task => task.id === id)
@@ -259,7 +264,7 @@ export const useTaskStore = defineStore('tasks', () => {
       return true
     } catch (err: any) {
       error.value = err.message || 'Failed to assign task'
-      console.error('Assign task error:', err)
+      console.error('❌ [TASK STORE] Assign task error:', err)
       return false
     }
   }

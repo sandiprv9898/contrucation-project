@@ -6,7 +6,7 @@
         <h1 class="text-2xl font-semibold text-gray-900">Projects</h1>
         <p class="mt-1 text-sm text-gray-600">Manage construction projects and track progress</p>
       </div>
-      <VButton @click="router.push('/projects/create')">
+      <VButton @click="router.push('/app/projects/create')">
         <Plus class="w-4 h-4 mr-2" />
         Create Project
       </VButton>
@@ -330,11 +330,11 @@ const clearAllFilters = () => {
 }
 
 const viewProject = (id: string) => {
-  router.push(`/projects/${id}`)
+  router.push(`/app/projects/${id}`)
 }
 
 const editProject = (id: string) => {
-  router.push(`/projects/${id}/edit`)
+  router.push(`/app/projects/${id}/edit`)
 }
 
 const confirmDelete = (project: ProjectListItem) => {

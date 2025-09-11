@@ -303,55 +303,8 @@
     </div>
 
     <!-- Kanban Board View -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-      <div
-        v-for="status in ['not_started', 'in_progress', 'review', 'completed', 'on_hold']"
-        :key="status"
-        class="bg-gray-100 rounded-lg p-4"
-      >
-        <h3 class="font-medium text-gray-900 mb-4 capitalize">
-          {{ status.replace('_', ' ') }}
-          <span class="text-sm text-gray-500">({{ getTasksByStatus(status).length }})</span>
-        </h3>
-        
-        <div class="space-y-3">
-          <div
-            v-for="task in getTasksByStatus(status)"
-            :key="task.id"
-            class="bg-white rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-            @click="selectTask(task)"
-          >
-            <h4 class="font-medium text-gray-900 mb-2 line-clamp-2">{{ task.name }}</h4>
-            
-            <div class="flex items-center justify-between text-sm text-gray-500 mb-2">
-              <span 
-                :class="[
-                  'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-                  getPriorityClasses(task.priority.value)
-                ]"
-              >
-                {{ task.priority.label }}
-              </span>
-              
-              <span v-if="task.due_date" :class="{ 'text-red-500': task.is_overdue }">
-                {{ formatDate(task.due_date) }}
-              </span>
-            </div>
-            
-            <div v-if="task.assigned_to" class="flex items-center space-x-2 text-sm text-gray-600 mb-2">
-              <User class="w-3 h-3" />
-              <span>{{ task.assigned_to.name }}</span>
-            </div>
-            
-            <div class="w-full bg-gray-200 rounded-full h-1.5">
-              <div 
-                class="bg-blue-600 h-1.5 rounded-full" 
-                :style="{ width: `${task.progress_percentage}%` }"
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div v-else class="h-[calc(100vh-20rem)]">
+      <TaskKanbanBoard @task-details="selectTask" />
     </div>
 
     <!-- Create/Edit Task Modal -->
@@ -400,6 +353,7 @@ import { useTaskStore } from '@/modules/tasks/stores/task.store'
 import type { Task, TaskFilters } from '@/modules/tasks/types/task.types'
 import TaskForm from '@/modules/tasks/components/TaskForm.vue'
 import TaskDetail from '@/modules/tasks/components/TaskDetail.vue'
+import TaskKanbanBoard from '@/modules/tasks/components/TaskKanbanBoard.vue'
 
 defineOptions({ name: 'TasksPage' })
 
@@ -429,10 +383,6 @@ const filters = ref<TaskFilters>({
 })
 
 // Computed
-const getTasksByStatus = (status: string): Task[] => {
-  return tasks.value.filter(task => task.status.value === status)
-}
-
 // Methods
 const loadTasks = async () => {
   await Promise.all([

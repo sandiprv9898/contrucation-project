@@ -29,23 +29,6 @@ Route::prefix('v1')->group(function () {
         Route::get('language-stats/{language}', [LocalizationController::class, 'languageStats']);
     });
 
-    // Temporary test route for settings (remove in production)
-    Route::get('test-settings', function() {
-        return response()->json([
-            'message' => 'Settings API is working',
-            'data' => [
-                'company' => [
-                    'company_name' => 'Test Company',
-                    'email' => 'test@company.com',
-                    'phone' => '555-0123'
-                ],
-                'system' => [
-                    'app_name' => 'Construction Platform',
-                    'maintenance_mode' => 'disabled'
-                ]
-            ]
-        ]);
-    });
     // Authentication routes
     Route::prefix('auth')->group(function () {
         Route::post('register', [AuthController::class, 'register']);

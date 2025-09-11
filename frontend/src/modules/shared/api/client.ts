@@ -240,6 +240,24 @@ class ApiClient {
     const response = await this.client.delete<T>(url)
     return response.data
   }
+
+  public async patch<T>(url: string, data?: unknown): Promise<T> {
+    // Get CSRF cookie for authenticated requests
+    const token = TokenManager.getToken()
+    if (token && !this.getCSRFTokenFromCookie()) {
+      console.log('[API] Getting CSRF cookie for PATCH request:', url)
+      await this.getCsrfCookie()
+    }
+    
+    console.log(`🌐 [API CLIENT] PATCH ${url}`, {
+      data: data,
+      dataType: typeof data,
+      dataKeys: data && typeof data === 'object' ? Object.keys(data) : 'N/A'
+    })
+    
+    const response = await this.client.patch<T>(url, data)
+    return response.data
+  }
 }
 
 export const apiClient = new ApiClient()

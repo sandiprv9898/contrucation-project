@@ -124,8 +124,14 @@ class TaskService
         }
 
         return DB::transaction(function () use ($task, $status) {
+            // Check if the transition is allowed by the enum
+            if (!$task->status->canTransitionTo($status)) {
+                throw new \InvalidArgumentException("Cannot transition from {$task->status->value} to {$status->value}");
+            }
+
+            // Use specific methods for certain transitions, but allow fallback to direct update
             $updated = match($status) {
-                TaskStatus::IN_PROGRESS => $task->start(),
+                TaskStatus::IN_PROGRESS => $this->transitionToInProgress($task),
                 TaskStatus::REVIEW => $task->putInReview(),
                 TaskStatus::COMPLETED => $task->complete(),
                 TaskStatus::ON_HOLD => $task->putOnHold(),
@@ -134,7 +140,7 @@ class TaskService
             };
 
             if (!$updated) {
-                throw new \InvalidArgumentException("Cannot transition from {$task->status->value} to {$status->value}");
+                throw new \InvalidArgumentException("Failed to update task status");
             }
 
             // Trigger status-specific business logic
@@ -360,6 +366,21 @@ class TaskService
 
             return $updatedCount;
         });
+    }
+
+    /**
+     * Transition task to IN_PROGRESS from any allowed status
+     */
+    protected function transitionToInProgress(Task $task): bool
+    {
+        $updateData = ['status' => TaskStatus::IN_PROGRESS];
+        
+        // Set start_date if transitioning from NOT_STARTED and no start_date is set
+        if ($task->status === TaskStatus::NOT_STARTED && !$task->start_date) {
+            $updateData['start_date'] = now()->toDateString();
+        }
+        
+        return $task->update($updateData);
     }
 
     /**
