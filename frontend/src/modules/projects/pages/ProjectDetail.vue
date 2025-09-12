@@ -473,57 +473,9 @@ const tabs = [
   { id: 'files', name: 'Files', icon: FileText }
 ]
 
-// Mock data for demonstration
-const recentActivities = ref([
-  {
-    description: 'Task "Foundation work" was completed',
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-    icon: CheckSquare
-  },
-  {
-    description: 'New task "Electrical installation" was created',
-    timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
-    icon: Plus
-  },
-  {
-    description: 'Project status updated to "In Progress"',
-    timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-    icon: Activity
-  }
-])
+const recentActivities = ref([])
 
-const projectTasks = ref([
-  {
-    id: '1',
-    name: 'Site Survey and Preparation',
-    description: 'Complete site survey and prepare foundation area',
-    status: 'completed',
-    priority: 'high',
-    assigned_to: { name: 'John Smith' },
-    due_date: '2025-09-15',
-    progress_percentage: 100
-  },
-  {
-    id: '2',
-    name: 'Foundation Excavation',
-    description: 'Excavate and prepare foundation',
-    status: 'in_progress',
-    priority: 'high',
-    assigned_to: { name: 'Mike Johnson' },
-    due_date: '2025-09-20',
-    progress_percentage: 65
-  },
-  {
-    id: '3',
-    name: 'Electrical Planning',
-    description: 'Plan electrical system layout',
-    status: 'not_started',
-    priority: 'medium',
-    assigned_to: null,
-    due_date: '2025-09-25',
-    progress_percentage: 0
-  }
-])
+const projectTasks = ref([])
 
 // Options
 const taskStatusOptions = [

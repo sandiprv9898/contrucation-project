@@ -98,6 +98,12 @@ const router = createRouter({
           meta: { requiresAuth: true, title: 'Project Details' }
         },
         {
+          path: 'projects/:id/gantt',
+          name: 'ProjectGantt',
+          component: () => import('../pages/projects/ProjectGantt.vue'),
+          meta: { requiresAuth: true, title: 'Project Gantt Chart' }
+        },
+        {
           path: 'projects/settings',
           name: 'ProjectSettings',
           component: () => import('../pages/projects/ProjectSettingsPage.vue'),

@@ -137,7 +137,8 @@ import {
   BarChart3, 
   Clock, 
   DollarSign, 
-  TrendingUp 
+  TrendingUp,
+  GitBranch
 } from 'lucide-vue-next'
 
 defineOptions({ name: 'SidebarContent' })
@@ -186,6 +187,11 @@ const mainNavigation = computed(() => [
     to: '/app/tasks',
     icon: CheckSquare,
     badge: '8',
+  },
+  {
+    name: t('navigation.gantt') || 'Timeline & Dependencies',
+    to: '/app/gantt',
+    icon: GitBranch,
   },
   {
     name: t('navigation.calendar') || 'Calendar',

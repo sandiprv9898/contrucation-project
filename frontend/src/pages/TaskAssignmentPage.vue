@@ -433,64 +433,7 @@ const filters = ref<TaskFilters & { due_filter?: string }>({
   due_filter: ''
 })
 
-// Mock team members data
-const teamMembers = ref<TeamMember[]>([
-  {
-    id: 'user-1',
-    name: 'John Smith',
-    email: 'john@example.com',
-    role: 'Field Worker',
-    workload_percentage: 85,
-    assigned_tasks: 8,
-    active_tasks: 6,
-    estimated_hours: 34,
-    available_hours: 40
-  },
-  {
-    id: 'user-2',
-    name: 'Jane Manager',
-    email: 'jane@example.com',
-    role: 'Project Manager',
-    workload_percentage: 70,
-    assigned_tasks: 12,
-    active_tasks: 9,
-    estimated_hours: 28,
-    available_hours: 40
-  },
-  {
-    id: 'user-3',
-    name: 'Mike Worker',
-    email: 'mike@example.com',
-    role: 'Field Worker',
-    workload_percentage: 45,
-    assigned_tasks: 4,
-    active_tasks: 3,
-    estimated_hours: 18,
-    available_hours: 40
-  },
-  {
-    id: 'user-4',
-    name: 'Sarah Inspector',
-    email: 'sarah@example.com',
-    role: 'Supervisor',
-    workload_percentage: 90,
-    assigned_tasks: 6,
-    active_tasks: 5,
-    estimated_hours: 36,
-    available_hours: 40
-  },
-  {
-    id: 'user-5',
-    name: 'Tom Builder',
-    email: 'tom@example.com',
-    role: 'Field Worker',
-    workload_percentage: 25,
-    assigned_tasks: 2,
-    active_tasks: 2,
-    estimated_hours: 10,
-    available_hours: 40
-  }
-])
+const teamMembers = ref<TeamMember[]>([])
 
 // Computed
 const unassignedTasks = computed(() => 

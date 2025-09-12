@@ -44,22 +44,6 @@ export function useUserStats() {
     } catch (err: any) {
       console.error('Failed to fetch user stats:', err);
       error.value = err.message || 'Failed to fetch user statistics';
-      
-      // Fallback to mock data for development
-      userStats.value = {
-        total: 156,
-        active: 142,
-        admins: 8,
-        newThisMonth: 12,
-        recentLogins: 45
-      };
-      
-      roleStats.value = {
-        admin: 8,
-        project_manager: 24,
-        supervisor: 48,
-        field_worker: 76
-      };
     } finally {
       isLoading.value = false;
     }

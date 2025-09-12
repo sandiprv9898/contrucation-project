@@ -411,27 +411,4 @@ function toggleFeatured(item: any) {
   }
 }
 
-// Initialize with mock data for demonstration
-portfolioItems.value = [
-  {
-    id: 1,
-    title: 'Downtown Office Complex',
-    description: 'Modern 50-story office building in the heart of downtown',
-    category: 'project',
-    image_url: null,
-    external_url: '',
-    is_featured: true,
-    created_at: '2024-01-15'
-  },
-  {
-    id: 2,
-    title: 'LEED Platinum Certification',
-    description: 'Green building certification for sustainable construction practices',
-    category: 'certification',
-    image_url: null,
-    external_url: '',
-    is_featured: false,
-    created_at: '2024-02-20'
-  }
-]
 </script>

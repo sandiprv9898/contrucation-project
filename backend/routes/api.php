@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\Task\TaskController;
 use App\Http\Controllers\Api\V1\Task\TaskAttachmentController;
 use App\Http\Controllers\Api\V1\Task\TimeTrackingController;
 use App\Http\Controllers\Api\V1\Task\TaskNotificationController;
+use App\Http\Controllers\Api\V1\Project\GanttController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -142,6 +143,21 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{project}', [ProjectController::class, 'destroy']);
             Route::patch('/{project}/status', [ProjectController::class, 'updateStatus']);
             Route::post('/{project}/progress', [ProjectController::class, 'updateProgress']);
+            
+            // Gantt Chart Routes
+            Route::prefix('{project}/gantt')->group(function () {
+                Route::get('/', [GanttController::class, 'index']);
+                Route::get('/tasks', [GanttController::class, 'getTasks']);
+                Route::get('/dependencies', [GanttController::class, 'getDependencies']);
+                Route::get('/critical-path', [GanttController::class, 'getCriticalPath']);
+                Route::get('/resources', [GanttController::class, 'getResourceAllocation']);
+                Route::get('/statistics', [GanttController::class, 'getStatistics']);
+                Route::get('/validate-dependencies', [GanttController::class, 'validateDependencies']);
+                Route::post('/auto-schedule', [GanttController::class, 'autoSchedule']);
+                Route::post('/optimize-schedule', [GanttController::class, 'optimizeSchedule']);
+                Route::post('/export', [GanttController::class, 'export']);
+                Route::post('/import', [GanttController::class, 'import']);
+            });
         });
 
         // Task Management Routes
@@ -155,6 +171,15 @@ Route::prefix('v1')->group(function () {
             Route::get('/project/{projectId}', [TaskController::class, 'byProject']);
             Route::get('/assignee/{userId}', [TaskController::class, 'byAssignee']);
             Route::post('/bulk-update', [TaskController::class, 'bulkUpdate']);
+            Route::post('/bulk-update-gantt', [GanttController::class, 'bulkUpdateTasks']);
+            
+            // Task Dependencies Routes
+            Route::post('/dependencies', [TaskController::class, 'createDependency']);
+            Route::put('/dependencies/{dependency}', [TaskController::class, 'updateDependency']);
+            Route::delete('/dependencies/{dependency}', [TaskController::class, 'deleteDependency']);
+            
+            // Task Dates Update for Gantt
+            Route::patch('/{task}/dates', [TaskController::class, 'updateDates']);
             
             Route::get('/{task}', [TaskController::class, 'show']);
             Route::put('/{task}', [TaskController::class, 'update']);
