@@ -108,6 +108,16 @@ class Task extends Model
         return $this->hasMany(TaskAttachment::class)->orderBy('created_at', 'desc');
     }
 
+    public function timeLogs(): HasMany
+    {
+        return $this->hasMany(TimeLog::class, 'task_id')->orderBy('created_at', 'desc');
+    }
+
+    public function activeTimeLogs(): HasMany
+    {
+        return $this->hasMany(TimeLog::class, 'task_id')->active();
+    }
+
     // Scopes
     public function scopeActive($query)
     {

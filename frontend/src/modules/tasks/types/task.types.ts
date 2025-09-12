@@ -98,6 +98,7 @@ export interface Task {
   is_overdue: boolean
   is_due_soon: boolean
   is_top_level: boolean
+  has_active_timer: boolean
   level: number
   sub_tasks_count?: number
   comments_count?: number
@@ -227,6 +228,7 @@ export interface TaskFilters {
   sort_by?: string
   sort_direction?: 'asc' | 'desc'
   per_page?: number
+  page?: number
 }
 
 export interface TaskStatistics {

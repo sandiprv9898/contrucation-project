@@ -72,6 +72,10 @@ export const useTaskStore = defineStore('tasks', () => {
     tasks.value.filter(task => !task.assigned_to)
   )
 
+  const activeTimerTasks = computed(() =>
+    tasks.value.filter(task => task.has_active_timer)
+  )
+
   // Actions
   const loadTasks = async (filters: TaskFilters = {}): Promise<void> => {
     try {
@@ -420,6 +424,11 @@ export const useTaskStore = defineStore('tasks', () => {
     }
   }
 
+  const goToPage = async (page: number): Promise<void> => {
+    const filters = { ...lastFilters.value, page }
+    await loadTasks(filters)
+  }
+
   // Getters
   const getTaskById = (id: string): Task | undefined => {
     return tasks.value.find(task => task.id === id)
@@ -453,6 +462,7 @@ export const useTaskStore = defineStore('tasks', () => {
     dueSoonTasks,
     myTasks,
     unassignedTasks,
+    activeTimerTasks,
 
     // Actions
     loadTasks,
@@ -476,6 +486,7 @@ export const useTaskStore = defineStore('tasks', () => {
     clearError,
     clearCurrentTask,
     clearTasks,
+    goToPage,
 
     // Getters
     getTaskById,

@@ -21,11 +21,21 @@ class TaskManagementSeeder extends Seeder
     {
         $this->command->info('🚀 Creating Task Management demo data...');
         
-        // Get existing data or create basic requirements
-        $users = $this->ensureUsers();
-        $companies = $this->ensureCompanies();
+        // Get existing data - no more creating duplicate users/companies
+        $users = $this->getExistingUsers();
+        $companies = $this->getExistingCompanies();
         $projects = $this->getExistingProjects();
         $phases = $this->getExistingPhases();
+        
+        if (empty($users)) {
+            $this->command->error('❌ No users found! Please run UserSeeder first.');
+            return;
+        }
+        
+        if (empty($projects)) {
+            $this->command->error('❌ No projects found! Please run ProjectSeeder first.');
+            return;
+        }
         
         // Create tasks with realistic construction scenarios
         $this->createConstructionTasks($projects, $phases, $users);
@@ -34,124 +44,35 @@ class TaskManagementSeeder extends Seeder
         $this->showSummary();
     }
     
-    private function ensureUsers(): array
+    private function getExistingUsers(): array
     {
-        $this->command->info('👥 Creating users...');
+        $this->command->info('👥 Using existing seeded users...');
         
-        $usersData = [
-            [
-                'name' => 'John Smith',
-                'email' => 'john.smith@construction.com',
-                'role' => 'field_worker',
-                'specialization' => 'General Construction'
-            ],
-            [
-                'name' => 'Jane Manager',
-                'email' => 'jane.manager@construction.com',
-                'role' => 'project_manager',
-                'specialization' => 'Project Management'
-            ],
-            [
-                'name' => 'Mike Rodriguez',
-                'email' => 'mike.rodriguez@construction.com',
-                'role' => 'field_worker',
-                'specialization' => 'Steel & Concrete'
-            ],
-            [
-                'name' => 'Sarah Inspector',
-                'email' => 'sarah.inspector@construction.com',
-                'role' => 'supervisor',
-                'specialization' => 'Quality Control'
-            ],
-            [
-                'name' => 'David Electrician',
-                'email' => 'david.electrician@construction.com',
-                'role' => 'specialist',
-                'specialization' => 'Electrical Systems'
-            ],
-            [
-                'name' => 'Lisa Plumber',
-                'email' => 'lisa.plumber@construction.com',
-                'role' => 'specialist',
-                'specialization' => 'Plumbing & HVAC'
-            ],
-            [
-                'name' => 'Robert Foreman',
-                'email' => 'robert.foreman@construction.com',
-                'role' => 'supervisor',
-                'specialization' => 'Site Supervision'
-            ],
-            [
-                'name' => 'Maria Architect',
-                'email' => 'maria.architect@construction.com',
-                'role' => 'architect',
-                'specialization' => 'Design & Planning'
-            ]
+        $users = [
+            'admin' => User::where('role', 'admin')->first(),
+            'project_managers' => User::where('role', 'project_manager')->get()->toArray(),
+            'supervisors' => User::where('role', 'supervisor')->get()->toArray(), 
+            'field_workers' => User::where('role', 'field_worker')->get()->toArray()
         ];
         
-        $users = [];
-        foreach ($usersData as $userData) {
-            $user = User::firstOrCreate(
-                ['email' => $userData['email']],
-                [
-                    'id' => Str::uuid(),
-                    'name' => $userData['name'],
-                    'email' => $userData['email'],
-                    'email_verified_at' => now(),
-                    'password' => bcrypt('password'),
-                    'role' => $userData['role'],
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]
-            );
-            $users[] = $user;
-        }
+        $this->command->info(sprintf(
+            "Found: %d admin, %d project managers, %d supervisors, %d field workers",
+            $users['admin'] ? 1 : 0,
+            count($users['project_managers']),
+            count($users['supervisors']),
+            count($users['field_workers'])
+        ));
         
         return $users;
     }
     
-    private function ensureCompanies(): array
+    private function getExistingCompanies(): array
     {
-        $this->command->info('🏢 Creating companies...');
+        $this->command->info('🏢 Using existing companies...');
         
-        $companiesData = [
-            [
-                'name' => 'Metropolitan Construction Corp',
-                'type' => 'general_contractor',
-                'description' => 'Leading construction company specializing in commercial and residential projects'
-            ],
-            [
-                'name' => 'Residential Builders Ltd',
-                'type' => 'residential_builder', 
-                'description' => 'Specialized residential construction and renovation company'
-            ],
-            [
-                'name' => 'Urban Development Group',
-                'type' => 'developer',
-                'description' => 'Real estate development and urban planning specialists'
-            ]
-        ];
+        $companies = Company::all()->toArray();
         
-        $companies = [];
-        foreach ($companiesData as $companyData) {
-            $company = Company::firstOrCreate(
-                ['name' => $companyData['name']],
-                [
-                    'id' => Str::uuid(),
-                    'name' => $companyData['name'],
-                    'type' => $companyData['type'],
-                    'description' => $companyData['description'],
-                    'address' => '123 Construction Ave, Builder City, BC 12345',
-                    'phone' => '+1-555-0100',
-                    'email' => strtolower(str_replace(' ', '', $companyData['name'])) . '@example.com',
-                    'website' => 'https://' . strtolower(str_replace(' ', '', $companyData['name'])) . '.com',
-                    'status' => 'active',
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]
-            );
-            $companies[] = $company;
-        }
+        $this->command->info(sprintf("Found: %d companies", count($companies)));
         
         return $companies;
     }
@@ -451,8 +372,8 @@ class TaskManagementSeeder extends Seeder
                         'task_type' => $type,
                         'project_id' => $projectObj->id,
                         'phase_id' => $phase->id,
-                        'assigned_to_id' => $assignedUser['id'],
-                        'created_by_id' => $users[1]['id'], // Jane Manager or first available
+                        'assigned_to_id' => $assignedUser->id,
+                        'created_by_id' => !empty($users['project_managers']) ? $users['project_managers'][0]['id'] : $users['admin']->id,
                         'estimated_hours' => $taskData['hours'],
                         'actual_hours' => $this->calculateActualHours($taskData['status'], $taskData['hours']),
                         'progress_percentage' => $this->calculateProgress($taskData['status']),
@@ -479,27 +400,39 @@ class TaskManagementSeeder extends Seeder
     
     private function getAssignedUser(array $users, string $taskType): object
     {
-        $assignments = [
-            'general' => [0, 2, 6], // Field workers and foreman
-            'foundation' => [0, 2, 6], // Field workers and foreman
-            'framing' => [0, 2, 6], // Field workers and foreman
-            'electrical' => [4], // Electrical specialist
-            'plumbing' => [5], // Plumbing specialist
-            'hvac' => [5], // HVAC specialist
-            'drywall' => [0, 2], // Field workers
-            'flooring' => [0, 2], // Field workers
-            'painting' => [0, 2], // Field workers
-            'finishing' => [0, 2], // Field workers
-            'inspection' => [3, 6], // Supervisors
-            'documentation' => [1, 7], // Project manager and architect
-            'planning' => [1, 7], // Project manager and architect
-            'cleanup' => [0, 2] // Field workers
+        // Define role-based task assignments
+        $roleAssignments = [
+            'general' => 'field_workers',
+            'foundation' => 'field_workers', 
+            'framing' => 'field_workers',
+            'electrical' => 'field_workers', // Can be any field worker
+            'plumbing' => 'field_workers',
+            'hvac' => 'field_workers',
+            'drywall' => 'field_workers',
+            'flooring' => 'field_workers', 
+            'painting' => 'field_workers',
+            'finishing' => 'field_workers',
+            'inspection' => 'supervisors',
+            'documentation' => 'project_managers',
+            'planning' => 'project_managers',
+            'cleanup' => 'field_workers'
         ];
         
-        $possibleUsers = $assignments[$taskType] ?? [0, 1, 2];
-        $userIndex = $possibleUsers[array_rand($possibleUsers)];
+        $assignedRole = $roleAssignments[$taskType] ?? 'field_workers';
         
-        return $users[$userIndex];
+        // Get appropriate user from the role group
+        if (!empty($users[$assignedRole])) {
+            $roleUsers = $users[$assignedRole];
+            return (object)$roleUsers[array_rand($roleUsers)];
+        }
+        
+        // Fallback to any available user
+        if ($users['admin']) {
+            return (object)$users['admin'];
+        }
+        
+        // Should never reach here, but safety fallback
+        return (object)collect($users)->flatten(1)->first();
     }
     
     private function calculateDueDate(string $status): Carbon
@@ -664,7 +597,9 @@ class TaskManagementSeeder extends Seeder
             $numComments = rand(1, 4);
             
             for ($i = 0; $i < $numComments; $i++) {
-                $user = $users[array_rand($users)];
+                // Get a random user from all available users
+                $allUsers = collect($users)->flatten(1)->filter()->toArray();
+                $user = (object)$allUsers[array_rand($allUsers)];
                 $comment = $commentTemplates[array_rand($commentTemplates)];
                 
                 DB::table('task_comments')->insert([

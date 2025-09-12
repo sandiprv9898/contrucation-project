@@ -209,7 +209,7 @@
           v-for="task in tasks"
           :key="task.id"
           class="p-6 hover:bg-gray-50 transition-colors border-l-4 border-transparent hover:border-blue-200"
-          :class="{ 'bg-green-50 border-green-300': isTaskActivelyTracked(task.id) }"
+          :class="{ 'bg-green-50 border-green-300': task.has_active_timer }"
         >
           <div class="flex items-start justify-between">
             <div class="flex-1 min-w-0 cursor-pointer" @click="selectTask(task)">
@@ -310,6 +310,55 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div v-if="viewMode === 'list' && pagination.last_page > 1" class="flex items-center justify-between px-6 py-3 bg-white border-t border-gray-200">
+      <div class="flex items-center text-sm text-gray-700">
+        <span>
+          Showing {{ ((pagination.current_page - 1) * pagination.per_page) + 1 }} to 
+          {{ Math.min(pagination.current_page * pagination.per_page, pagination.total) }} of 
+          {{ pagination.total }} results
+        </span>
+      </div>
+      
+      <div class="flex items-center space-x-2">
+        <!-- Previous Button -->
+        <button
+          @click="goToPage(pagination.current_page - 1)"
+          :disabled="pagination.current_page === 1"
+          class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Previous
+        </button>
+        
+        <!-- Page Numbers -->
+        <template v-for="page in getPageNumbers()" :key="page">
+          <button
+            v-if="page !== '...'"
+            @click="goToPage(page as number)"
+            :class="{
+              'bg-blue-500 text-white': page === pagination.current_page,
+              'text-gray-500 bg-white hover:bg-gray-50': page !== pagination.current_page
+            }"
+            class="px-3 py-2 text-sm font-medium border border-gray-300 rounded-md"
+          >
+            {{ page }}
+          </button>
+          <span v-else class="px-2 py-2 text-sm text-gray-500">
+            ...
+          </span>
+        </template>
+        
+        <!-- Next Button -->
+        <button
+          @click="goToPage(pagination.current_page + 1)"
+          :disabled="pagination.current_page === pagination.last_page"
+          class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Next
+        </button>
       </div>
     </div>
 
@@ -524,6 +573,48 @@ const getPriorityClasses = (priority: string): string => {
 
 const formatDate = (date: string): string => {
   return new Date(date).toLocaleDateString()
+}
+
+// Pagination methods
+const goToPage = async (page: number) => {
+  await taskStore.goToPage(page)
+}
+
+const getPageNumbers = (): (number | string)[] => {
+  const current = pagination.value.current_page
+  const total = pagination.value.last_page
+  const pages: (number | string)[] = []
+  
+  if (total <= 7) {
+    // Show all pages if 7 or fewer
+    for (let i = 1; i <= total; i++) {
+      pages.push(i)
+    }
+  } else {
+    // Complex pagination logic for many pages
+    pages.push(1)
+    
+    if (current > 4) {
+      pages.push('...')
+    }
+    
+    const start = Math.max(2, current - 2)
+    const end = Math.min(total - 1, current + 2)
+    
+    for (let i = start; i <= end; i++) {
+      pages.push(i)
+    }
+    
+    if (current < total - 3) {
+      pages.push('...')
+    }
+    
+    if (total > 1) {
+      pages.push(total)
+    }
+  }
+  
+  return pages
 }
 
 // Time tracking methods

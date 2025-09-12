@@ -68,6 +68,7 @@ class TaskListResource extends JsonResource
             'is_due_soon' => $this->isDueSoon(),
             'is_top_level' => $this->isTopLevel(),
             'level' => $this->getLevel(),
+            'has_active_timer' => (bool) $this->getAttribute('has_active_timer'),
             'sub_tasks_count' => $this->whenCounted('subTasks'),
             'comments_count' => $this->whenCounted('comments'),
             'dependencies_count' => $this->whenCounted('dependencies'),
