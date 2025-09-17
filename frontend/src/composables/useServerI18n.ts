@@ -15,7 +15,7 @@ const LANGUAGE_STORAGE_KEY = 'preferred-language'
 
 // Track active API calls to prevent duplicates
 let initializationPromise: Promise<void> | null = null
-let languageChangePromises = new Map<string, Promise<void>>()
+const languageChangePromises = new Map<string, Promise<void>>()
 
 export function useServerI18n() {
   /**

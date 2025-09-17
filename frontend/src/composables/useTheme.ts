@@ -403,7 +403,7 @@ export function useTheme() {
     // Colors
     Object.entries(theme.colors).forEach(([category, shades]) => {
       Object.entries(shades).forEach(([shade, value]) => {
-        variables[`--color-${category}-${shade}`] = value;
+        variables[`--color-${category}-${shade}`] = value as string;
       });
     });
 

@@ -265,7 +265,7 @@ const visibleMonths = computed(() => {
   const startDate = new Date(Math.min(...props.tasks.map(t => new Date(t.startDate).getTime())))
   const endDate = new Date(Math.max(...props.tasks.map(t => new Date(t.endDate).getTime())))
   
-  let current = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
+  const current = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
   while (current <= endDate) {
     months.push({
       key: `${current.getFullYear()}-${current.getMonth()}`,
@@ -283,7 +283,7 @@ const visibleWeeks = computed(() => {
   const startDate = new Date(Math.min(...props.tasks.map(t => new Date(t.startDate).getTime())))
   const endDate = new Date(Math.max(...props.tasks.map(t => new Date(t.endDate).getTime())))
   
-  let current = new Date(startDate)
+  const current = new Date(startDate)
   current.setDate(current.getDate() - current.getDay()) // Start from Sunday
   
   let weekNum = 1

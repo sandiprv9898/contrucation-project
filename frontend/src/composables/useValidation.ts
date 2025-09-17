@@ -270,7 +270,7 @@ export function useValidation(
           const error = await validationPromise;
           
           // Only update state if this is still the current validation
-          if (pendingValidations.get(fieldName) === validationPromise) {
+        if (pendingValidations.get(fieldName) !== null && pendingValidations.get(fieldName) !== undefined && pendingValidations.get(fieldName) !== validationPromise) {
             if (error) {
               validationState.errors[fieldName] = error;
             } else {
